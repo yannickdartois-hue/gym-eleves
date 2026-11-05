@@ -1,0 +1,2721 @@
+[
+{
+"s": 1,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"Fiches de travail interactives Ateliers, vidéos, consignes, validation des niveaux",
+"GYMNASTIQUE ARTISTIQUE"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 2,
+"titre": [
+"Roulade avant → Salto",
+"Niveaux A à F"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"Accueil",
+"Validation des niveaux",
+"ATR→ Saut de main Niveaux A à F",
+"Roue → Rondade Niveaux A à F",
+"Saut Niveaux A à F",
+"Barres Asymétriques Niveaux A à F",
+"Éléments de liaison Niveaux A à F",
+"Roulade arrière → Salto Niveaux A à F"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 3,
+"titre": null,
+"cons": [],
+"mat": [
+"Un seul élève passe sur l’atelier, les autres libèrent l’espace",
+"Avant chaque passage, les membres du groupe s’assurent que:",
+"Les tapis sont bien en place (collés les uns aux autres et à leur place)",
+"L’espace de travail est libre",
+"« Je libère l’atelier dès que possible »",
+"« J’attends que l’élève précédent ait terminé »",
+"« Je ne traverse pas la zone de travail »"
+],
+"lab": [
+"Parade et Aide Parade: elle consiste à assurer la sécurité du partenaire en cas de difficulté (déséquilibre, mauvaise impulsion etc.) Aide: elle consiste à accompagner du début à la fin le partenaire pour l’aider à réaliser l’élément travaillé Critères de Réalisation Se placer de manière adaptée par rapport au partenaire et à l’élément travaillé(ex: ni trop près, ni trop loin, de profil…) Etre vigilant du début à la fin de l’élément Communication simple et réduite (ne pas crier, utiliser un code simple entre les deux partenaires)",
+"Interdiction de travailler des éléments d’un niveau supérieur sans avoir validé le précédent Interdiction de travailler d’autres éléments que ceux indiqués sur la progression"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 4,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"Validation des NIVEAUX",
+"Les niveaux proposés De A à F selon les thèmes de travail",
+"Critères de Validation L’élément doit être réussidu premier coup: Respect des critères de réussite Réception maîtrisée",
+"Seul l’enseignant ou le coach peut valider un niveau",
+"« Simple et correct vaut mieux que difficile et incorrect »"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 5,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"SALTO AVANT"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 6,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"SALTO ARRIERE"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 7,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"SAUT DE MAIN"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 8,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"RONDADE"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 9,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"SAUT"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 10,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"ASYMETRIQUES A&amp;B"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 11,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"ASYMETRIQUES C&amp;D"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 12,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"SAUTS LIAISON 1"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 13,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"SAUTS LIAISON 2"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 14,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"TOURS LIAISON"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 15,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"TRAMPOLINE"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 16,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [
+"TRAMPOLINE"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 17,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau A"
+],
+"cons": [
+"Poser les mains à plat devant soi",
+"Pousser dans les jambes pour monter les fesses au dessus de la tête",
+"Amortir avec les bras et rentrer la tête (le menton touche la poitrine)"
+],
+"mat": [
+"Tremplin",
+"Tapis",
+"Mini tremplin en mousse"
+],
+"lab": [
+"Roulade avant groupésur plan incliné"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 18,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau A Remédiation 1"
+],
+"cons": [
+"Poser les mains à plat devant soi",
+"Pousser dans les jambes pour monter les fesses au dessus de la tête",
+"Amortir avec les bras et rentrer la tête (le menton touche la poitrine)"
+],
+"mat": [
+"Bloc de parade",
+"Plan incliné"
+],
+"lab": [
+"Roulade avant groupésur plan incliné (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 19,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau A Remédiation 2"
+],
+"cons": [
+"Départ allongé sur le ventre",
+"Poser les mains à plat au sol",
+"Amortir avec les bras parallèles et poser la nuque en rentrant la tête (menton / poitrine), dos arrondi",
+"Fléchir les jambes le plus tard possible pour se relever"
+],
+"mat": [
+"Table de saut en mousse ou Bloc en mousse rectangulaire type « Dima 6 »"
+],
+"lab": [
+"Roulade avant groupésur plan incliné (remédiation 2)",
+"OU"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 20,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau B"
+],
+"cons": [
+"Départ debout",
+"Poser les mains loin devant en rentrant la tête (menton / poitrine)",
+"Amortir avec les bras parallèles"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade avant groupé",
+"Roulade avant écart"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5"
+]
+},
+{
+"s": 21,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau B remédiation 1"
+],
+"cons": [
+"Départ pieds serrés",
+"Poser les mains loin devant soi",
+"Écarter les jambes le plus tard possible",
+"Se relever jambes tendues avec l’aide des mains entre les jambes"
+],
+"mat": [
+"Tremplin",
+"Tapis",
+"Mini tremplin en mousse"
+],
+"lab": [
+"Roulade avant écart sur plan incliné"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 22,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau B Remédiation 2"
+],
+"cons": [
+"Départ allongé sur le dos, jambes tendues à la verticale",
+"Se redresser en écartant les jambes tendues et en poussant sur les mains entre les jambes"
+],
+"mat": [
+"Tremplin",
+"Tapis"
+],
+"lab": [
+"Roulade avant écart sur plan incliné (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 23,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau B Remédiation 3 23"
+],
+"cons": [
+"Départ pieds serrés",
+"Poser les mains loin devant soi",
+"Écarter les jambes au dernier moment",
+"Se relever jambes tendues avec l’aide des mains entre les jambes"
+],
+"mat": [
+"Bloc de parade",
+"Plan incliné"
+],
+"lab": [
+"Roulade avant écart sur plan incliné (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 24,
+"titre": [
+"Roulade Avant → Saut de l’ange",
+"Niveau C"
+],
+"cons": [
+"Départ pieds serrés",
+"Poser les mains loin devant soi",
+"Écarter les jambes au dernier moment",
+"Se relever jambes tendues avec l’aide des mains entre les jambes"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade avant écart",
+"Rouler en Avant (Roulade avant → Saut de l’ange)",
+"Rouler en Arrière (Roulade arrière)",
+"Se renverser en ATR pour tourner en Avant (ATR → Saut de mains)",
+"Tourner en Avant en passant par l’ATR avec rotation longitudinale (Roue → Rondade)",
+"Tourner en Avant sans appui des mains (Salto avant)",
+"Tourner en Arrière avec passage en ATR (Flip arrière)",
+"Tourner en Arrière sans appui des mains (Salto arrière)",
+"Thèmes (élément)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 25,
+"titre": [
+"Roulade Avant → Saut de l’ange",
+"Niveau C"
+],
+"cons": [
+"Départ pieds serrés",
+"Poser les mains loin devant soi",
+"Se relever jambes tendues et serrées en poussant fort et longtemps sur les mains derrière les fesses"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade avant carpé"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 26,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau C"
+],
+"cons": [
+"3 pas d’élan, impulsion à 2 pieds, jambes tendues, dos arrondi, bras levés (« se grandir »)",
+"Rester gainé en l’air",
+"Regarder les mains se poser au sol pour amortir avec ses bras",
+"Rentrer la tête (menton / poitrine) pour rouler",
+"Fléchir les jambes le plus tard possible pour se relever"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Saut de l’ange"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 27,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau C Remédiation 1"
+],
+"cons": [
+"Regarder les mains se poser sur le sur-tapis de réception pour amortir avec ses bras"
+],
+"mat": [
+"Praticable",
+"Sur-tapis de 10cm d’épaisseur"
+],
+"lab": [
+"Saut de l’ange (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 28,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau C Remédiation 2"
+],
+"cons": [
+"Regarder les mains se poser sur les tapis de réception pour amortir avec ses bras"
+],
+"mat": [
+"Praticable",
+"1 tremplin",
+"2 tapis de réception",
+"Sur-tapis de 10cm d’épaisseur"
+],
+"lab": [
+"Saut de l’ange sur tremplin (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 29,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau C Remédiation 3"
+],
+"cons": [
+"Utiliser le tremplin pour monter haut, corps gainé et aligné avant de poser les mains sur le gros tapis de réception"
+],
+"mat": [
+"Praticable",
+"1 tremplin",
+"2 tapis de réception",
+"1 gros tapis de réception"
+],
+"lab": [
+"Saut de l’ange sur tremplin (remédiation 3)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 30,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau C remédiation 4"
+],
+"cons": [
+"Élan réduit (1 à 2 pas) et impulsion à 2 pieds, dos arrondi, bras levés",
+"Poser les mains sur le tapis, derrière un repère visuel",
+"Amortir avec les bras parallèles et rentrer la tête (menton / poitrine)"
+],
+"mat": [
+"5 tapis de réception empilés + 1 sur le côté",
+"Mini-trampoline",
+"1 grande caisse en bois"
+],
+"lab": [
+"Roulade avant élevée avec mini-trampoline"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 31,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau D"
+],
+"cons": [
+"Élan réduit (1 à 2 pas) et impulsion à 2 pieds, jambes tendues, dos arrondi, bras levés (« se grandir »)",
+"Monter et grouper vite en attrapant les genoux, tête rentrée (menton / poitrine)"
+],
+"mat": [
+"5 tapis de réception empilés + 1 sur le côté",
+"Mini-trampoline",
+"1 grande caisse en bois"
+],
+"lab": [
+"Salto avant avec mini-trampoline, réception debout"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 32,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau D remédiation 1"
+],
+"cons": [
+"Élan réduit (1 à 2 pas) et impulsion à 2 pieds, dos arrondi, bras levés",
+"Grouper en attrapant les genoux légèrement écarté, tête rentrée (menton / poitrine)"
+],
+"mat": [
+"5 tapis de réception empilés + 1 sur le côté",
+"Mini-trampoline",
+"1 grande caisse en bois"
+],
+"lab": [
+"Salto avant avec mini-trampoline, réception assis"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 33,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau E"
+],
+"cons": [
+"3 pas d’élan, impulsion à 2 pieds, jambes tendues, dos arrondi, bras levés (« se grandir »)",
+"Monter et grouper vite en attrapant les genoux, tête rentrée (menton / poitrine)",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis de réception",
+"1 tremplin"
+],
+"lab": [
+"Salto avant avec tremplin, réception debout"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 34,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau E Remédiation 1"
+],
+"cons": [
+"Appel long et rasant par-dessus le repère visuel avant le tremplin"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis de réception",
+"1 tremplin",
+"1 repère visuel au sol"
+],
+"lab": [
+"Salto avant avec tremplin, réception debout (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 35,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau E Remédiation 2"
+],
+"cons": [
+"3 pas d’élan, appel long et rasant, impulsion à 2 pieds, jambes tendues, dos arrondi, bras levés (« se grandir »)",
+"Monter et grouper vite en attrapant les genoux, tête rentrée (menton / poitrine)",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis de réception",
+"1 tremplin"
+],
+"lab": [
+"Salto avant avec tremplin, réception debout (remédiation 2)",
+"Thèmes (élément)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 36,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau F"
+],
+"cons": [
+"3 pas d’élan, impulsion à 2 pieds, jambes tendues, dos arrondi, bras levés (« se grandir »)",
+"Monter et grouper vite en attrapant les genoux, tête rentrée (menton / poitrine)",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Salto avant au sol"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 37,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau F Remédiation 1"
+],
+"cons": [
+"Se réceptionner debout sur le sur-tapis pour amortir la réception"
+],
+"mat": [
+"Praticable",
+"1 sur-tapis de réception"
+],
+"lab": [
+"Salto avant au sol (remédiation 1)",
+"Thèmes (élément)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 38,
+"titre": [
+"Roulade Avant → Salto",
+"Niveau F Remédiation 2"
+],
+"cons": [
+"Appel long et rasant par-dessus le repère visuel",
+"Se réceptionner debout sur les tapis pour amortir la réception"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis de réception",
+"1 repère visuel au sol"
+],
+"lab": [
+"Salto avant au sol (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 39,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau A"
+],
+"cons": [
+"Départ assis, pieds serrés, mains tournées vers les épaules, coudes levés et parallèles",
+"Rentrer la tête (menton / poitrine) et regarder ses genoux",
+"Rouler sur le dos et poser les mains à plat",
+"Rester groupé pour se réceptionner sur les pieds"
+],
+"mat": [
+"Tremplin",
+"Tapis"
+],
+"lab": [
+"Roulade arrière groupésur plan incliné"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 40,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau A Remédiation 1"
+],
+"cons": [
+"Écarter les jambes pour se réceptionner sur les pieds"
+],
+"mat": [
+"Tremplin",
+"Tapis"
+],
+"lab": [
+"Roulade arrière écartsur plan incliné (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 41,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau A Remédiation 2"
+],
+"cons": [
+"Départ assis, pieds serrés, mains tournées vers les épaules, coudes levés et parallèles",
+"Rentrer la tête (menton / poitrine) et regarder ses genoux",
+"Rouler sur le dos et poser les mains à plat",
+"Rester groupé pour se réceptionner sur les pieds"
+],
+"mat": [
+"Bloc triangulaire"
+],
+"lab": [
+"Roulade arrière groupésur plan incliné (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 42,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau A Remédiation 3"
+],
+"cons": [
+"Écarter les jambes pour se réceptionner sur les pieds"
+],
+"mat": [
+"Bloc triangulaire"
+],
+"lab": [
+"Roulade arrière écartsur plan incliné (remédiation 3)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 43,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau B"
+],
+"cons": [
+"Départ debout, s’asseoir mains tournées vers les épaules, coudes levés et parallèles",
+"Rentrer la tête (menton / poitrine) et regarder ses genoux",
+"Rouler sur le dos et poser les mains à plat",
+"Rester groupé pour se réceptionner sur les pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade arrière groupé"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5"
+]
+},
+{
+"s": 44,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau B Remédiation 1"
+],
+"cons": [
+"Écarter les jambes pour se réceptionner sur les pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade arrière écart (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 45,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau C"
+],
+"cons": [
+"S’accroupir en plaçant les bras tendus à hauteur des oreilles, mains tournées l’une vers l’autre",
+"Lancer les jambes tendues vers l’arrière en poussant sur les épaules"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade arrière carpé, bras tendus"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 46,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau C Remédiation 1"
+],
+"cons": [
+"S’asseoir mains tournées vers les épaules, coudes levés et parallèles",
+"Lancer les jambes tendues vers l’arrière en poussant fort sur les bras pour se redresser"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade arrière carpé, bras fléchis (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 47,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau C Remédiation 2"
+],
+"cons": [
+"S’asseoir en plaçant les bras tendus à hauteur des oreilles, mains tournées l’une vers l’autre",
+"Lancer les jambes tendues vers l’arrière en poussant sur les épaules"
+],
+"mat": [
+"Tremplin",
+"Tapis"
+],
+"lab": [
+"Roulade arrière carpé, bras tendus, sur plan incliné (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 48,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau C Remédiation 3"
+],
+"cons": [
+"S’asseoir mains tournées vers les épaules, coudes levés et parallèles",
+"Lancer les jambes tendues vers l’arrière en poussant sur les bras"
+],
+"mat": [
+"Tremplin",
+"Tapis"
+],
+"lab": [
+"Roulade arrière carpé, bras fléchis, sur plan incliné (remédiation 3)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 49,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau C Remédiation 4"
+],
+"cons": [
+"S’asseoir en plaçant les bras tendus à hauteur des oreilles, mains tournées l’une vers l’autre",
+"Lancer les jambes tendues vers l’arrière en poussant sur les épaules"
+],
+"mat": [
+"Bloc triangulaire"
+],
+"lab": [
+"Roulade arrière carpé, bras tendus, sur plan incliné (remédiation 4)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 50,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau C Remédiation 5"
+],
+"cons": [
+"S’asseoir mains tournées vers les épaules, coudes levés et parallèles",
+"Lancer les jambes tendues vers l’arrière en poussant sur les bras"
+],
+"mat": [
+"Bloc triangulaire"
+],
+"lab": [
+"Roulade arrière carpé, bras fléchis, sur plan incliné (remédiation 5)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 51,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D"
+],
+"cons": [
+"S’asseoir en plaçant les bras tendus à hauteur des oreilles, mains tournées l’une vers l’autre",
+"Lancer les jambes tendues vers le plafond (passage en chandelle) en poussant sur les épaules"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade arrière à l’ATR, bras tendus"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 52,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D Remédiation 1"
+],
+"cons": [
+"S’asseoir mains tournées vers les épaules, coudes levés et parallèles",
+"Lancer les jambes tendues vers le plafond (passage en chandelle) en poussant sur les bras"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Roulade arrière à l’ATR, bras fléchis (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 53,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D Remédiation 2"
+],
+"cons": [
+"S’asseoir en plaçant les bras tendus à hauteur des oreilles, mains tournées l’une vers l’autre",
+"Lancer les jambes tendues vers le plafond (passage en chandelle) en poussant sur les épaules"
+],
+"mat": [
+"Bloc triangulaire"
+],
+"lab": [
+"Roulade arrière à l’ATR, bras tendus (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 54,
+"titre": [
+"Flip Arrière",
+"Niveau A"
+],
+"cons": [
+"Départ debout, bras croisés ou le long du corps, regard vers l’avant",
+"Laisser tomber les épaules en arrière en gardant le corps gainé (jambes, dos, tête alignés)"
+],
+"mat": [
+"1 tapis de réception",
+"1 sur-tapis de réception",
+"1 tremplin"
+],
+"lab": [
+"Tomber à plat dos vers l’arrière"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 55,
+"titre": [
+"Flip Arrière",
+"Niveau B"
+],
+"cons": [
+"Départ debout, dos arrondi, bras vers le bas, regard vers le bas",
+"Se déséquilibrer vers l’arrière et pousser très fort dans les jambes en lançant les bras tendus vers l’arrière",
+"Se réceptionner sur le dos en extension complète, corps gainé (jambes, dos et bras alignés)"
+],
+"mat": [
+"Fosse de réception"
+],
+"lab": [
+"Impulsion des jambes et lancer des bras vers l’arrière"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 56,
+"titre": [
+"Flip Arrière",
+"Niveau C"
+],
+"cons": [
+"Départ allongé sur le dos, descendre doucement vers l’arrière pour poser les mains à plat au sol",
+"Se placer en ATR avec l’aide d’un pied sur le support en mousse",
+"Regarder les mains au sol et « se grandir »",
+"Tomber à plat ventre, corps gainé et aligné"
+],
+"mat": [
+"1 tapis de réception",
+"1 sur-tapis de réception",
+"Table de saut en mousse"
+],
+"lab": [
+"ATR tomber à plat ventre"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 57,
+"titre": [
+"Flip Arrière",
+"Niveau D"
+],
+"cons": [
+"Départ debout, dos arrondi, bras vers le bas, regard vers le bas",
+"Se déséquilibrer vers l’arrière et pousser fort dans les jambes en lançant les bras tendus vers l’arrière",
+"Pousser fort dans les épaules au passage en ATR pour se redresser"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Flip arrière"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 58,
+"titre": [
+"Flip Arrière",
+"Niveau D Remédiation"
+],
+"cons": [
+"Départ debout, dos arrondi, bras vers le bas, regard vers le bas",
+"Se déséquilibrer vers l’arrière et pousser fort dans les jambes en lançant les bras tendus vers l’arrière",
+"Pousser fort dans les épaules au passage en ATR pour se redresser"
+],
+"mat": [
+"Piste acro-tramp"
+],
+"lab": [
+"Flip arrièresur trampoline (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 59,
+"titre": [
+"Flip Arrière",
+"Niveau E"
+],
+"cons": [
+"1 à 3 pas d’élan, grand sursaut et grande fente avant",
+"Rondade : Pousser fort dans les épaules au passage en ATR pour se redresser en déséquilibre arrière et enchaîner le flip",
+"Flip : Pousser fort dans les épaules au passage en ATR pour se redresser et enchaîner le saut en extension"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Rondade flip, saut en extension"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 60,
+"titre": [
+"Flip Arrière",
+"Niveau E Remédiation 1"
+],
+"cons": [
+"Poser les mains sur le sur-tapis à la rondade"
+],
+"mat": [
+"Praticable",
+"Sur-tapis de réception"
+],
+"lab": [
+"Rondade flip, saut en extension (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 61,
+"titre": [
+"Flip Arrière",
+"Niveau E Remédiation 2"
+],
+"cons": [
+"Grand sursaut et grande fente avant",
+"Rondade dans l’axe du déplacement (tourner les épaules et regarder l’endroit où les mains se posent au sol jusqu’à l’arrivée sur les pieds)",
+"Pousser fort dans les épaules au passage en ATR pour se redresser",
+"Arriver jambes tendues en déséquilibre arrière pour rebondir vers l’arrière"
+],
+"mat": [
+"Fosse de réception"
+],
+"lab": [
+"Sursaut, rondade tomber dos (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 62,
+"titre": [
+"Flip Arrière",
+"Niveau E Remédiation 3"
+],
+"cons": [
+"Grand sursaut et grande fente avant",
+"Rondade dans l’axe du déplacement (tourner les épaules et regarder le mini-trampoline jusqu’à l’arrivée sur les pieds)",
+"Pousser fort dans les épaules au passage en ATR pour se redresser",
+"Arriver jambes tendues en déséquilibre arrière pour rebondir vers l’arrière"
+],
+"mat": [
+"2 Tapis de réception",
+"1 sur-tapis de réception",
+"Fosse de réception",
+"Mini-trampoline",
+"2 petites caisses en bois et leur chapeau"
+],
+"lab": [
+"Sursaut, rondade tomber dos (remédiation 3)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 63,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D"
+],
+"cons": [
+"Départ debout, bras alignés avec le dos",
+"Saut en extension en léger déséquilibre arrière",
+"Monter et attraper les genoux vers la poitrine",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"Piste acro-tramp"
+],
+"lab": [
+"Salto arrière avec trampoline"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 64,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D remédiation 1"
+],
+"cons": [
+"Départ allongé sur le dos sur le bloc en mousse, tête rentrée (seule la tête n’est pas en contact avec le bloc: menton / poitrine)",
+"Monter et attraper les genoux vers la poitrine",
+"Rouler en arrière et se réceptionner sur les pieds en lâchant les genoux"
+],
+"mat": [
+"Tapis de réception",
+"Bloc en mousse rectangulaire type « Dima 6 »"
+],
+"lab": [
+"Roulade arrière en contre-bas"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 65,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D remédiation 2"
+],
+"cons": [
+"Départ debout, bras alignés avec le dos",
+"Saut en extension en léger déséquilibre vers l’arrière (lancer des bras tendus synchronisé à l’impulsion des jambes)",
+"Arriver sur le dos sur le plan incliné",
+"Monter et attraper les genoux vers la poitrine pour rouler en arrière"
+],
+"mat": [
+"2 tapis de réception sur grosse fosse de réception",
+"Bloc en mousse triangulaire",
+"Piste acro-tramp"
+],
+"lab": [
+"Roulade arrière sur plan incliné avec trampoline"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 66,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D Remédiation 3"
+],
+"cons": [
+"Départ debout, bras alignés avec le dos",
+"Saut en extension en léger déséquilibre arrière",
+"Monter et attraper les genoux vers la poitrine",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"1 tapis de réception sur grosse fosse de réception",
+"Piste acro-tramp"
+],
+"lab": [
+"Salto arrière avec trampoline (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 67,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau D Remédiation 4"
+],
+"cons": [
+"Départ debout, bras alignés avec le dos",
+"Saut en extension en léger déséquilibre arrière",
+"Monter et attraper les genoux vers la poitrine",
+"Dégrouper pour se réceptionner à 4 pattes"
+],
+"mat": [
+"2 tapis de réception sur grosse fosse de réception",
+"Piste acro-tramp"
+],
+"lab": [
+"Salto arrière avec trampoline (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 68,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau E"
+],
+"cons": [
+"Départ debout, bras alignés avec le dos",
+"Grand saut en extension en léger déséquilibre arrière",
+"Monter et attraper les genoux vers la poitrine",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis",
+"Tremplin"
+],
+"lab": [
+"Salto arrière avec tremplin"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 69,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau F"
+],
+"cons": [
+"Départ debout, bras alignés avec le dos",
+"Grand saut en extension en léger déséquilibre arrière",
+"Monter et attraper les genoux vers la poitrine",
+"Dégrouper pour se réceptionner debout"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Salto arrière"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 70,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau F"
+],
+"cons": [
+"3 pas d’élan et grand sursaut",
+"Rondade dans l’axe du déplacement (tourner les épaules et regarder l’endroit où les mains se posent au sol)",
+"Pousser fort dans les épaules pour se redresser, bras vers le haut",
+"Rebondir jambes tendues",
+"Monter et attraper les genoux vers la poitrine"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Rondade salto arrière au sol"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 71,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau F Remédiation 1"
+],
+"cons": [
+"3 pas d’élan et grand sursaut",
+"Rondade dans l’axe du déplacement (tourner les épaules et regarder l’endroit où les mains se posent au sol)",
+"Pousser fort dans les épaules pour se redresser, bras vers le haut",
+"Rebondir jambes tendues",
+"Monter et attraper les genoux vers la poitrine"
+],
+"mat": [
+"Praticable",
+"3 à 4 tapis de réception"
+],
+"lab": [
+"Rondade salto arrière sur tapis (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 72,
+"titre": [
+"Roulade Arrière → Salto",
+"Niveau F Remédiation 2"
+],
+"cons": [
+"1 à 3 pas d’élan et grand sursaut",
+"Rondade dans l’axe du déplacement (tourner les épaules et regarder le repère visuel au sol)",
+"Pousser fort dans les épaules pour se redresser, bras vers le haut",
+"Rebondir jambes tendues pour monter et arriver sur le dos sur le plan incliné"
+],
+"mat": [
+"3 tapis de réception",
+"Bloc triangulaire",
+"Repère visuel au sol"
+],
+"lab": [
+"Rondade, saut extension, roulade arrière sur tapis (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 73,
+"titre": [
+"ATR → Saut de mains",
+"Niveau A"
+],
+"cons": [
+"Mains au sol, bras tendus, poser les pieds sur le bloc jambes tendues pour aligner le dos avec les bras (placement du dos)",
+"Regarder les mains au sol",
+"Monter une jambe, puis l’autre pour tenir l’ATR avec les pieds en contact le tapis au mur"
+],
+"mat": [
+"Gros tapis au mur",
+"Table de saut en mousse",
+"Tapis de réception"
+],
+"lab": [
+"Placement du dos 3’’ puis ATR dos au mur 3’’"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 74,
+"titre": [
+"ATR → Saut de mains",
+"Niveau A remédiation 1"
+],
+"cons": [
+"Mains au sol, monter les pieds sur le plan incliné",
+"Pousser sur les bras tendus",
+"Gainer tout le corps (mains, épaules, dos et jambes alignés)",
+"Tenir 3’’ en regardant les mains au sol",
+"Rouler en fléchissant les bras parallèlement"
+],
+"mat": [
+"Mur",
+"Bloc triangulaire",
+"Tapis de réception"
+],
+"lab": [
+"Appui Tendu Renversé tenu 3’’ face au mur"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 75,
+"titre": [
+"ATR → Saut de mains",
+"Niveau B"
+],
+"cons": [
+"Poser les mains à plat en fléchissant la jambe avant, bras tendus, écartement des épaules",
+"Regarder les mains au sol",
+"Lancer la jambe arrière, tendue, vers le tapis au mur et assembler les 2 pieds"
+],
+"mat": [
+"Gros tapis au mur",
+"Tapis de réception"
+],
+"lab": [
+"ATR 3’’ dos au mur"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5"
+]
+},
+{
+"s": 76,
+"titre": [
+"ATR → Saut de mains",
+"Niveau B Remédiation 1"
+],
+"cons": [
+"Regarder un repère visuel au sol du début à la fin"
+],
+"mat": [
+"Gros tapis au mur",
+"Tapis de réception",
+"Repère visuel au sol"
+],
+"lab": [
+"ATR 3’’ dos au mur (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 77,
+"titre": [
+"ATR → Saut de mains",
+"Niveau C"
+],
+"cons": [
+"Poser les mains à plat en fléchissant la jambe avant, bras tendus, écartement des épaules",
+"Regarder les mains ou un repère visuel au sol",
+"Lancer la jambe arrière, tendue et assembler les 2 pieds à la verticale en restant gainé jusqu’à la réception sur le dos (bras, dos et jambes alignés)"
+],
+"mat": [
+"Tapis de réception",
+"Repère visuel au sol"
+],
+"lab": [
+"ATR tomber à plat dos"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 78,
+"titre": [
+"ATR → Saut de mains",
+"Niveau C Remédiation 1"
+],
+"cons": [
+"Départ mains au sol, bras tendus, pieds sur le bloc jambes tendues, aligner le dos avec les bras (placement du dos)",
+"Regarder les mains ou un repère visuel au sol",
+"Monter une jambe puis l’autre à la verticale (ATR)",
+"Rester gainé jusqu’à la réception sur le dos (bras, dos et jambes alignés)"
+],
+"mat": [
+"Bloc en mousse",
+"Tapis de réception",
+"Repère visuel au sol"
+],
+"lab": [
+"ATR tomber à plat dos (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 79,
+"titre": [
+"ATR → Saut de mains",
+"Niveau D"
+],
+"cons": [
+"Lancer la jambe arrière pour passer à l’ATR, corps gainé et aligné, jambes serrées",
+"Regarder les mains au sol le plus longtemps possible",
+"Rouler bras tendus en rentrant la tête (menton / poitrine), dos arrondi",
+"Fléchir les jambes le plus tard possible pour se relever"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"ATR roulade avant"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 80,
+"titre": [
+"ATR → Saut de mains",
+"Niveau E Remédiation 1"
+],
+"cons": [
+"Rouler en fléchissant les bras"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"ATR roulade avant (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 81,
+"titre": [
+"ATR → Saut de mains",
+"Niveau E Remédiation 2"
+],
+"cons": [
+"Placement du dos jambes tendues, pieds sur le bloc (bras et dos alignés)",
+"Regarder les mains au sol",
+"Monter une jambe à l’ATR",
+"Plier les bras parallèlement puis poser la nuque en rentrant la tête (menton / poitrine), dos arrondi",
+"Fléchir les jambes le plus tard possible pour se relever"
+],
+"mat": [
+"Table de saut en mousse ou Bloc en mousse rectangulaire type « Dima 6 »"
+],
+"lab": [
+"ATR roulade avant (remédiation 2)",
+"OU"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 82,
+"titre": [
+"ATR → Saut de mains",
+"Niveau E Remédiation 3"
+],
+"cons": [
+"Départ allongé sur le ventre",
+"Poser les mains à plat",
+"Amortir avec les bras parallèles pour poser la nuque en rentrant la tête (menton / poitrine), dos arrondi",
+"Fléchir les jambes le plus tard possible pour se relever"
+],
+"mat": [
+"Table de saut en mousse ou Bloc en mousse rectangulaire type « Dima 6 »"
+],
+"lab": [
+"ATR roulade avant (remédiation 3)",
+"OU"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 83,
+"titre": [
+"ATR → Saut de mains",
+"Niveau D"
+],
+"cons": [
+"Grande fente avant en regardant la marque à franchir au sol",
+"Lancer fort la jambe arrière et pousser très fort dans les épaules pour franchir le repère visuel au sol en « sautant »",
+"Passer en ATR après avoir franchi la marque au sol",
+"Rester gainé jusqu’à la réception sur le dos (bras, dos et jambes alignés)"
+],
+"mat": [
+"Tapis de réception",
+"Repère visuel au sol"
+],
+"lab": [
+"ATR avec impulsion, tomber à plat dos"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 84,
+"titre": [
+"ATR → Saut de mains",
+"Niveau D Remédiation 1"
+],
+"cons": [],
+"mat": [
+"Tapis de réception",
+"Repère visuel au sol"
+],
+"lab": [
+"ATR avec impulsion, tomber à plat dos (remédiation)"
+],
+"crit": [
+"Franchir le repère visuel au sol en avançant une main, puis l’autre, lorsque les pieds dépassent la verticale (marcher sur les mains)"
+],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 85,
+"titre": [
+"ATR → Saut de mains",
+"Niveau E"
+],
+"cons": [
+"1 ou 2 pas d’élan, grand sursaut vers l’avant, bras alignés avec le dos (« se grandir »)",
+"Grande fente avant en regardant le mini-trampoline le plus longtemps possible",
+"Lancer très fort la jambe arrière et pousser très fort dans les épaules pour rebondir sur le mini-trampoline",
+"Franchir l’obstacle corps gainé jusqu’à la réception debout (bras, dos et jambes alignés)"
+],
+"mat": [
+"2 Tapis de réception",
+"1 sur-tapis de réception",
+"Bloc cylindrique",
+"Mini-trampoline",
+"2 petites caisses en bois et leur chapeau"
+],
+"lab": [
+"Saut de mains sur mini-trampoline"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 86,
+"titre": [
+"ATR → Saut de mains",
+"Niveau E Remédiation 1"
+],
+"cons": [
+"Départ debout bras alignés avec le dos (« se grandir »)",
+"Grande fente avant en regardant le mini-trampoline le plus longtemps possible",
+"Lancer la jambe arrière et pousser très fort dans les épaules au passage en ATR",
+"Rester corps aligné et gainé jusqu’à l’arrivée du dos sur le bloc cylindrique"
+],
+"mat": [
+"2 Tapis de réception",
+"1 sur-tapis de réception",
+"Bloc cylindrique",
+"Mini-trampoline",
+"2 petites caisses en bois et leur chapeau"
+],
+"lab": [
+"Saut de mains sur mini-trampoline (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 87,
+"titre": [
+"ATR → Saut de mains",
+"Niveau F"
+],
+"cons": [
+"1 à 3 pas d’élan, grand sursaut vers l’avant, bras alignés avec le dos (« se grandir »)",
+"Grande fente avant en regardant les mains au sol le plus longtemps possible",
+"Lancer très fort la jambe arrière et pousser très fort dans les épaules",
+"Rester corps gainé jusqu’à la réception debout (bras, dos et jambes alignés)"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Saut de mains au sol"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 88,
+"titre": [
+"ATR → Saut de mains",
+"Niveau F Remédiation 1"
+],
+"cons": [
+"Poser les mains sur le tapis"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis de réception"
+],
+"lab": [
+"Saut de mains au sol (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 89,
+"titre": [
+"ATR → Saut de mains",
+"Niveau F Remédiation 2"
+],
+"cons": [
+"Poser les mains sur le tapis"
+],
+"mat": [
+"2 tapis de réception",
+"1 sur-tapis de réception"
+],
+"lab": [
+"Saut de mains au sol (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 90,
+"titre": [
+"Roue → Rondade",
+"Niveau A"
+],
+"cons": [
+"Départ debout pieds décalés",
+"Lancer la jambe arrière et poser les mains sur l’obstacle (mains tournées l’une vers l’autre)",
+"Pousser fort sur les bras tendus",
+"Regarder l’obstacle jusqu’à la réception",
+"Se réceptionner sur un pied, puis l’autre de l’autre côté de l’obstacle"
+],
+"mat": [
+"Chapeau de caisse en bois"
+],
+"lab": [
+"Roue sur obstacle en largeur"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 91,
+"titre": [
+"Roue → Rondade",
+"Niveau B"
+],
+"cons": [
+"Lancer la jambe arrière par-dessus le bloc en mousse et poser les mains sur l’obstacle (mains tournées l’une vers l’autre)"
+],
+"mat": [
+"Chapeau de caisse en bois",
+"Bloc en mousse trapézoïdal"
+],
+"lab": [
+"Roue sur obstacle en largeur (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 92,
+"titre": [
+"Roue → Rondade",
+"Niveau B Remédiation 1"
+],
+"cons": [
+"Lancer la jambe arrière par-dessus la caisse en bois et poser les mains dessus (mains tournées l’une vers l’autre)"
+],
+"mat": [
+"Petite caisse en bois"
+],
+"lab": [
+"Lycée Jean RostandF.DEMAZEUX",
+"E.P.S.",
+"GYM",
+"Roue sur obstacle en largeur (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5"
+]
+},
+{
+"s": 93,
+"titre": [
+"Roue → Rondade",
+"Niveau B Remédiation 2"
+],
+"cons": [
+"Départ debout, mains sur la caisse (mains tournées l’une vers l’autre), un pied de chaque côté de la caisse",
+"Pousser fort sur les bras tendus et regarder les mains sur l’obstacle",
+"Pousser alternativement sur une jambe puis sur l’autre"
+],
+"mat": [
+"Petite caisse en bois"
+],
+"lab": [
+"Roue sur obstacle en largeur (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 94,
+"titre": [
+"Roue → Rondade",
+"Niveau B Remédiation 3"
+],
+"cons": [
+"Départ debout devant l’obstacle, bras levés alignés avec le dos",
+"Poser un pied sur l’obstacle et lancer la jambe arrière tendue vers le haut",
+"Poser une main après l’autre au bout de l’obstacle (mains tournées l’une vers l’autre)",
+"Pousser fort sur les bras et regarder le bout de l’obstacle jusqu’à la réception"
+],
+"mat": [
+"Chapeau de caisse en bois",
+"Carpette"
+],
+"lab": [
+"Roue sur obstacle en longueur"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 95,
+"titre": [
+"Roue → Rondade",
+"Niveau C"
+],
+"cons": [
+"Départ en grande fente avant, bras alignés avec le dos",
+"Lancer fort la jambe arrière tendue vers le haut et poser les mains au sol en tournant les épaules dans l’axe du déplacement",
+"Pousser fort sur un bras puis sur l’autre",
+"Regarder l’endroit où les mains se posent jusqu’à la réception"
+],
+"mat": [
+"2 blocs en mousse rectangulaires"
+],
+"lab": [
+"Roue dans un couloir"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 96,
+"titre": [
+"Roue → Rondade",
+"Niveau C explication"
+],
+"cons": [],
+"mat": [
+"2 blocs en mousse rectangulaires"
+],
+"lab": [
+"Roue dans un couloir"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 97,
+"titre": [
+"Roue → Rondade",
+"Niveau D"
+],
+"cons": [
+"Départ en grande fente avant, bras alignés avec le dos",
+"Lancer fort la jambe arrière tendue vers le haut et poser les mains au sol en tournant les épaules dans l’axe du déplacement",
+"Pousser fort sur un bras puis sur l’autre",
+"Regarder l’endroit où les mains se posent jusqu’à la réception sur le 1er pied puis se replacer en fente avant…"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"2 Roues enchaînées au sol"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 98,
+"titre": [
+"Roue → Rondade",
+"Niveau D"
+],
+"cons": [
+"Sursaut vers l’avant, bras alignés avec le dos (« se grandir »)",
+"Grande fente avant en regardant le mini-trampoline jusqu’à la réception",
+"Lancer la jambe arrière tendue vers le haut et poser les mains en tournant les épaules dans l’axe du déplacement",
+"Pousser fort dans les épaules pour rebondir sur le mini-trampoline",
+"Assembler les jambes et les poser en même temps face au mini-trampoline"
+],
+"mat": [
+"2 Tapis de réception",
+"1 sur-tapis de réception",
+"Mini-trampoline",
+"2 petites caisses en bois et leur chapeau"
+],
+"lab": [
+"Sursaut, Rondade sur mini-trampoline"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 99,
+"titre": [
+"Roue → Rondade",
+"Niveau D Remédiation 1"
+],
+"cons": [
+"Départ en grande fente avant sans sursaut"
+],
+"mat": [
+"2 Tapis de réception",
+"1 sur-tapis de réception",
+"Mini-trampoline",
+"2 petites caisses en bois et leur chapeau"
+],
+"lab": [
+"Rondade sur mini-trampoline (remédiation 1)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 100,
+"titre": [
+"Roue → Rondade",
+"Niveau D Remédiation 2"
+],
+"cons": [
+"Bien tourner les épaules dans le sens du déplacement juste avant de poser les mains sur le mini-trampoline",
+"Pousser sur les 2 bras pour rester dans l’axe"
+],
+"mat": [
+"2 Tapis de réception",
+"1 sur-tapis de réception",
+"1 obstacle en mousse",
+"Mini-trampoline",
+"2 petites caisses en bois et leur chapeau"
+],
+"lab": [
+"Rondade sur mini-trampoline (remédiation 2)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 101,
+"titre": [
+"Roue → Rondade",
+"Niveau E"
+],
+"cons": [
+"Grand sursaut vers l’avant, bras alignés avec le dos (« se grandir »)",
+"Grande fente avant en regardant l’endroit où les mains se posent au sol jusqu’à la réception",
+"Lancer la jambe arrière tendue vers le haut et poser les mains en tournant les épaules dans l’axe du déplacement",
+"Pousser très fort dans les épaules",
+"Assembler les jambes tendues pour rebondir et faire un saut en extension"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Sursaut, Rondade appui sur tremplin"
+],
+"crit": [],
+"vid": []
+},
+{
+"s": 102,
+"titre": [
+"Roue → Rondade",
+"Niveau E explication"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Sursaut, Rondade appui sur tremplin"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 103,
+"titre": [
+"Roue → Rondade",
+"Niveau F"
+],
+"cons": [
+"Grand sursaut vers l’avant, bras alignés avec le dos (« se grandir »)",
+"Grande fente avant en regardant l’endroit où les mains se posent au sol jusqu’à la réception",
+"Lancer la jambe arrière tendue vers le haut et poser les mains en tournant les épaules dans l’axe du déplacement",
+"Pousser très fort dans les épaules",
+"Assembler les jambes tendues pour rebondir et faire un saut en extension"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Sursaut, Rondade saut en extension"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 104,
+"titre": [
+"Roue → Rondade",
+"Niveau F Remédiation 1"
+],
+"cons": [
+"1 pas avant le sursaut"
+],
+"mat": [
+"Praticable"
+],
+"lab": [
+"Sursaut, Rondade saut en extension (remédiation)"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 105,
+"titre": [
+"Saut",
+"Niveau A : Saut extension trampoline"
+],
+"cons": [
+"Saut avec pose des mains puis des pieds sur la table et saut extension"
+],
+"mat": [
+"Table de saut",
+"Mini trampoline"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 106,
+"titre": [
+"Saut",
+"Niveau B : Saut extension trampoline ½ tour"
+],
+"cons": [
+"Saut avec pose des mains puis des pieds sur la table et saut extension"
+],
+"mat": [
+"Table de saut",
+"Mini trampoline"
+],
+"lab": [],
+"crit": [],
+"vid": []
+},
+{
+"s": 107,
+"titre": [
+"Saut",
+"Niveau C : ATR roulé épaules tombé plat dos"
+],
+"cons": [
+"Saut avec pose des mains puis des pieds sur la table et saut extension"
+],
+"mat": [
+"Table de saut",
+"Mini trampoline",
+"Tapis"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 108,
+"titre": [
+"Saut",
+"Niveau D : ATR tombé plat dos"
+],
+"cons": [
+"Saut avec pose des mains puis des pieds sur la table et saut extension"
+],
+"mat": [
+"Table de saut",
+"Mini trampoline",
+"Tapis"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 109,
+"titre": [
+"Saut",
+"Niveau E : Saut lune réception dos à la table"
+],
+"cons": [
+"Saut avec pose des mains puis des pieds sur la table et saut extension"
+],
+"mat": [
+"Table de saut",
+"Trampoline"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 110,
+"titre": [
+"Saut",
+"Niveau F : Saut avec ¼ ou ½ Tour réception face à la table"
+],
+"cons": [
+"Saut avec pose des mains puis des pieds sur la table et saut extension"
+],
+"mat": [
+"Table de saut",
+"Trampoline"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 111,
+"titre": [
+"Barres Asymétriques",
+"Niveau A"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"Barre inférieure Appui facial",
+"Barre inférieure Siège écart",
+"Barre supérieure ½ tour",
+"Barre supérieure Balancer AR"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5",
+"rId7",
+"rId9"
+]
+},
+{
+"s": 112,
+"titre": [
+"Barres Asymétriques",
+"Niveau A"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"Barre supérieure ½ tour Jambes serrées tendues, sans arrêt"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 113,
+"titre": [
+"Barres Asymétriques",
+"Niveau B"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"Barre supérieure Suspension",
+"Barre supérieure à Barre inférieure Balancer AV",
+"Barre inférieure à Barre supérieure",
+"Barre supérieure sortie vers l’avant"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5",
+"rId7",
+"rId9"
+]
+},
+{
+"s": 114,
+"titre": [
+"Barres Asymétriques",
+"Niveau C"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"Barre inférieure Tour rotation AR",
+"Barre inférieure Tour entier",
+"Barre supérieure Rotation AV",
+"Barre supérieure Tour entier"
+],
+"crit": [],
+"vid": [
+"rId3",
+"rId5",
+"rId7",
+"rId9"
+]
+},
+{
+"s": 115,
+"titre": [
+"Barres Asymétriques",
+"Niveau C"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"Barre inférieure tour Rotation AR, Bras tendus, corps aligné"
+],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 116,
+"titre": [
+"Barres Asymétriques",
+"Niveau D"
+],
+"cons": [],
+"mat": [],
+"lab": [
+"½ tour Arrivée Barre supérieure",
+"Barre supérieure ½ T +Rotation AR",
+"Barre supérieure Siège écart",
+"Barre supérieure ½ T + Sortie filée"
+],
+"crit": [],
+"vid": [
+"rId2",
+"rId4",
+"rId6",
+"rId8"
+]
+},
+{
+"s": 117,
+"titre": [
+"Liaison Saut vertical"
+],
+"cons": [
+"Saut vertical, appel 2 pieds, jambes tendues serrées, réception 2 pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 118,
+"titre": [
+"Liaison Saut extension groupé"
+],
+"cons": [
+"Appel 2 pieds, saut groupé et réception 2 pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 119,
+"titre": [
+"Liaison Saut extension demi-tour (180°)"
+],
+"cons": [
+"Impulsion 2 pieds, saut groupé"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 120,
+"titre": [
+"Liaison Saut e chat"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 121,
+"titre": [
+"Liaison Saut tour complet (360°)"
+],
+"cons": [
+"Appel 2 pieds, saut vertical avec 1 tour et réception 2 pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 122,
+"titre": [
+"Liaison Saut tour et demi (540°)"
+],
+"cons": [
+"Appel 2 pieds, saut vertical avec 1 tour ½ et réception 2 pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 123,
+"titre": [
+"Liaison Saut cosaque"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 124,
+"titre": [
+"Liaison Saut cisonne"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 125,
+"titre": [
+"Liaison Saut ciseaux"
+],
+"cons": [
+"Saut, impulsion 1 jambe, ciseaux de jambes, revenir sur la jambe libre"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 126,
+"titre": [
+"Liaison Saut carpé"
+],
+"cons": [
+"Appel 2 pieds saut carpé, jambes écartées et tendues à l’horizontale et réception 2 pieds"
+],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 127,
+"titre": [
+"Liaison Grant jeté au grand écart"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 128,
+"titre": [
+"Liaison Tour sur ½ pointes"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 129,
+"titre": [
+"Liaison ½ tour sur un pie"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 130,
+"titre": [
+"Liaison Pas chassés"
+],
+"cons": [],
+"mat": [
+"Praticable"
+],
+"lab": [],
+"crit": [],
+"vid": [
+"rId3"
+]
+},
+{
+"s": 131,
+"titre": null,
+"cons": [],
+"mat": [],
+"lab": [],
+"crit": [],
+"vid": []
+},
+{
+"s": 132,
+"titre": [
+"Trampoline"
+],
+"cons": [
+"Impulsion pieds joints écartés largeur du bassin",
+"Garder jambes tendues et contractées (action des chevilles) au moment de l’impulsion sur la toile",
+"Les bras montent tendus par l’avant au dessus de la tête quand le",
+"corps monte / Les bras descendent tendus sur les côtés quand le corps descend",
+"Le corps est gainé",
+"Légère antéversion du bassin",
+"Repère visuel droit devant (Ne pas baisser la tête!)"
+],
+"mat": [
+"Trampoline",
+"Grand tapis protection"
+],
+"lab": [
+"Trampoline"
+],
+"crit": [],
+"vid": []
+}
+]

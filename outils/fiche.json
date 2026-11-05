@@ -1,0 +1,338 @@
+{
+ "1": [
+  {
+   "n": "A",
+   "nom": "Roulade groupée aidée",
+   "crit": [
+    "Je roule dans l'axe, sans arrêt",
+    "Je me relève sans poser mains derrière"
+   ],
+   "img": true
+  },
+  {
+   "n": "B",
+   "nom": "Roulade groupée sol",
+   "crit": [
+    "Je roule dans l'axe, sans arrêt",
+    "Je me relève sans poser mains derrière"
+   ],
+   "img": true
+  },
+  {
+   "n": "C",
+   "nom": "Roulade élevée",
+   "crit": [
+    "Mes jambes restent tendues",
+    "J’enchaine envol et rotation sans arrêt"
+   ],
+   "img": true
+  },
+  {
+   "n": "D",
+   "nom": "Salto trampoline",
+   "crit": [
+    "Sursaut & impulsion 2 pieds",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  },
+  {
+   "n": "E",
+   "nom": "Salto tremplin",
+   "crit": [
+    "Sursaut & impulsion 2 pieds",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  },
+  {
+   "n": "F",
+   "nom": "Salto au sol",
+   "crit": [
+    "Sursaut & impulsion 2pieds",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  }
+ ],
+ "2": [
+  {
+   "n": "A",
+   "nom": "Roulade groupée / écart sur plan incliné",
+   "crit": [
+    "Je roule dans l'axe sans arrêt",
+    "Coudes & genoux ne touchent pas sol"
+   ],
+   "img": true
+  },
+  {
+   "n": "B",
+   "nom": "Roulade groupée/ écart au sol",
+   "crit": [
+    "Je roule dans l'axe sans arrêt",
+    "Coudes & genoux ne touchent pas sol"
+   ],
+   "img": true
+  },
+  {
+   "n": "C",
+   "nom": "Roulade groupée/écart jambes tendues au sol",
+   "crit": [
+    "Je roule dans l'axe sans arrêt",
+    "Jambes tendues à la réception"
+   ],
+   "img": false
+  },
+  {
+   "n": "D",
+   "nom": "Salto trampoline",
+   "crit": [
+    "Sursaut&impulsion2pieds",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  },
+  {
+   "n": "E",
+   "nom": "Salto tremplin",
+   "crit": [
+    "Sursaut&impulsion2pieds",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  },
+  {
+   "n": "F",
+   "nom": "Salto au sol",
+   "crit": [
+    "Sursaut&impulsion2pieds",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  }
+ ],
+ "3": [
+  {
+   "n": "A",
+   "nom": "Placement du dos puis ATR dos au mur",
+   "crit": [
+    "Je regarde les mains, coudes verrouillés",
+    "Je tiens immobile chaque position 3’’"
+   ],
+   "img": true
+  },
+  {
+   "n": "B",
+   "nom": "ATR dos au mur",
+   "crit": [
+    "Je regarde les mains, coudes verrouillés",
+    "Je tiens aligné 3’’pieds au mur"
+   ],
+   "img": true
+  },
+  {
+   "n": "C",
+   "nom": "ATR tombé plat dos",
+   "crit": [
+    "Je regarde les mains, coudes verrouillés",
+    "3’’& arriver dos/pieds simultanément"
+   ],
+   "img": true
+  },
+  {
+   "n": "D",
+   "nom": "ATR impulsion bras tombé plat dos",
+   "crit": [
+    "Sursaut avec flexion/extension coudes",
+    "Arriver bras tendus, dans l'axe, gainé"
+   ],
+   "img": true
+  },
+  {
+   "n": "E",
+   "nom": "Sursaut & saut de mains trampoline",
+   "crit": [
+    "Passage ATR sans toucher obstacle",
+    "Réception debout, bras verticaux"
+   ],
+   "img": true
+  },
+  {
+   "n": "F",
+   "nom": "Elan 3 pas, sursaut & saut de mains",
+   "crit": [
+    "Passage ATR avec extension coudes",
+    "Réception debout, bras verticaux"
+   ],
+   "img": true
+  }
+ ],
+ "4": [
+  {
+   "n": "A",
+   "nom": "Roue mains sur plinth",
+   "crit": [
+    "Main G main D pied D pied G (DGGD)",
+    "Ligne mains fesses, jambes fléchies"
+   ],
+   "img": true
+  },
+  {
+   "n": "B",
+   "nom": "Roue avec obstacle",
+   "crit": [
+    "Je pose mes 4 appuis l’un après l’autre",
+    "Passage jambes tendues vers l'ATR"
+   ],
+   "img": true
+  },
+  {
+   "n": "C",
+   "nom": "Roue dans un couloir",
+   "crit": [
+    "J’aligne mes 4 appuis au sol",
+    "Je ne touche jamais les murs"
+   ],
+   "img": true
+  },
+  {
+   "n": "D",
+   "nom": "Sursaut+Rondade sur trampoline",
+   "crit": [
+    "Mains quittent trampo avant pose pieds",
+    "Réception pieds joints face trampo"
+   ],
+   "img": true
+  },
+  {
+   "n": "E",
+   "nom": "Sursaut+Rondade sur tremplin",
+   "crit": [
+    "Sursaut & ATR quand mains posées",
+    "Réception pieds joints de face & sursaut"
+   ],
+   "img": false
+  },
+  {
+   "n": "F",
+   "nom": "Sursaut+Rondade au sol + saut extension",
+   "crit": [
+    "Sursaut, ATR et extension dynamique",
+    "Réception pieds joints de face & sursaut"
+   ],
+   "img": true
+  }
+ ],
+ "5": [
+  {
+   "n": "A",
+   "nom": "Saut extension trampoline",
+   "crit": [
+    "Sursaut & impulsion pieds joints",
+    "Appuis mains pieds brefs, envol aligné"
+   ],
+   "img": true
+  },
+  {
+   "n": "B",
+   "nom": "Saut extension trampoline ½ tour",
+   "crit": [
+    "Sursaut&impulsion pieds joints",
+    "Appuis mains pieds brefs, envol aligné"
+   ],
+   "img": true
+  },
+  {
+   "n": "C",
+   "nom": "ATR roulé épaules tombé plat dos",
+   "crit": [
+    "ATR, flexion coudes & j’enroule dos",
+    "Bras & Jambes tendues à la réception"
+   ],
+   "img": true
+  },
+  {
+   "n": "D",
+   "nom": "ATR tombé plat dos",
+   "crit": [
+    "Impulsion 2 pieds dynamique & ATR",
+    "Corps tendu de la verticale à réception"
+   ],
+   "img": true
+  },
+  {
+   "n": "E",
+   "nom": "Saut lune réception dos à la table",
+   "crit": [
+    "Sursaut, envol dos aligné, mains ensemble",
+    "Repousse fort bras & pont 2nd envol"
+   ],
+   "img": true
+  },
+  {
+   "n": "F",
+   "nom": "Saut avec ¼ ou ½ Tour réception face à la table",
+   "crit": [
+    "Sursaut, envol dos aligné, mains ensemble",
+    "Repousse fort bras & aligné 2nd envol"
+   ],
+   "img": true
+  }
+ ],
+ "6": [
+  {
+   "n": "A",
+   "nom": "Saut chandelle ou Saut demi-tour",
+   "crit": [
+    "Corps tendu de la verticale à réception",
+    "Equilibre avec les bras, regarde devant"
+   ],
+   "img": true
+  },
+  {
+   "n": "B",
+   "nom": "Saut groupé ou carpé ou Saut carpé écart",
+   "crit": [
+    "Buste cuisse à 90°, jambes tendues",
+    "Equilibre avec les bras, regarde devant"
+   ],
+   "img": true
+  },
+  {
+   "n": "C",
+   "nom": "Saut tombé assis",
+   "crit": [
+    "Réception fesses / jambes tendues",
+    "Se relever jambes tendues corps gainé"
+   ],
+   "img": true
+  },
+  {
+   "n": "D",
+   "nom": "Tomber dos",
+   "crit": [
+    "Réception fesses / dos simultanée",
+    "Se relever jambes tendues corps gainé"
+   ],
+   "img": true
+  },
+  {
+   "n": "E",
+   "nom": "Pull Over avant ou Salto avant",
+   "crit": [
+    "Impulsion 2 pieds, menton collé poitrine",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  },
+  {
+   "n": "F",
+   "nom": "Pull Over arrière ou Salto arrière",
+   "crit": [
+    "Impulsion 2 pieds, menton collé poitrine",
+    "Je tourne dans l’axe, mains sur genoux"
+   ],
+   "img": true
+  }
+ ]
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gym Élève">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-32.png">
+<title>Gymnastique · Élève</title>
+<style>
+:root{--act:#0f766e;--act-fonce:#0b4f4a;--act-pale:#dff2ef;--act-sombre:#5eead4;--act-pale-sombre:#0f2e2b;
+  --sol:#f3f5f8;--craie:#fff;--encre:#1c2128;--repere:#5b6470;--trait:#dde2e8;--sur-encre:#fff;
+  --ok:#15803d;--ok-pale:#e7f6ec;--alerte:#b42318;--alerte-pale:#fde8e6;--prof:#1d4ed8;--prof-pale:#e5edff;
+  --d:"Archivo","Arial Narrow",Arial,sans-serif;--t:"Atkinson","Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--sol);color:var(--encre);font:18px/1.4 var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;padding-bottom:90px}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--act);outline-offset:2px}
+[hidden]{display:none!important}
+img{max-width:100%}
+.barre{display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));background:var(--craie)}
+.barre img{width:38px;height:38px;border-radius:9px;flex:none}
+.barre .app{font:700 17px/1.15 var(--t);flex:1;min-width:0}
+.barre .app small{display:block;font-weight:400;color:var(--repere);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trace{height:8px;background:var(--act)}
+main{padding:12px 16px;max-width:820px;margin:0 auto}
+h2{font:800 32px/1.05 var(--d);font-stretch:74%;margin:8px 0 6px}
+h3{font:800 23px/1.1 var(--d);font-stretch:78%;margin:0 0 6px}
+h4{font:800 19px/1.1 var(--d);font-stretch:80%;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.03em;color:var(--repere)}
+.muted{color:var(--repere)}.small{font-size:max(15px,var(--fs-min,15px))}
+.carte{background:var(--craie);border-radius:16px;padding:14px;margin:12px 0;border:1px solid var(--trait)}
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 18px;border-radius:14px;font:700 18px var(--t);border:2px solid var(--encre);background:var(--craie);color:var(--encre);text-decoration:none}
+.bt.noir{background:var(--encre);color:var(--sur-encre)}
+.bt.act{background:var(--act);border-color:var(--act);color:#fff}
+.bt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.bt.prof{background:var(--prof);border-color:var(--prof);color:#fff}
+.bt.mini{min-height:44px;padding:0 12px;font-size:16px}
+.bt.danger{border-color:var(--alerte);color:var(--alerte)}
+.bt[disabled]{opacity:.45;cursor:not-allowed}
+.lien{background:none;border:0;color:var(--act-fonce);text-decoration:underline;font-weight:700;padding:6px 0;min-height:44px}
+.rangee{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pleine{width:100%}
+input[type=text],input[type=password],select{width:100%;min-height:52px;padding:8px 12px;border-radius:12px;border:1.5px solid var(--trait);background:var(--craie)}
+input.code{font:800 34px/1 var(--d);letter-spacing:.4em;text-align:center}
+/* Qui pratique */
+.qui{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+.qui button{min-height:50px;padding:0 18px;border-radius:25px;border:2px solid var(--encre);background:var(--craie);font-weight:700}
+.qui button.ici{background:var(--encre);color:var(--sur-encre)}
+/* Lettres de niveau : teintes de la couleur gym, de clair (A) à foncé (F) */
+.L{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;font:800 26px/1 var(--d);flex:none}
+.LA{background:#dff2ef;color:#0b4f4a}.LB{background:#b5e3dc;color:#0b4f4a}.LC{background:#7cc9be;color:#0b3f3b}
+.LD{background:#2a9d8f;color:#fff}.LE{background:#0f766e;color:#fff}.LF{background:#0b4f4a;color:#fff}
+/* Grille des ateliers */
+.ateliers{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:12px 0}
+.tuile{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--craie);border:1px solid var(--trait);border-radius:16px;padding:14px;min-height:96px}
+.tuile b{font:800 22px/1.1 var(--d);font-stretch:78%}
+.tuile .num{font:800 15px/1 var(--d);letter-spacing:.06em;color:var(--act-fonce);text-transform:uppercase}
+.tuile.info{background:var(--act-pale);border-color:transparent}
+.tuile.bonus{border-style:dashed}
+.etat-at{display:flex;gap:4px;margin-top:4px}
+.etat-at i{width:26px;height:26px;border-radius:7px;font:800 15px/26px var(--d);text-align:center;font-style:normal;background:var(--sol);color:var(--repere)}
+.etat-at i.e{background:#fff3c4;color:#6b4e00;box-shadow:inset 0 0 0 2px #d6a400}
+.etat-at i.p{background:var(--ok);color:#fff}
+/* Ligne de niveau (fiche) */
+.atelier{background:var(--craie);border:1px solid var(--trait);border-radius:16px;margin:14px 0;overflow:hidden}
+.atelier>header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--act);color:#fff}
+.atelier>header b{font:800 24px/1 var(--d);font-stretch:76%;flex:1}
+.atelier>header .n{font:800 30px/1 var(--d);opacity:.8}
+.niv{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;padding:10px 12px;border:0;border-top:1px solid var(--trait);background:none;text-align:left}
+.niv:first-of-type{border-top:0}
+.niv .nom{font-weight:700;line-height:1.2}
+.niv .crit{font-size:15px;color:var(--repere);line-height:1.25;margin-top:2px}
+.niv .picto{display:block;height:44px;margin-top:4px;max-width:100%;object-fit:contain;object-position:left}
+.niv.verrou{opacity:.5}
+.ep{display:flex;gap:6px}
+.ep span{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;font:800 22px/1 var(--d);border:2px dashed var(--trait);color:var(--repere)}
+.ep span.e{border:2px solid #d6a400;background:#fff3c4;color:#6b4e00}
+.ep span.p{border:2px solid var(--ok);background:var(--ok);color:#fff}
+.ep span.v{border-style:solid}
+/* Fiche d'apprentissage */
+.video{position:relative;background:#000;border-radius:14px;overflow:hidden;margin:8px 0}
+.video video{display:block;width:100%;max-height:62vh;background:#000}
+.video .leg{position:absolute;left:0;right:0;top:0;padding:6px 10px;background:linear-gradient(#000a,#0000);color:#fff;font-weight:700;font-size:15px;pointer-events:none}
+.ralenti{display:flex;gap:6px;margin-top:-2px;margin-bottom:6px}
+.ralenti button{min-height:44px;padding:0 12px;border-radius:10px;border:1.5px solid var(--trait);background:var(--craie);font-weight:700;font-size:16px}
+.ralenti button.ici{background:var(--encre);color:var(--sur-encre);border-color:var(--encre)}
+ol.cons{margin:4px 0;padding-left:26px}ol.cons li{margin:6px 0}
+.mat{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+.mat span{padding:6px 12px;border-radius:20px;background:var(--sol);border:1px solid var(--trait);font-size:16px}
+.imgs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.imgs img{max-height:150px;border-radius:10px;background:#fff;border:1px solid var(--trait)}
+.critbox{background:var(--act-pale);border-radius:14px;padding:10px 14px;margin:10px 0}
+.critbox li{margin:4px 0;font-weight:700}
+.alerte{background:var(--alerte-pale);color:var(--alerte);border-radius:14px;padding:10px 14px;font-weight:700;margin:10px 0}
+.remlist{display:grid;gap:8px}
+.rem{display:flex;gap:10px;align-items:center;text-align:left;padding:8px;border-radius:14px;border:1px solid var(--trait);background:var(--craie);min-height:64px}
+.rem img{width:96px;height:54px;object-fit:cover;border-radius:8px;background:#000;flex:none}
+.retour{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 14px 0 8px;border-radius:12px;border:0;background:var(--craie);font-weight:700;margin:4px 0}
+/* Validation */
+.valid{border:2px solid var(--act);border-radius:16px;padding:12px 14px;margin:14px 0;background:var(--craie)}
+.coche{display:flex;align-items:center;gap:12px;min-height:54px;padding:6px 12px;border-radius:12px;background:var(--sol);font-weight:700;margin-top:8px}
+.coche input{width:28px;height:28px;accent-color:var(--ok);flex:none}
+.tampon{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:12px;font-weight:700}
+.tampon.e{background:#fff3c4;color:#6b4e00}.tampon.p{background:var(--ok-pale);color:var(--ok)}
+/* Onglets du bas */
+nav.onglets{position:fixed;left:0;right:0;bottom:0;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--craie);border-top:1px solid var(--trait);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav.onglets button{min-height:66px;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:700 15px var(--t);color:var(--repere)}
+nav.onglets button i{font-style:normal;font-size:24px;line-height:1}
+nav.onglets button.ici{color:var(--act-fonce);box-shadow:inset 0 4px 0 var(--act)}
+/* Fenêtres */
+.voile{position:fixed;inset:0;background:#0009;display:flex;align-items:flex-end;justify-content:center;z-index:20;padding:12px}
+.fen{background:var(--craie);border-radius:18px;padding:18px;width:100%;max-width:560px;max-height:92vh;overflow:auto}
+@media (min-width:700px){.voile{align-items:center}}
+.qrbox{background:#fff;border-radius:12px;padding:8px;max-width:420px;margin:0 auto}
+.qrbox svg{display:block;width:100%;height:auto}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--encre);color:var(--sur-encre);padding:12px 18px;border-radius:14px;font-weight:700;z-index:30;max-width:90vw;text-align:center}
+.groupe{display:flex;align-items:center;gap:10px;width:100%;text-align:left;min-height:64px;padding:10px 14px;border-radius:14px;border:1px solid var(--trait);background:var(--craie);margin:8px 0}
+.groupe b{flex:1}
+.liste-el{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;max-height:46vh;overflow:auto}
+.liste-el label{display:flex;gap:10px;align-items:center;min-height:48px;padding:4px 10px;border-radius:10px;background:var(--sol);font-weight:700}
+.liste-el input{width:24px;height:24px}
+.progres{height:12px;border-radius:6px;background:var(--sol);overflow:hidden;margin:8px 0}
+.progres i{display:block;height:100%;background:var(--act);width:0}
+/* Scanner (scan.js) */
+.scan-voile{position:fixed;inset:0;background:#000c;z-index:40;display:flex;align-items:center;justify-content:center;padding:12px}
+.scan-fen{background:var(--craie);border-radius:18px;padding:16px;width:100%;max-width:520px}
+.scan-cadre{position:relative;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:1}
+.scan-cadre video{width:100%;height:100%;object-fit:cover}
+.scan-viseur{position:absolute;inset:15%;border:4px solid #fff;border-radius:16px;box-shadow:0 0 0 999px #0006}
+.scan-msg{font-weight:700;min-height:1.5em}.scan-msg.ok{color:var(--ok)}.scan-msg.err{color:var(--alerte)}
+.scan-bas{display:flex;justify-content:space-between;align-items:center;gap:8px}
+@media print{nav.onglets,.barre button,.retour{display:none}}
+</style>
+<link rel="stylesheet" href="eps-charte-v1.css">
+<style>/* Charte v1 : couleur de la gym (à valider) */ :root{--act:#0f766e;--act-fonce:#0b4f4a;--act-pale:#dff2ef}</style>
+<style>@media print{:root{--fs-min:0px}}</style>
+</head>
+<body>
+<header class="barre"><img src="icon-192.png" alt=""><div class="app">Gymnastique · Élève<small id="sous">Lycée Georges Pompidou</small></div><span id="haut"></span></header>
+<div class="trace"></div>
+<main id="app"></main>
+<nav class="onglets" id="onglets"></nav>
+<div id="modal"></div>
+<script src="donnees.js"></script>
+<script src="qrcode.js"></script>
+<script src="jsqr.js"></script>
+<script src="scan.js"></script>
+<script src="app.js"></script>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
+</body>
+</html>
