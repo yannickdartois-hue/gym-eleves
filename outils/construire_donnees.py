@@ -95,6 +95,21 @@ for a in range(1, 7):
                     'f': pl['f'], 'r': pl['r'], 'prof': k in PRESENCE_PROF})
     ateliers.append({'n': a, 'nom': NOMS[a], 'court': COURT[a], 'niv': niv})
 
+# ---------- Trampoline : vidéos à part (dossier « Trampoline/Fait » de Yannick, recompressées en 720p dans trampo/) ----------
+# (niveau, numéro de fiche, titre, fichier) — une vidéo absente du dossier est simplement ignorée
+TRAMPO = [('A', 201, 'Les chandelles', 'chandelles'), ('A', 202, 'Le demi-tour', 'demi-tour'),
+          ('B', 203, 'Sauts groupé, carpé, écart', 'groupe-carpe-ecart'),
+          ('C', 204, 'Le tomber assis', 'tomber-assis'), ('D', 205, 'Le tomber dos', 'tomber-dos'),
+          ('E', 206, 'Le pull over avant (piqué)', 'pique'), ('E', 207, 'Le salto avant', 'salto-avant'),
+          ('F', 208, 'Le pull over arrière', 'pull-over'), ('F', 209, 'Le salto arrière', 'salto-arriere')]
+TR_VIDS = {}
+for nv, num, titre, fic in TRAMPO:
+    src = f'{B}/trampo/{fic}.mp4'
+    if not os.path.exists(src): continue
+    FICHES[num] = {'t': titre, 'niv': nv, 'rem': False, 'cons': [], 'mat': ['Trampoline', 'Parade autour de la toile'], 'vid': [[f'v{num}.mp4', '']], 'img': [], 'q': []}
+    TR_VIDS[f'v{num}'] = src
+    next(n for n in ateliers[5]['niv'] if n['n'] == nv)['f'].append(num)
+
 def txt(i):
     x = S[i]; return [net(l) for l in (x['lab'] + x['mat'] + x['cons'])]
 s3, s4, s132 = S[3], S[4], S[132]
@@ -147,6 +162,13 @@ for m in sorted(vids_utiles):
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', '1', '-i', dst, '-frames:v', '1', '-vf', 'scale=480:-2', '-q:v', '6', po], check=True)
     d = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', dst], capture_output=True, text=True).stdout.strip() or 0)
     dur[nom] = round(d)
+for nom, src in TR_VIDS.items():
+    dst = OUT + '/media/' + nom + '.mp4'
+    if not os.path.exists(dst) or os.path.getmtime(dst) < os.path.getmtime(src): shutil.copy(src, dst)
+    po = OUT + '/media/' + nom + '.jpg'
+    if not os.path.exists(po):
+        subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', '4', '-i', dst, '-frames:v', '1', '-vf', 'scale=480:-2', '-q:v', '6', po], check=True)
+    dur[nom] = round(float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', dst], capture_output=True, text=True).stdout.strip() or 0))
 GYM['duree'] = dur
 open(OUT + '/donnees.js', 'w').write('/* Données gym — générées par construire_donnees.py depuis le PowerPoint et la fiche CA3. Ne pas modifier à la main. */\nconst GYM=' + json.dumps(GYM, ensure_ascii=False, separators=(',', ':')) + ';\n')
 print('fiches', len(FICHES), 'vidéos', len(vids_utiles), 'images', len(imgs_utiles))

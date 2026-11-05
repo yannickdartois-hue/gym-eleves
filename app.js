@@ -263,7 +263,7 @@ function vNiveau(k){
   h+=`<div class="critbox"><b>Critères de réussite</b><ul>${n.crit.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${n.picto?`<img class="picto-grand" src="${n.picto}" alt="Pictogramme du niveau" data-zoom>`:''}</div>`;
   h+=S&&S.eleves.length?blocValid(k):'';
   if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom)}</div>`).join('');
-  else if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
+  if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
   else h+=`<p class="carte small muted">Pas de vidéo pour ce niveau : regardez le pictogramme et les critères.</p>`;
   if(n.r.length)h+=`<h4>Je n’y arrive pas encore ? Essaie d’abord :</h4><div class="remlist" data-lst="${n.r.join(',')}" data-at="${k[0]}">${n.r.map((id,i)=>carteRem(id,i)).join('')}</div>`;
   return h;
