@@ -7,6 +7,7 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(B, 'sortie')
 S = {x['s']: x for x in json.load(open(B + '/slides.json'))}
 M = json.load(open(B + '/media_map.json'))
 F = json.load(open(B + '/fiche.json'))
+LIENS = json.load(open(B + '/liens.json'))  # liens des images cliquables de chaque diapo (relevés dans le PowerPoint)
 
 def net(t):
     t = t.replace('\xa0', ' ').replace('&amp;', '&')
@@ -24,8 +25,10 @@ def critnet(c):
 # ---------- images de contenu (hors navigation) ----------
 from collections import Counter
 cnt = Counter(p[0] for v in M.values() for p in v['pics'])
+QDECO = {'image106.png', 'image145.png', 'image196.png', 'image222.png', 'image230.png'}
 def images(i):
-    return [p[0] for p in M[str(i)]['pics'] if cnt[p[0]] < 4 and not p[2]]
+    # les petits bonshommes « ? » décoratifs ne sont pas des images de contenu
+    return [p[0] for p in M[str(i)]['pics'] if cnt[p[0]] < 4 and not p[2] and p[0] not in QDECO]
 
 AT = {'Roulade Avant': 1, 'Roulade Arrière': 2, 'ATR': 3, 'Roue': 4, 'Saut': 5}
 FICHES = {}
@@ -68,6 +71,8 @@ for i in range(17, 131):
     FICHES[i] = {'t': titre, 'niv': niv, 'rem': rem, 'cons': [net(c) for c in x['cons']],
                  'mat': [net(c) for c in x['mat']], 'vid': vl,
                  'img': ['i' + re.sub(r'\D', '', p) + '.' + ('jpg' if p.endswith(('jpeg', 'jpg')) else 'png') for p in im]}
+    # « ? » du PowerPoint : exercice(s) de remédiation proposé(s) si l'élève n'y arrive pas
+    FICHES[i]['q'] = [t for img, t in LIENS.get(str(i), []) if img in ('image96.png', 'image157.png', 'image229.png', 'image240.png') and t != i]
     if grp:
         BONUS[grp].append(i)
     else:

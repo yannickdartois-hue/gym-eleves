@@ -240,7 +240,19 @@ function blocFiche(id,titre){
   ${f.vid.map(v=>video(v,id)).join('')}
   ${f.cons.length?`<h4>Consignes</h4><ol class="cons">${f.cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:''}
   ${f.mat.length?`<h4>Matériel</h4><div class="mat">${f.mat.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}
-  ${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="" loading="lazy">`).join('')}</div>`:''}`;
+  ${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="" loading="lazy">`).join('')}</div>`:''}
+  ${boutonsQ(id)}`;
+}
+/* Le « ? » du PowerPoint : sur chaque exercice, un lien vers l'exercice de remédiation plus facile */
+function boutonsQ(id){
+  const q=(fiche(id).q||[]).filter(t=>fiche(t));if(!q.length)return '';
+  return `<div class="qbox"><span class="qrond" aria-hidden="true">?</span><div><b>${fiche(id).rem?'Encore trop difficile ?':'Je n’y arrive pas ?'}</b><div class="rangee" style="margin-top:6px">${q.map(t=>`<button type="button" class="bt mini" data-act="fiche" data-v="${t}" data-q="1">Essaie : ${esc(fiche(t).t)} ›</button>`).join('')}</div></div></div>`;
+}
+// Liste d'aides à laquelle appartient une fiche (pour les flèches ‹ ›)
+function listeDe(id){
+  id=+id;for(const a of GYM.ateliers)for(const n of a.niv)if(n.r.includes(id))return {lst:n.r.map(String),at:String(a.n)};
+  for(const b of GYM.bonus)if(b.f.includes(id))return {lst:b.f.filter(i=>b.id==='liaisons'||fiche(i).rem||i===id).map(String),at:b.id};
+  return {lst:null,at:null};
 }
 function blocTrampo(){const t=GYM.trampo;return `<h3>Trampoline : les bases</h3><h4>Consignes</h4><ol class="cons">${t.cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ol><h4>Matériel</h4><div class="mat">${t.mat.map(c=>`<span>${esc(c)}</span>`).join('')}</div><div class="imgs">${t.img.map(i=>`<img src="img/${i}" alt="" loading="lazy">`).join('')}</div>`}
 function carteRem(id,i){const f=fiche(id),v=f.vid[0];return `<button class="rem" type="button" data-act="fiche" data-v="${id}">${v?`<img src="media/${v[0].replace('.mp4','.jpg')}" alt="" loading="lazy">`:'<span style="width:96px;text-align:center;font-size:28px">📄</span>'}<span><b>${typeof i==='number'?'Aide '+(i+1)+' · ':''}${esc(f.t)}</b>${f.cons[0]?`<br><span class="small muted">${esc(f.cons[0])}</span>`:''}</span></button>`}
@@ -381,7 +393,7 @@ document.addEventListener('click',async ev=>{
     case 'qui':S.cur=+v;OBS=null;sauver();rendre();break;
     case 'atelier':aller({v:'atelier',a:+v});break;
     case 'niveau':OBS=null;aller({v:'niveau',k:v});break;
-    case 'fiche':{const L=b.closest('[data-lst]');aller({v:'fiche',id:v,lst:L?L.dataset.lst.split(',').filter(Boolean):null,at:L?L.dataset.at:null});break}
+    case 'fiche':{const L=b.dataset.q?null:b.closest('[data-lst]'),D=L?{lst:L.dataset.lst.split(',').filter(Boolean),at:L.dataset.at}:listeDe(v);aller({v:'fiche',id:v,lst:D.lst,at:D.at});break}
     case 'fleche':flecher(+v);break;
     case 'bonus':aller({v:'bonus',id:v});break;
     case 'info':aller({v:'info',x:v});break;
