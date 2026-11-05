@@ -170,7 +170,7 @@ function vGroupe(){
   return `<h2>Notre groupe</h2>
   <section class="carte"><p class="small muted">${S.classe?'Classe <b>'+esc(S.classe)+'</b>':'Classe non choisie'}${C&&C.eleves&&C.eleves.length?' · liste du professeur reçue':''}</p>
   ${S.eleves.length?S.eleves.map((e,i)=>`<div class="rangee" style="justify-content:space-between;border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b><button class="bt mini danger" type="button" data-act="retirer" data-v="${i}">Retirer</button></div>`).join(''):'<p>Ajoutez les élèves du groupe (2 à 8), avec leur prénom et leur nom.</p>'}
-  ${S.eleves.length<MAX_GROUPE?`<div class="rangee" style="margin-top:10px">${C&&C.eleves&&C.eleves.length?'<button class="bt act" type="button" data-act="choisirnoms">＋ Choisir dans la liste de la classe</button>':''}<button class="bt" type="button" data-act="ajoutnom">＋ Écrire un prénom</button></div>`:''}
+  ${S.eleves.length<MAX_GROUPE?`<div class="rangee" style="margin-top:10px">${C&&C.eleves&&C.eleves.length?'<button class="bt act" type="button" data-act="choisirnoms">＋ Choisir dans la liste de la classe</button>':''}<button class="bt" type="button" data-act="ajoutnom">＋ Écrire prénom et nom</button></div>`:''}
   </section>
   <section class="carte"><h3>Classe</h3><p class="small muted">Le QR de la classe (affiché par le professeur) donne la liste des élèves et le code de validation du professeur.</p><button class="bt" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></section>
   <section class="carte"><h3>Fin d’année ou erreur</h3><button class="bt danger" type="button" data-act="suppgroupe">Supprimer ce groupe de la tablette</button></section>`;

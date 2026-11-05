@@ -1,7 +1,7 @@
 /* Hors ligne : l'appli est gardée sur la tablette après la 1re ouverture.
    À chaque mise en ligne : augmenter VERSION (gym-eleves-vN). Les vidéos ont leur propre cache
    (gym-eleves-media-v1) : il n'est pas effacé par une mise à jour, inutile de les retélécharger. */
-const VERSION='gym-eleves-v14';
+const VERSION='gym-eleves-v15';
 const MEDIA='gym-eleves-media-v1';
 // Toutes les applis partagent le même stockage (même adresse github.io) : on n'efface QUE les anciennes versions de CETTE appli.
 const MES_CACHES=/^gym-eleves-(?:media-)?v\d+$/;
@@ -24,6 +24,6 @@ async function video(req){
 self.addEventListener('fetch',e=>{
   if(e.request.method!=='GET'||new URL(e.request.url).origin!==location.origin)return;
   if(/\/media\/v\d+\.mp4$/.test(new URL(e.request.url).pathname)){e.respondWith(video(e.request));return}
-  const net=fetch(e.request).then(r=>{if(r.status===200){const c=r.clone();caches.open(VERSION).then(x=>x.put(e.request,c))}return r});
+  const net=fetch(e.request,{cache:'no-cache'}).then(r=>{if(r.status===200){const c=r.clone();caches.open(VERSION).then(x=>x.put(e.request,c))}return r});
   e.respondWith(sous3s(net).catch(()=>caches.match(e.request,{ignoreSearch:true}).then(h=>h||net)));
 });
