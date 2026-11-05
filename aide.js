@@ -17,7 +17,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 <li>6 ateliers, niveaux <b>A à F</b>. Touche un niveau pour voir la vidéo, les consignes, le matériel et les critères.</li>
 <li><b>E</b> : un camarade t’observe. Il choisit son nom dans « Qui observe ? », coche les 2 critères, « réussi du premier coup » et « réception maîtrisée », puis <span class="bouton">✔ Valider E</span>.</li>
 <li>Raté ? Il laisse décochés les critères ratés et touche <span class="bouton">✗ Pas encore réussi</span> : l’appli te propose un exercice plus facile pour travailler ce point.</li>
-<li><b>P</b> : montre ton élément au professeur ; lui seul tape son code pour valider P.</li>
+<li><b>P</b> : touche <span class="bouton">📲 Montrer au professeur</span>. Il scanne le QR, te regarde faire et valide sur son iPad. Puis touche <span class="bouton">📷 Scanner la réponse du prof</span> et vise son écran : le P s’affiche. S’il n’a pas le temps, le P arrivera avec le QR de la classe.</li>
 <li>Un niveau s’ouvre quand le précédent est validé E (🔒 sinon). « Simple et correct vaut mieux que difficile et incorrect ».</li>
 </ul>`},
 {t:'Sécurité et niveaux ⚠️',html:`<ul>
@@ -45,17 +45,17 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 {t:'Nouvelle version, hors ligne, démo',html:`<ul>
 <li>Un bandeau jaune « Nouvelle version » : touche <span class="bouton">Mettre à jour</span> (le carnet est enregistré avant).</li>
 <li>Sans Wi-Fi, l’appli fonctionne. Pour garder toutes les vidéos sur la tablette : Accueil → Réglages de la tablette → <span class="bouton">Garder toutes les vidéos hors ligne</span>, une fois avec le Wi-Fi.</li>
-<li><span class="bouton">Essayer l’appli (démo)</span> sur l’accueil : un groupe fictif pour tout essayer, rien n’est enregistré (code professeur de la démo : 0000).</li>
+<li><span class="bouton">Essayer l’appli (démo)</span> sur l’accueil : un groupe fictif pour tout essayer, rien n’est enregistré (le bouton « Démo : simuler le prof » remplace l’iPad du professeur).</li>
 </ul>`}
 ]},
 {id:'prof',titre:'Professeur',chapitres:[
 {t:'Avant le premier cours',html:`<ol>
-<li>Outil prof → Réglages : choisissez votre <b>code de validation</b> (4 à 8 chiffres), importez la liste Pronote.</li>
+<li>Outil prof → Réglages : importez la liste Pronote.</li>
 <li>Affichez le <b>QR de démarrage</b> de la classe : chaque tablette le scanne (accueil → « QR de la classe »).</li>
 <li>Avec le Wi-Fi, sur chaque tablette : Réglages de la tablette → <span class="bouton">Garder toutes les vidéos hors ligne</span> (≈ 90 Mo).</li>
 </ol>`},
 {t:'Sur la tablette d’un groupe',html:`<ul>
-<li><span class="bouton">🔐 Validation P</span> : tapez votre code. <span class="bouton">Le professeur ouvre ce niveau</span> : débloque un niveau sans le précédent.</li>
+<li><b>Validation P</b> : l’élève touche « Montrer au professeur » ; dans votre outil, À valider → <span class="bouton">📷 Valider un élève</span>, scannez, validez, puis montrez votre réponse à l’élève. Même chemin pour « Le professeur ouvre ce niveau ». Aucun code n’est tapé sur les téléphones.</li>
 <li>Le QR de la classe porte aussi vos validations P : refaites-le scanner pour que les P donnés dans l’outil prof apparaissent sur les tablettes.</li>
 <li>Barres asymétriques : cachées tant que vous ne les activez pas pour la classe (outil prof → Réglages).</li>
 </ul>`}

@@ -234,7 +234,7 @@ function bandeauRotation(){
 document.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-act]');if(!b)return;const v=b.dataset.v;
   switch(b.dataset.act){
-    case 'rate':if(S)noterRate(v);break;
+    case 'rate':if(!S)break;if(window.EPSCode&&S.cfg&&S.cfg.tc&&EPSCode.etat()==='fermee'){const k=v;EPSCode.exiger(()=>noterRate(k));break}noterRate(v);break;
     case 'aide-ciblee':fermer();aller({v:'fiche',id:v,...listeDe(v)});break;
     case 'quiz':if(S)ouvrirQuiz();break;
     case 'quiz-ok':verifierQuiz();break;

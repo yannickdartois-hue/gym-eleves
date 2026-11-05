@@ -14,7 +14,7 @@ function carteDemo(){
     <button type="button" class="bt" data-act="demo">Essayer l’appli (démo)</button></section>`;
 }
 function bandeauDemo(){
-  return DEMO?`<div class="demo-bandeau"><span>👀 <b>Mode démo</b> : rien n’est enregistré. Code professeur : <b>0000</b>.</span><button type="button" class="bt mini" data-act="demofin">Quitter la démo</button></div>`:'';
+  return DEMO?`<div class="demo-bandeau"><span>👀 <b>Mode démo</b> : rien n’est enregistré.</span><button type="button" class="bt mini" data-act="demofin">Quitter la démo</button></div>`:'';
 }
 async function ouvrirDemo(){
   const s=vide(),J=n=>Date.now()-n*864e5;

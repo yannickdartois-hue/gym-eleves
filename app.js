@@ -273,15 +273,15 @@ function vNiveau(k){
 function blocValid(k){
   const E=elv(),v=V(E.id,k)||{},o=ouvert(E.id,k),n=niveau(k);
   const autres=S.eleves.filter(x=>x.id!==E.id);
-  if(v.p)return `<div class="valid"><span class="tampon p">✅ P · validé par le professeur le ${dateFr(v.p.t)}</span>${v.e?`<p class="small muted">E par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</p>`:''}<div class="rangee" style="margin-top:8px"><button class="bt mini" type="button" data-act="annulerP" data-v="${k}">Retirer P (professeur)</button></div></div>`;
-  if(!o)return `<div class="valid"><p><b>🔒 Niveau fermé pour ${esc(court(E.nom))}</b> : il faut d’abord valider le niveau ${NIVS[NIVS.indexOf(k[1])-1]} (E).</p><p class="small muted">Tu peux regarder la vidéo, mais on ne travaille pas un niveau au-dessus sans avoir validé le précédent.</p><button class="bt mini" type="button" data-act="debloquer" data-v="${k}">Le professeur ouvre ce niveau</button></div>`;
-  if(v.e)return `<div class="valid"><span class="tampon e">E · validé par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</span><p class="small">Montre-le au professeur pour la validation <b>P</b>.</p><div class="rangee"><button class="bt prof" type="button" data-act="valP" data-v="${k}">🔐 Validation P (professeur)</button><button class="bt mini" type="button" data-act="annulerE" data-v="${k}">Annuler E</button></div></div>`;
+  if(v.p)return `<div class="valid"><span class="tampon p">✅ P · validé par le professeur le ${dateFr(v.p.t)}</span>${v.e?`<p class="small muted">E par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</p>`:''}</div>`;
+  if(!o)return `<div class="valid"><p><b>🔒 Niveau fermé pour ${esc(court(E.nom))}</b> : il faut d’abord valider le niveau ${NIVS[NIVS.indexOf(k[1])-1]} (E).</p><p class="small muted">Tu peux regarder la vidéo, mais on ne travaille pas un niveau au-dessus sans avoir validé le précédent.</p><button class="bt mini" type="button" data-act="montrer" data-v="${k}" data-x="d">📲 Le professeur ouvre ce niveau</button></div>`;
+  if(v.e)return `<div class="valid"><span class="tampon e">E · validé par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</span><p class="small">Montre-le au professeur pour la validation <b>P</b>.</p><div class="rangee"><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Montrer au professeur (P)</button><button class="bt mini" type="button" data-act="annulerE" data-v="${k}">Annuler E</button></div></div>`;
   return `<div class="valid"><h3>Co-évaluation (E) de ${esc(court(E.nom))}</h3>
     ${autres.length?`<p class="small"><b>Qui observe ?</b></p><div class="qui">${autres.map(x=>`<button type="button" class="${OBS===x.id?'ici':''}" data-act="obs" data-v="${x.id}">${esc(court(x.nom))}</button>`).join('')}</div>`:'<p class="small muted">Seul dans le groupe : la validation se fait avec le professeur.</p>'}
     ${n.crit.map((c,i)=>`<label class="coche"><input type="checkbox" data-cr="${i}"> ${esc(c)}</label>`).join('')}
     <label class="coche"><input type="checkbox" data-cr="r1"> Réussi du premier coup</label>
     <label class="coche"><input type="checkbox" data-cr="r2"> Réception maîtrisée</label>
-    <div class="rangee" style="margin-top:12px"><button class="bt ok" type="button" data-act="valE" data-v="${k}">✔ Valider E</button><button class="bt prof" type="button" data-act="valP" data-v="${k}">🔐 Directement P</button></div>
+    <div class="rangee" style="margin-top:12px"><button class="bt ok" type="button" data-act="valE" data-v="${k}">✔ Valider E</button><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Directement P</button></div>
     <p class="small muted">« Simple et correct vaut mieux que difficile et incorrect »</p></div>`;
 }
 let OBS=null;
@@ -336,7 +336,7 @@ function marquerEnvoye(){S.envoi=Date.now();sauver();rendre();toast('Fiche envoy
 /* ---------- QR de la classe (donné par le prof) ---------- */
 function recevoirClasse(o){
   if(o.t!=='C')throw new Error('Ce n’est pas le QR de la classe.');
-  const cfg={classe:o.c,eleves:o.l||[],lien:o.u||'',pin:o.k||'',barres:!!o.b};
+  const cfg={classe:o.c,eleves:o.l||[],lien:o.u||'',pk:o.pk||'',barres:!!o.b,tc:!!o.tc};
   if(window.EPSCode)EPSCode.memoriserCle(o.c,o.cc);
   ROOT.classes[o.c]=cfg;ecrireRoot();
   if(S&&(!S.classe||S.classe===o.c)){S.classe=o.c;S.cfg=JSON.parse(JSON.stringify(cfg));sauver()}
@@ -408,18 +408,18 @@ document.addEventListener('click',async ev=>{
     case 'info':aller({v:'info',x:v});break;
     case 'obs':OBS=v;document.querySelectorAll('[data-act="obs"]').forEach(x=>x.classList.toggle('ici',x.dataset.v===v));break;
     case 'valE':{
-      // Niveaux ⚠️ : validation E seulement en cours (code du cours du professeur, eps-code.js).
-      if(window.EPSCode&&niveau(v).prof&&EPSCode.etat()==='fermee'){const k=v;EPSCode.exiger(()=>{const b=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(b)b.click()});return}
+      // Niveaux ⚠️ (ou tous si le prof l’a choisi pour la classe) : validation E seulement en cours (code du cours du professeur, eps-code.js).
+      if(window.EPSCode&&(niveau(v).prof||(S.cfg&&S.cfg.tc))&&EPSCode.etat()==='fermee'){const k=v;EPSCode.exiger(()=>{const b=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(b)b.click()});return}
       const coches=[...document.querySelectorAll('[data-cr]')];
       if(coches.some(c=>!c.checked)){toast('Toutes les cases doivent être cochées : sinon, on recommence !');return}
       const autres=S.eleves.filter(x=>x.id!==elv().id);
       if(autres.length&&!OBS){toast('Choisissez qui a observé.');return}
       const obs=S.eleves.find(x=>x.id===OBS);
       maj(elv().id,v,x=>{x.e={t:Date.now(),par:obs?obs.nom:'?'}});toast('Niveau '+v[1]+' validé E. Le niveau suivant est ouvert.');rendre();break}
-    case 'valP':{const k=v;demanderProf('Validation P · niveau '+k[1],()=>{maj(elv().id,k,x=>{x.p={t:Date.now()};if(!x.e)x.e={t:Date.now(),par:'professeur'}});toast('Validé P ✔');rendre()});break}
+    case 'montrer':montrerDemande(v,b.dataset.x||'p');break;
+    case 'scanP':GQR.scanner(async t=>recevoirReponse(await GQR.decoder(t)),{titre:'Réponse du professeur',aide:'Vise le QR affiché sur l’iPad du professeur.'});break;
+    case 'demoP':{const k=v,x=b.dataset.x;maj(elv().id,k,y=>{if(x==='d')y.deb={t:Date.now()};else{y.p={t:Date.now()};if(!y.e)y.e={t:Date.now(),par:'professeur'}}});fermer();toast(x==='d'?'Niveau ouvert (démo).':'Validé P ✔ (démo)');rendre();break}
     case 'annulerE':maj(elv().id,v,x=>{delete x.e});rendre();break;
-    case 'annulerP':{const k=v;demanderProf('Retirer la validation P',()=>{maj(elv().id,k,x=>{delete x.p});rendre()});break}
-    case 'debloquer':{const k=v;demanderProf('Ouvrir le niveau '+k[1],()=>{maj(elv().id,k,x=>{x.deb={t:Date.now()}});rendre()});break}
     case 'pinok':validerPin();break;
     case 'qr':montrerQR();break;
     case 'qrfait':fermer();marquerEnvoye();break;
@@ -442,3 +442,35 @@ rendre();compterHL();
 
 /* Code du cours (eps-code.js, commun) : en gym, seuls les niveaux ⚠️ le demandent pour valider E, avec le code à 4 chiffres du professeur (2 h). */
 if(window.EPSCode)EPSCode.eleve({app:'gye',classe:()=>S&&S.classe||'',seance:()=>'G',seances:()=>['G'],nom:()=>'Le cours du jour',ouvrir:()=>{},actif:()=>false,bandeau:false,demo:()=>DEMO});
+
+/* ---------- Validation P par QR signé (le code du prof n’est plus tapé sur les téléphones) ----------
+   1. « Montrer au professeur » : QR de demande (t:'V').  2. Le prof le scanne et valide dans son outil.
+   3. « Scanner la réponse du prof » : QR (t:'P') signé ECDSA ; la clé publique vient du QR de la classe. */
+const nrm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+async function montrerDemande(k,x){
+  const E=elv(),v=V(E.id,k)||{};
+  const o={a:'GYM',v:1,t:'V',c:S.classe||'',n:E.nom,k,x,e:v.e?[Math.round(v.e.t/1000),v.e.par||'']:0};
+  let svg;try{svg=GQR.svgQR(await GQR.encoder(o))}catch(e){svg='<p class="alerte">QR impossible.</p>'}
+  fen(`<h3>${x==='d'?'Ouvrir le niveau':'Validation P'} · ${esc(court(E.nom))} · ${k}</h3>
+    <p class="small">1. Le professeur scanne ce QR avec son iPad et regarde l’élément.<br>2. Ensuite, touche « Scanner la réponse du prof » pour voir le ${x==='d'?'niveau ouvert':'P'} ici.</p>
+    <div class="qrbox" style="background:#fff;padding:10px;border-radius:12px">${svg}</div>
+    <p class="small muted">Le prof n’a pas le temps de montrer sa réponse ? Pas grave : c’est enregistré chez lui et ça arrivera avec le QR de la classe.</p>
+    <div class="rangee" style="justify-content:space-between;margin-top:10px"><button class="bt" type="button" data-act="fermer">Fermer</button>
+    ${DEMO?`<button class="bt prof" type="button" data-act="demoP" data-v="${k}" data-x="${x}">Démo : simuler le prof</button>`:`<button class="bt prof" type="button" data-act="scanP">📷 Scanner la réponse du prof</button>`}</div>`);
+}
+async function recevoirReponse(o){
+  if(o.t!=='P')throw new Error('Ce n’est pas la réponse du professeur.');
+  if(!S)throw new Error('Ouvre d’abord le carnet du groupe.');
+  const pk=S.cfg&&S.cfg.pk;
+  if(!pk)throw new Error('Il faut d’abord scanner le nouveau QR de la classe (professeur).');
+  if(o.c!==S.classe)throw new Error('Ce QR concerne la classe '+o.c+'.');
+  const deb=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+  const cle=await crypto.subtle.importKey('raw',deb(pk),{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+  const ok=await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},cle,deb(o.s||''),new TextEncoder().encode(['GYMP',o.c,o.n,o.k,o.x,o.p].join('|')));
+  if(!ok)throw new Error('QR non reconnu : il ne vient pas de l’outil du professeur.');
+  const E=S.eleves.find(e=>nrm(e.nom)===nrm(o.n));
+  if(!E)throw new Error('Ce QR concerne '+o.n+' : ouvre le carnet de son groupe.');
+  maj(E.id,o.k,y=>{if(o.x==='d')y.deb={t:o.p*1000};else{y.p={t:o.p*1000};if(!y.e)y.e={t:o.p*1000,par:'professeur'}}});
+  setTimeout(()=>{fermer();toast(o.x==='d'?'Niveau '+o.k[1]+' ouvert ✔':'Validé P ✔ · '+court(E.nom)+' · '+o.k);rendre()},300);
+  return o.x==='d'?'Niveau ouvert.':'Validé P ✔';
+}
