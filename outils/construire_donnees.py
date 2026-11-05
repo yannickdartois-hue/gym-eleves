@@ -25,6 +25,8 @@ def critnet(c):
 # ---------- images de contenu (hors navigation) ----------
 from collections import Counter
 cnt = Counter(p[0] for v in M.values() for p in v['pics'])
+# Liens « ? » du PowerPoint corrigés (ils renvoyaient vers la roulade avant écart ou le niveau suivant)
+Q_CORRIGE = {70: [71], 57: [58], 59: [60], 54: []}
 QDECO = {'image106.png', 'image145.png', 'image196.png', 'image222.png', 'image230.png'}
 def images(i):
     # les petits bonshommes « ? » décoratifs ne sont pas des images de contenu
@@ -73,6 +75,7 @@ for i in range(17, 131):
                  'img': ['i' + re.sub(r'\D', '', p) + '.' + ('jpg' if p.endswith(('jpeg', 'jpg')) else 'png') for p in im]}
     # « ? » du PowerPoint : exercice(s) de remédiation proposé(s) si l'élève n'y arrive pas
     FICHES[i]['q'] = [t for img, t in LIENS.get(str(i), []) if img in ('image96.png', 'image157.png', 'image229.png', 'image240.png') and t != i]
+    if i in Q_CORRIGE: FICHES[i]['q'] = Q_CORRIGE[i]
     if grp:
         BONUS[grp].append(i)
     else:

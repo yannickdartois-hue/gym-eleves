@@ -149,6 +149,15 @@ nav.onglets button.ici{color:var(--act-fonce);box-shadow:inset 0 4px 0 var(--act
 .scan-bas{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .demo-bandeau{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;padding:10px 14px;border-radius:12px;background:#fff3c4;color:#5c4300;border:2px dashed #c99a00}
 .demo-bandeau span{flex:1}.demo-carte{border-style:dashed}
+.objectif{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;width:100%;text-align:left;margin:6px 0;padding:10px 14px;border-radius:14px;border:3px solid var(--at,var(--act));background:var(--craie);min-height:56px}
+.objectif>span:first-child{font-weight:800;color:var(--act-fonce)}.objectif b{display:inline-flex;align-items:center;gap:8px;flex:1}
+.objectif.vide{display:block;border:2px dashed var(--trait);color:var(--repere);font-size:16px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}.duo figure{margin:0}.duo figcaption{font-weight:800;font-size:15px;margin-bottom:4px}
+.duo video{width:100%;max-height:52vh;background:#000;border-radius:10px;display:block}
+@media (max-width:600px){.duo{grid-template-columns:1fr}}
+ol.ench{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}
+ol.ench li{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;background:var(--craie);border:3px solid var(--at,var(--trait))}
+ol.ench .n{font:800 24px/1 var(--d);min-width:28px;text-align:center}ol.ench .nm{flex:1;font-weight:700;display:flex;align-items:center;gap:8px}
 @media print{nav.onglets,.barre button,.retour{display:none}}
 </style>
 <link rel="stylesheet" href="eps-charte-v1.css">
@@ -167,6 +176,7 @@ nav.onglets button.ici{color:var(--act-fonce);box-shadow:inset 0 4px 0 var(--act
 <script src="scan.js"></script>
 <script src="demo.js"></script>
 <script src="app.js"></script>
+<script src="plus.js"></script>
 <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>

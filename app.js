@@ -264,7 +264,7 @@ function vNiveau(k){
   h+=S&&S.eleves.length?blocValid(k):'';
   if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom)}</div>`).join('');
   if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
-  else h+=`<p class="carte small muted">Pas de vidéo pour ce niveau : regardez le pictogramme et les critères.</p>`;
+  else if(!n.f.length)h+=`<p class="carte small muted">Pas de vidéo pour ce niveau : regardez le pictogramme et les critères.</p>`;
   if(n.r.length)h+=`<h4>Je n’y arrive pas encore ? Essaie d’abord :</h4><div class="remlist" data-lst="${n.r.join(',')}" data-at="${k[0]}">${n.r.map((id,i)=>carteRem(id,i)).join('')}</div>`;
   return h;
 }
@@ -342,7 +342,7 @@ function recevoirClasse(o){
 }
 
 /* ---------- Vidéos ---------- */
-function brancherVideos(){document.querySelectorAll('video[data-vid]').forEach(v=>{v.addEventListener('play',()=>document.querySelectorAll('video').forEach(o=>{if(o!==v)o.pause()}))})}
+function brancherVideos(){document.querySelectorAll('video[data-vid]').forEach(v=>{v.addEventListener('play',()=>{if(v.closest('.duo'))return;document.querySelectorAll('video').forEach(o=>{if(o!==v&&!o.closest('.duo'))o.pause()})})})}
 async function toutCharger(){
   const L=[...new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>'media/'+v[0])))];
   const p=$('#prog');if(p)p.hidden=false;let n=0,err=0;
