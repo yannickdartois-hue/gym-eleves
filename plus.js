@@ -243,3 +243,20 @@ document.addEventListener('click',ev=>{
     case 'grp':if(S){S.grp=+v;sauver();rendre()}break;
   }
 });
+
+/* Avant une mise à jour (bandeau commun eps-maj.js) : on enregistre le carnet ouvert. */
+window.addEventListener('eps-avant-maj',()=>{try{enregistrer()}catch(e){}});
+
+/* ---------- Rappel à l'ouverture : téléphone portable et images des camarades ---------- */
+// Texte modifiable ici (une ligne par paragraphe).
+const RAPPEL_TEL={titre:'📵 Téléphone portable',lignes:[
+  'Au lycée, le téléphone portable reste rangé, sauf quand ton professeur te demande de l’utiliser pour le cours.',
+  'Pendant l’EPS, il sert uniquement au travail demandé : aucun autre usage (messages, réseaux sociaux, jeux, musique…).',
+  'Tu ne filmes ni ne photographies personne sans son accord et celui du professeur, et aucune image ne quitte l’appli.'
+],bouton:'J’ai compris'};
+function rappelTelephone(){
+  fen(`<h3>${esc(RAPPEL_TEL.titre)}</h3>${RAPPEL_TEL.lignes.map(l=>`<p>${esc(l)}</p>`).join('')}<p class="small muted">Règlement intérieur du lycée Georges Pompidou.</p>
+   <div class="rangee" style="justify-content:flex-end"><button class="bt act" type="button" data-act="fermer">${esc(RAPPEL_TEL.bouton)}</button></div>`);
+}
+// À chaque ouverture de l'appli (pas dans les fenêtres déjà ouvertes, ni au rechargement d'une mise à jour)
+if(!/[?&]demo\b/.test(location.search))setTimeout(()=>{if(!$('#modal').innerHTML)rappelTelephone()},300);
