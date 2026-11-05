@@ -17,6 +17,10 @@ const prenom=n=>String(n||'').split(/\s+/)[0];
 const atelier=a=>GYM.ateliers.find(x=>x.n===+a);
 const niveau=k=>{const a=atelier(k[0]);return a&&a.niv.find(x=>x.n===k[1])};
 const fiche=id=>GYM.fiches[id];
+/* Couleur de cadre de chaque atelier, reprise de l'accueil du PowerPoint (trampoline : pas sur l'accueil → orange des diapos trampoline) */
+const COUL={1:'#92d050',2:'#ffff00',3:'#00b0f0',4:'#7030a0',5:'#ffc000',6:'#ff6600',flip:'#ffff00',barres:'#66ffcc',liaisons:'#c20e93'};
+const TXT={4:'#fff',liaisons:'#fff'};
+const st=k=>COUL[k]?`style="--at:${COUL[k]};--at-t:${TXT[k]||'#1c2128'}"`:'';
 
 /* ---------- Stockage : un carnet chiffré par groupe ---------- */
 /* ROOT = {v:1, groupes:{id:{classe,noms,sel,iv,data,vu}}, classes:{classe:{eleves,lien,pin,barres}}} */
@@ -176,7 +180,7 @@ function vFiche(){
   return `<div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(prenom(e.nom))}</button>`).join('')}</div>
   <h2>Fiche de ${esc(prenom(E.nom))}</h2>
   <p class="small muted">Touchez un niveau pour voir la vidéo, les consignes et le faire valider. <b>E</b> = validé par un camarade · <b>P</b> = validé par le professeur.</p>
-  ${GYM.ateliers.map(a=>`<section class="atelier"><header><span class="n">${a.n}</span><b>${esc(a.nom)}</b><span class="small">${(()=>{const p=meilleur(E.id,a.n,'p');return p?'Niveau '+p:''})()}</span></header>
+  ${GYM.ateliers.map(a=>`<section class="atelier" ${st(a.n)}><header><span class="n">${a.n}</span><b>${esc(a.nom)}</b><span class="small">${(()=>{const p=meilleur(E.id,a.n,'p');return p?'Niveau '+p:''})()}</span></header>
     ${a.niv.map(n=>{const k=a.n+n.n,s=etat(E.id,k),o=ouvert(E.id,k);
       return `<button class="niv ${o?'':'verrou'}" type="button" data-act="niveau" data-v="${k}"><span class="L L${n.n}">${n.n}</span>
       <span><span class="nom">${o?'':'🔒 '}${esc(n.nom)}${n.prof?' <span title="en présence du professeur">⚠️</span>':''}</span><div class="crit">${n.crit.map(esc).join(' · ')}</div>${n.picto?`<img class="picto" src="${n.picto}" alt="" loading="lazy">`:''}</span>
@@ -191,25 +195,39 @@ function vApprendre(){
     <button class="tuile info" type="button" data-act="info" data-v="validation"><span class="num">Règle du jeu</span><b>✅ Valider un niveau</b></button>
   </div>
   <h4>Les 6 ateliers</h4>
-  <div class="ateliers">${a.map(x=>`<button class="tuile" type="button" data-act="atelier" data-v="${x.n}"><span class="num">Atelier ${x.n}</span><b>${esc(x.nom)}</b>${S&&S.eleves.length?puces(elv().id,x.n):''}</button>`).join('')}</div>
+  <div class="ateliers">${a.map(x=>`<button class="tuile at" ${st(x.n)} type="button" data-act="atelier" data-v="${x.n}"><span class="num">Atelier ${x.n}</span><b>${esc(x.nom)}</b>${S&&S.eleves.length?puces(elv().id,x.n):''}</button>`).join('')}</div>
   <h4>Pour aller plus loin</h4>
-  <div class="ateliers">${GYM.bonus.filter(b=>!b.cache||barresVisibles()).map(b=>`<button class="tuile bonus" type="button" data-act="bonus" data-v="${b.id}"><b>${esc(b.nom)}</b><span class="small muted">${esc(b.info)}</span></button>`).join('')}</div>`;
+  <div class="ateliers">${GYM.bonus.filter(b=>!b.cache||barresVisibles()).map(b=>`<button class="tuile bonus at" ${st(b.id)} type="button" data-act="bonus" data-v="${b.id}"><b>${esc(b.nom)}</b><span class="small muted">${esc(b.info)}</span></button>`).join('')}</div>`;
 }
 function vPile(){
   const p=NAV[NAV.length-1];
   const ret=`<button class="retour" type="button" data-act="retour">‹ Retour</button>`;
-  if(p.v==='atelier')return ret+vAtelier(p.a);
-  if(p.v==='niveau')return ret+vNiveau(p.k);
-  if(p.v==='fiche')return ret+`<div class="carte">${blocFiche(p.id,true)}</div>`;
+  if(p.v==='atelier'){const f=fleches(p);return `<div ${st(p.a)} class="cadre-at">${ret}${f}${vAtelier(p.a)}</div>`}
+  if(p.v==='niveau'){const f=fleches(p);return `<div ${st(p.k[0])} class="cadre-at">${ret}${f}${vNiveau(p.k)}${f}</div>`}
+  if(p.v==='fiche'){const f=fleches(p);return `<div ${st(p.at)} class="cadre-at">${ret}${f}<div class="carte">${p.lst&&p.lst.length>1?`<p class="small muted" style="margin:0 0 6px">${p.lst.indexOf(p.id)+1} sur ${p.lst.length}</p>`:''}${blocFiche(p.id,true)}</div>${f}</div>`}
   if(p.v==='bonus')return ret+vBonus(p.id);
   if(p.v==='info')return ret+vInfo(p.x);
   return ret;
 }
+/* Flèches ‹ › comme dans le PowerPoint : niveau précédent / suivant dans l'atelier, aide précédente / suivante */
+function voisins(p){
+  if(p.v==='atelier'){const a=+p.a;return [a>1?{v:'niveau',k:(a-1)+'F',lab:'Atelier '+(a-1)+' · niveau F'}:null,{v:'niveau',k:a+'A',lab:'Niveau A'}]}
+  if(p.v==='niveau'){const a=+p.k[0],i=NIVS.indexOf(p.k[1]);
+    const prec=i>0?{v:'niveau',k:a+NIVS[i-1],lab:'Niveau '+NIVS[i-1]}:{v:'atelier',a,lab:'Atelier '+a};
+    const suiv=i<5?{v:'niveau',k:a+NIVS[i+1],lab:'Niveau '+NIVS[i+1]}:(a<6?{v:'atelier',a:a+1,lab:'Atelier '+(a+1)}:null);
+    return [prec,suiv]}
+  if(p.v==='fiche'&&p.lst&&p.lst.length>1){const i=p.lst.indexOf(p.id),m=x=>({v:'fiche',id:p.lst[x],lst:p.lst,at:p.at,lab:p.at==='liaisons'?fiche(p.lst[x]).t:'Aide '+(x+1)});
+    return [i>0?m(i-1):null,i<p.lst.length-1?m(i+1):null]}
+  return [null,null];
+}
+function fleches(p){const [a,b]=voisins(p);if(!a&&!b)return '';
+  return `<div class="fleches">${a?`<button type="button" class="fl" data-act="fleche" data-v="-1" aria-label="Précédent">‹ <span>${esc(a.lab)}</span></button>`:'<span></span>'}${b?`<button type="button" class="fl" data-act="fleche" data-v="1" aria-label="Suivant"><span>${esc(b.lab)}</span> ›</button>`:'<span></span>'}</div>`}
+function flecher(d){if(!NAV.length)return;const [a,b]=voisins(NAV[NAV.length-1]),c=d<0?a:b;if(!c)return;delete c.lab;NAV[NAV.length-1]=c;OBS=null;rendre();window.scrollTo(0,0)}
 function vAtelier(n){
   const a=atelier(n),id=S&&S.eleves.length?elv().id:null;
   return `<h2><span class="muted">Atelier ${a.n} ·</span> ${esc(a.nom)}</h2>
   ${n===6?`<div class="carte">${blocTrampo()}</div>`:''}
-  <div class="atelier">${a.niv.map(x=>{const k=a.n+x.n,s=id?etat(id,k):'';return `<button class="niv" type="button" data-act="niveau" data-v="${k}"><span class="L L${x.n}">${x.n}</span><span><span class="nom">${esc(x.nom)}${x.prof?' ⚠️':''}</span><div class="crit">${x.crit.map(esc).join(' · ')}</div>${x.picto?`<img class="picto" src="${x.picto}" alt="" loading="lazy">`:''}</span><span class="ep">${id?`<span class="${s?'e v':''}">E</span><span class="${s==='p'?'p':''}">P</span>`:'›'}</span></button>`}).join('')}</div>`;
+  <div class="atelier" ${st(a.n)}>${a.niv.map(x=>{const k=a.n+x.n,s=id?etat(id,k):'';return `<button class="niv" type="button" data-act="niveau" data-v="${k}"><span class="L L${x.n}">${x.n}</span><span><span class="nom">${esc(x.nom)}${x.prof?' ⚠️':''}</span><div class="crit">${x.crit.map(esc).join(' · ')}</div>${x.picto?`<img class="picto" src="${x.picto}" alt="" loading="lazy">`:''}</span><span class="ep">${id?`<span class="${s?'e v':''}">E</span><span class="${s==='p'?'p':''}">P</span>`:'›'}</span></button>`}).join('')}</div>`;
 }
 function video(v,id){
   const [src,leg]=v,base=src.replace('.mp4','');
@@ -235,7 +253,7 @@ function vNiveau(k){
   if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom)}</div>`).join('');
   else if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
   else h+=`<p class="carte small muted">Pas de vidéo pour ce niveau : regardez le pictogramme et les critères.</p>`;
-  if(n.r.length)h+=`<h4>Je n’y arrive pas encore ? Essaie d’abord :</h4><div class="remlist">${n.r.map((id,i)=>carteRem(id,i)).join('')}</div>`;
+  if(n.r.length)h+=`<h4>Je n’y arrive pas encore ? Essaie d’abord :</h4><div class="remlist" data-lst="${n.r.join(',')}" data-at="${k[0]}">${n.r.map((id,i)=>carteRem(id,i)).join('')}</div>`;
   return h;
 }
 function blocValid(k){
@@ -256,10 +274,10 @@ let OBS=null;
 function vBonus(id){
   const b=GYM.bonus.find(x=>x.id===id);
   let h=`<h2>${esc(b.nom)}</h2><p class="muted">${esc(b.info)}</p>`;
-  if(id==='liaisons')return h+`<div class="remlist">${b.f.map(i=>carteRem(i)).join('')}</div>`;
+  if(id==='liaisons')return h+`<div class="remlist" data-lst="${b.f.join(',')}" data-at="liaisons">${b.f.map(i=>carteRem(i)).join('')}</div>`;
   // Flip et barres : regroupés par niveau
   const par={};b.f.forEach(i=>{const n=fiche(i).niv||'?';(par[n]=par[n]||[]).push(i)});
-  return h+Object.keys(par).sort().map(n=>`<h4><span class="L L${n}" style="width:34px;height:34px;font-size:20px;vertical-align:middle">${n}</span> Niveau ${n}</h4><div class="remlist">${par[n].map(i=>fiche(i).rem?carteRem(i,null):`<div class="carte">${blocFiche(i,true)}</div>`).join('')}</div>`).join('');
+  return h+Object.keys(par).sort().map(n=>`<h4><span class="L L${n}" style="width:34px;height:34px;font-size:20px;vertical-align:middle">${n}</span> Niveau ${n}</h4><div class="remlist" data-lst="${par[n].filter(i=>fiche(i).rem).join(',')}" data-at="${id}">${par[n].map(i=>fiche(i).rem?carteRem(i,null):`<div class="carte">${blocFiche(i,true)}</div>`).join('')}</div>`).join('');
 }
 function vInfo(x){
   if(x==='securite'){const s=GYM.securite;return `<h2>🛡️ Sécurité</h2>
@@ -363,7 +381,8 @@ document.addEventListener('click',async ev=>{
     case 'qui':S.cur=+v;OBS=null;sauver();rendre();break;
     case 'atelier':aller({v:'atelier',a:+v});break;
     case 'niveau':OBS=null;aller({v:'niveau',k:v});break;
-    case 'fiche':aller({v:'fiche',id:v});break;
+    case 'fiche':{const L=b.closest('[data-lst]');aller({v:'fiche',id:v,lst:L?L.dataset.lst.split(',').filter(Boolean):null,at:L?L.dataset.at:null});break}
+    case 'fleche':flecher(+v);break;
     case 'bonus':aller({v:'bonus',id:v});break;
     case 'info':aller({v:'info',x:v});break;
     case 'obs':OBS=v;document.querySelectorAll('[data-act="obs"]').forEach(x=>x.classList.toggle('ici',x.dataset.v===v));break;
@@ -391,6 +410,9 @@ document.addEventListener('click',async ev=>{
       break}
   }
 });
+document.addEventListener('keydown',e=>{if(!$('#modal').innerHTML&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')){if(e.key==='ArrowLeft')flecher(-1);if(e.key==='ArrowRight')flecher(1)}});
+let TX=null;document.addEventListener('touchstart',e=>{TX=(e.touches.length===1&&!e.target.closest('video,.ralenti,input,.qui'))?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null},{passive:true});
+document.addEventListener('touchend',e=>{if(!TX||$('#modal').innerHTML)return;const t=e.changedTouches[0],dx=t.clientX-TX.x,dy=t.clientY-TX.y;TX=null;if(Math.abs(dx)>80&&Math.abs(dx)>2*Math.abs(dy))flecher(dx<0?1:-1)},{passive:true});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'){if($('#code'))validerCode();else if($('#pin'))validerPin()}});
 if(/[?&]demo\b/.test(location.search))ouvrirDemo().then(rendre);
 rendre();compterHL();

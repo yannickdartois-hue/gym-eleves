@@ -69,7 +69,14 @@ input.code{font:800 34px/1 var(--d);letter-spacing:.4em;text-align:center}
 .etat-at i.p{background:var(--ok);color:#fff}
 /* Ligne de niveau (fiche) */
 .atelier{background:var(--craie);border:1px solid var(--trait);border-radius:16px;margin:14px 0;overflow:hidden}
-.atelier>header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--act);color:#fff}
+.atelier>header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--at,var(--act));color:var(--at-t,#fff)}
+.atelier[style]{border:4px solid var(--at)}
+.tuile.at{border:5px solid var(--at)}
+.tuile.at .num{color:var(--encre)}
+.cadre-at{border-left:10px solid var(--at,transparent);padding-left:10px;margin-left:-6px}
+.fleches{display:flex;justify-content:space-between;gap:8px;margin:8px 0}
+.fl{display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 18px;border-radius:14px;border:3px solid var(--at,var(--encre));background:var(--craie);font:800 26px/1 var(--d)}
+.fl span{font:700 17px var(--t)}
 .atelier>header b{font:800 24px/1 var(--d);font-stretch:76%;flex:1}
 .atelier>header .n{font:800 30px/1 var(--d);opacity:.8}
 .niv{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;padding:10px 12px;border:0;border-top:1px solid var(--trait);background:none;text-align:left}
