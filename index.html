@@ -135,6 +135,8 @@ nav.onglets button.ici{color:var(--act-fonce);box-shadow:inset 0 4px 0 var(--act
 .scan-viseur{position:absolute;inset:15%;border:4px solid #fff;border-radius:16px;box-shadow:0 0 0 999px #0006}
 .scan-msg{font-weight:700;min-height:1.5em}.scan-msg.ok{color:var(--ok)}.scan-msg.err{color:var(--alerte)}
 .scan-bas{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.demo-bandeau{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;padding:10px 14px;border-radius:12px;background:#fff3c4;color:#5c4300;border:2px dashed #c99a00}
+.demo-bandeau span{flex:1}.demo-carte{border-style:dashed}
 @media print{nav.onglets,.barre button,.retour{display:none}}
 </style>
 <link rel="stylesheet" href="eps-charte-v1.css">
@@ -151,6 +153,7 @@ nav.onglets button.ici{color:var(--act-fonce);box-shadow:inset 0 4px 0 var(--act
 <script src="qrcode.js"></script>
 <script src="jsqr.js"></script>
 <script src="scan.js"></script>
+<script src="demo.js"></script>
 <script src="app.js"></script>
 <script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>

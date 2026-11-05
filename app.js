@@ -35,6 +35,7 @@ let tSauve=null;
 function sauver(){clearTimeout(tSauve);tSauve=setTimeout(enregistrer,200)}
 async function enregistrer(){
   clearTimeout(tSauve);
+  if(DEMO)return; // démo : rien n'est enregistré
   if(!S||!ACTIF||!CLEF){ecrireRoot();return}
   const g=ROOT.groupes[ACTIF]||(ROOT.groupes[ACTIF]={});
   const iv=crypto.getRandomValues(new Uint8Array(12));
@@ -55,7 +56,7 @@ async function ouvrir(id,code){
   S.tab=S.eleves.length?'fiche':'groupe';S.cur=0;NAV=[];
   await enregistrer();
 }
-async function verrouiller(){await enregistrer();S=null;ACTIF=null;CLEF=null;NAV=[]}
+async function verrouiller(){await enregistrer();DEMO=false;S=null;ACTIF=null;CLEF=null;NAV=[]}
 async function nouveauGroupe(classe,code){
   const id=uid(),sel=crypto.getRandomValues(new Uint8Array(16));
   ROOT.groupes[id]={classe:classe||'',noms:[],sel:b64(sel)};
@@ -135,7 +136,7 @@ function rendre(){
   if(NAV.length)h=vPile();
   else if(!S)h=VUE==='apprendre'?vApprendre():vAccueil();
   else h={fiche:vFiche,apprendre:vApprendre,envoi:vEnvoi,groupe:vGroupe}[S.tab]();
-  app.innerHTML=h;
+  app.innerHTML=bandeauDemo()+h;
   const T=S?[['fiche','📋','Ma fiche'],['apprendre','🎬','Apprendre'],['envoi','📤','Envoyer'],['groupe','👥','Groupe']]:[['accueil','🏠','Accueil'],['apprendre','🎬','Apprendre']];
   const cur=S?S.tab:VUE;
   $('#onglets').innerHTML=T.map(([k,i,l])=>`<button type="button" class="${cur===k&&!NAV.length?'ici':''}" data-act="onglet" data-v="${k}"><i>${i}</i>${l}${k==='envoi'&&aEnvoyer()?' •':''}</button>`).join('');
@@ -150,6 +151,7 @@ function vAccueil(){
   ${G.length?G.map(([id,g])=>`<button class="groupe" type="button" data-act="ouvrir" data-v="${id}"><span style="font-size:28px">🔒</span><b>${esc(g.noms&&g.noms.length?g.noms.join(', '):'Groupe sans élève')}<br><span class="small muted">${esc(g.classe||'classe ?')}${g.vu?' · '+dateFr(g.vu):''}${g.aEnvoyer?' · <span style="color:var(--alerte)">à envoyer</span>':''}</span></b><span aria-hidden="true">›</span></button>`).join(''):'<p class="carte small">Aucun groupe sur cette tablette pour l’instant.</p>'}
   <div class="rangee" style="margin-top:14px"><button class="bt act" type="button" data-act="nouveau">＋ Nouveau groupe</button><button class="bt" type="button" data-act="scanclasse">📷 QR de la classe (prof)</button></div>
   <section class="carte" style="margin-top:20px"><h3>🎬 Apprendre sans ouvrir de carnet</h3><p class="small muted">Vidéos, consignes et aides de tous les ateliers.</p><button class="bt" type="button" data-act="onglet" data-v="apprendre">Voir les ateliers</button></section>
+  ${carteDemo()}
   <details class="carte"><summary class="small" style="min-height:44px;font-weight:700">Réglages de la tablette</summary>
     <p class="small muted">Vidéos gardées pour le gymnase sans Wi-Fi : <b id="nb-hl">…</b></p>
     <button class="bt" type="button" data-act="toutcharger">⬇ Garder toutes les vidéos hors ligne (≈ 66 Mo)</button>
@@ -288,7 +290,7 @@ function vEnvoi(){
 async function montrerQR(){
   const txt=await GQR.encoder(objetEnvoi());let svg;
   try{svg=GQR.svgQR(txt)}catch(e){svg='<p class="alerte">Trop de données pour un QR : utilisez le fichier.</p>'}
-  fen(`<h3>Fiche du groupe · ${esc(S.classe||'')}</h3><p class="small muted">Outil prof → « Scanner les QR ».</p><div class="qrbox">${svg}</div><div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Fermer</button><button class="bt act" type="button" data-act="qrfait">C’est scanné ✔</button></div>`);
+  fen(`<h3>Fiche du groupe · ${esc(S.classe||'')}</h3><p class="small muted">Outil prof → « Scanner les QR ».${DEMO?' (Démo : l’outil prof l’accepte, dans sa propre démo.)':''}</p><div class="qrbox">${svg}</div><div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Fermer</button><button class="bt act" type="button" data-act="qrfait">C’est scanné ✔</button></div>`);
 }
 function nomFichier(){const sl=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return `gym_${sl(S.classe)||'classe'}_${S.eleves.map(e=>sl(prenom(e.nom))).join('-')}_${today()}.json`}
 async function enregistrerFichier(){
@@ -343,7 +345,7 @@ document.addEventListener('click',async ev=>{
     case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c),true);break}
     case 'codeok':validerCode();break;
     case 'codeoubli':fen(`<h3>Code oublié</h3><p>Le carnet est chiffré : sans le code, personne ne peut l’ouvrir, même le professeur.</p><p class="small muted">Le professeur a reçu vos validations envoyées (QR ou fichier). Créez un nouveau groupe ; le professeur peut vous redonner vos niveaux P en débloquant les niveaux.</p><div class="rangee"><button class="bt noir" type="button" data-act="fermer">Compris</button></div>`);break;
-    case 'verrou':await verrouiller();fermer();VUE='accueil';rendre();break;
+    case 'verrou':if(DEMO){quitterDemo();fermer();rendre();break}await verrouiller();fermer();VUE='accueil';rendre();break;
     case 'scanclasse':GQR.scanner(async t=>recevoirClasse(await GQR.decoder(t)),{titre:'QR de la classe',aide:'Visez le QR affiché par le professeur.'});break;
     case 'choisirnoms':{
       const pris=new Set(Object.values(ROOT.groupes).filter(g=>g.classe===S.classe).flatMap(g=>g.noms||[]));
@@ -379,7 +381,9 @@ document.addEventListener('click',async ev=>{
     case 'pinok':validerPin();break;
     case 'qr':montrerQR();break;
     case 'qrfait':fermer();marquerEnvoye();break;
-    case 'fichier':enregistrerFichier();break;
+    case 'fichier':if(DEMO){toast('Démo : le fichier n’est pas créé. En vrai, il part dans le Nuage.');break}enregistrerFichier();break;
+    case 'demo':await ouvrirDemo();rendre();window.scrollTo(0,0);break;
+    case 'demofin':quitterDemo();rendre();window.scrollTo(0,0);break;
     case 'toutcharger':b.disabled=true;await toutCharger();b.disabled=false;break;
     case 'vitesse':case 'boucle':{const bar=b.closest('.ralenti'),vid=document.querySelector(`video[data-vid="${bar.dataset.pour}"]`);if(!vid)return;
       if(act==='boucle'){vid.loop=!vid.loop;b.classList.toggle('ici',vid.loop)}
@@ -388,4 +392,5 @@ document.addEventListener('click',async ev=>{
   }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Enter'){if($('#code'))validerCode();else if($('#pin'))validerPin()}});
+if(/[?&]demo\b/.test(location.search))ouvrirDemo().then(rendre);
 rendre();compterHL();
