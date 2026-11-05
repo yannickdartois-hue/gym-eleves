@@ -44,7 +44,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 </ol><p class="astuce">Code oublié ? Personne ne peut rouvrir le carnet. Créez un nouveau groupe et choisissez vos noms dans la liste : les niveaux déjà reçus par le professeur reviennent quand il fait scanner le QR de la classe.</p>`},
 {t:'Nouvelle version, hors ligne, démo',html:`<ul>
 <li>Un bandeau jaune « Nouvelle version » : touche <span class="bouton">Mettre à jour</span> (le carnet est enregistré avant).</li>
-<li>Sans Wi-Fi, l’appli fonctionne. Pour garder toutes les vidéos sur la tablette : Accueil → Réglages de la tablette → <span class="bouton">Garder toutes les vidéos hors ligne</span>, une fois avec le Wi-Fi.</li>
+<li>Sans Wi-Fi, l’appli fonctionne. Pour voir les vidéos au gymnase sans Wi-Fi : Accueil → <b>Réglages : vidéos hors ligne</b> → <span class="bouton">⬇ Garder</span> sur les ateliers que tu travailles (le poids est affiché), avec le Wi-Fi. <span class="bouton">Effacer les vidéos du téléphone</span> libère la place.</li>
 <li><span class="bouton">Essayer l’appli (démo)</span> sur l’accueil : un groupe fictif pour tout essayer, rien n’est enregistré (le bouton « Démo : simuler le prof » remplace l’iPad du professeur).</li>
 </ul>`}
 ]},
@@ -52,7 +52,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 {t:'Avant le premier cours',html:`<ol>
 <li>Outil prof → Réglages : importez la liste Pronote.</li>
 <li>Affichez le <b>QR de démarrage</b> de la classe : chaque tablette le scanne (accueil → « QR de la classe »).</li>
-<li>Avec le Wi-Fi, sur chaque tablette : Réglages de la tablette → <span class="bouton">Garder toutes les vidéos hors ligne</span> (≈ 90 Mo).</li>
+<li>Si le gymnase n’a pas de Wi-Fi : demandez aux élèves, la veille et avec le Wi-Fi, de garder les vidéos des ateliers du jour (Accueil → Réglages : vidéos hors ligne ; 2 à 20 Mo par atelier, 87 Mo en tout).</li>
 </ol>`},
 {t:'Sur la tablette d’un groupe',html:`<ul>
 <li><b>Validation P</b> : l’élève touche « Montrer au professeur » ; dans votre outil, À valider → <span class="bouton">📷 Valider un élève</span>, scannez, validez, puis montrez votre réponse à l’élève. Même chemin pour « Le professeur ouvre ce niveau ». Aucun code n’est tapé sur les téléphones.</li>

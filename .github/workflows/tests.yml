@@ -1,0 +1,30 @@
+# Tests automatiques de la gym (appli élève + outil prof), à chaque mise en ligne.
+# Le test est dans gym-eleves/tests/gym.test.js ; les deux dépôts sont récupérés côte à côte.
+name: Tests gym
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: gym-eleves
+      - uses: actions/checkout@v4
+        with:
+          repository: yannickdartois-hue/gym-prof
+          path: gym-prof
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Installer Playwright
+        run: |
+          npm install --no-save playwright@1.47.2
+          npx playwright install --with-deps chromium
+      - name: Élève et prof · démo, circuit QR signé, note, code du cours
+        run: |
+          python3 -m http.server 8840 >/dev/null 2>&1 &
+          sleep 1
+          node gym-eleves/tests/gym.test.js

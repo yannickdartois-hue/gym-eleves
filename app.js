@@ -158,10 +158,12 @@ function vAccueil(){
   <div class="rangee" style="margin-top:14px"><button class="bt act" type="button" data-act="nouveau">＋ Nouveau groupe</button><button class="bt" type="button" data-act="scanclasse">📷 QR de la classe (prof)</button></div>
   <section class="carte" style="margin-top:20px"><h3>🎬 Apprendre sans ouvrir de carnet</h3><p class="small muted">Vidéos, consignes et aides de tous les ateliers.</p><button class="bt" type="button" data-act="onglet" data-v="apprendre">Voir les ateliers</button></section>
   ${carteDemo()}
-  <details class="carte"><summary class="small" style="min-height:44px;font-weight:700">Réglages de la tablette</summary>
-    <p class="small muted">Vidéos gardées pour le gymnase sans Wi-Fi : <b id="nb-hl">…</b></p>
-    <button class="bt" type="button" data-act="toutcharger">⬇ Garder toutes les vidéos hors ligne (≈ 66 Mo)</button>
+  <details class="carte"><summary class="small" style="min-height:44px;font-weight:700">Réglages : vidéos hors ligne</summary>
+    <h3 style="margin-top:6px">🎬 Vidéos hors ligne</h3>
+    <p class="small muted">Sans Wi-Fi au gymnase, gardez sur le téléphone les vidéos des ateliers que vous travaillez. À faire avec le Wi-Fi (évitez les données mobiles). Sur le téléphone : <b id="nb-hl">…</b></p>
+    <div id="hl-liste">${blocHL()}</div>
     <div class="progres" id="prog" hidden><i></i></div>
+    <div class="rangee" style="margin-top:10px"><button class="bt" type="button" data-act="charger" data-v="tout">⬇ Tout garder (${mo(poids(groupesHL().flatMap(g=>g.v)))})</button><button class="bt mini danger" type="button" data-act="viderhl">Effacer les vidéos du téléphone</button></div>
     <p class="small muted" style="margin-top:14px">Supprimer un groupe : ouvrez-le, puis Groupe → Supprimer.</p>
   </details>`;
 }
@@ -346,13 +348,31 @@ function recevoirClasse(o){
 
 /* ---------- Vidéos ---------- */
 function brancherVideos(){document.querySelectorAll('video[data-vid]').forEach(v=>{v.addEventListener('play',()=>{if(v.closest('.duo'))return;document.querySelectorAll('video').forEach(o=>{if(o!==v&&!o.closest('.duo'))o.pause()})})})}
-async function toutCharger(){
-  const L=[...new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>'media/'+v[0])))];
+/* Vidéos hors ligne par atelier (poids : media-tailles.js, généré par outils/tailles_media.py) */
+function groupesHL(){
+  const vids=id=>(GYM.fiches[id]||{vid:[]}).vid.map(v=>v[0]);
+  const G=[...GYM.ateliers.map(a=>({id:'a'+a.n,nom:a.n+' · '+a.court,f:a.niv.flatMap(n=>n.f.concat(n.r))})),...GYM.bonus.filter(b=>b.id!=='barres'||barresVisibles()).map(b=>({id:b.id,nom:b.nom,f:b.f}))];
+  G.forEach(g=>g.v=[...new Set(g.f.flatMap(vids))]);return G;
+}
+const poids=L=>[...new Set(L)].reduce((s,f)=>s+((typeof TAILLES!=='undefined'&&TAILLES[f])||0),0);
+const mo=o=>o<1e6?(o?'< 1 Mo':'0 Mo'):Math.round(o/1e6)+' Mo';
+let HL=new Set();
+function blocHL(){return groupesHL().map(g=>{const n=g.v.filter(f=>HL.has(f)).length,ok=n===g.v.length;
+  return `<div class="rangee" style="justify-content:space-between;border-top:1px solid var(--trait);padding:6px 0"><span><b>${esc(g.nom)}</b><br><span class="small muted">${g.v.length} vidéos · ${mo(poids(g.v))}${n&&!ok?' · '+n+' déjà là':''}</span></span>${ok?'<span class="tampon p">✓ sur le téléphone</span>':`<button class="bt mini" type="button" data-act="charger" data-v="${g.id}">⬇ Garder</button>`}</div>`}).join('')}
+async function etatHL(){try{const ks=await caches.keys(),k=ks.find(x=>/^gym-eleves-media-v\d+$/.test(x));HL=new Set();if(k){const c=await caches.open(k);(await c.keys()).forEach(r=>HL.add(new URL(r.url).pathname.split('/').pop()))}}catch(e){}}
+async function chargerHL(id){
+  const G=groupesHL(),L=[...new Set((id==='tout'?G:G.filter(g=>g.id===id)).flatMap(g=>g.v))].filter(f=>!HL.has(f)).map(f=>'media/'+f);
+  return toutCharger(L);
+}
+async function viderHL(){try{const ks=await caches.keys();await Promise.all(ks.filter(x=>/^gym-eleves-media-v\d+$/.test(x)).map(k=>caches.delete(k)))}catch(e){}HL=new Set();toast('Vidéos effacées du téléphone : elles se rechargent avec le Wi-Fi.');compterHL()}
+async function toutCharger(L){
+  L=L||[...new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>'media/'+v[0])))];
   const p=$('#prog');if(p)p.hidden=false;let n=0,err=0;
   for(const u of L){try{const r=await fetch(u);if(!r.ok)err++;else await r.arrayBuffer()}catch(e){err++}n++;if(p)p.firstChild.style.width=Math.round(100*n/L.length)+'%'}
-  toast(err?err+' vidéo(s) non téléchargée(s) : réessayez avec le Wi-Fi.':'Toutes les vidéos sont sur la tablette.');compterHL();
+  if(p)p.hidden=true;
+  toast(err?err+' vidéo(s) non téléchargée(s) : réessayez avec le Wi-Fi.':(L.length?'Vidéos gardées sur le téléphone.':'Déjà sur le téléphone.'));compterHL();
 }
-async function compterHL(){const el=$('#nb-hl');if(!el)return;try{const ks=await caches.keys(),k=ks.find(x=>/^gym-eleves-media-v\d+$/.test(x));if(!k){el.textContent='0';return}const c=await caches.open(k),n=(await c.keys()).length;el.textContent=n+' / '+new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>v[0]))).size}catch(e){el.textContent='?'}}
+async function compterHL(){await etatHL();const el=$('#nb-hl');const tous=new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>v[0])));const n=[...tous].filter(f=>HL.has(f));if(el)el.textContent=n.length+' / '+tous.size+' vidéos ('+mo(poids(n))+')';const z=$('#hl-liste');if(z)z.innerHTML=blocHL()}
 
 /* ---------- Fenêtres ---------- */
 function fen(html){$('#modal').innerHTML=`<div class="voile" data-act="fermerVoile"><div class="fen" role="dialog" aria-modal="true">${html}</div></div>`}
@@ -426,7 +446,8 @@ document.addEventListener('click',async ev=>{
     case 'fichier':if(DEMO){toast('Démo : le fichier n’est pas créé. En vrai, il part dans le Nuage.');break}enregistrerFichier();break;
     case 'demo':await ouvrirDemo();rendre();window.scrollTo(0,0);break;
     case 'demofin':quitterDemo();rendre();window.scrollTo(0,0);break;
-    case 'toutcharger':b.disabled=true;await toutCharger();b.disabled=false;break;
+    case 'toutcharger':case 'charger':b.disabled=true;await chargerHL(v||'tout');b.disabled=false;break;
+    case 'viderhl':if(confirm('Effacer les vidéos gardées sur ce téléphone ?'))await viderHL();break;
     case 'vitesse':case 'boucle':{const bar=b.closest('.ralenti'),vid=document.querySelector(`video[data-vid="${bar.dataset.pour}"]`);if(!vid)return;
       if(act==='boucle'){vid.loop=!vid.loop;b.classList.toggle('ici',vid.loop)}
       else{vid.playbackRate=+v;vid.defaultPlaybackRate=+v;bar.querySelectorAll('[data-act="vitesse"]').forEach(x=>x.classList.toggle('ici',x===b));if(vid.paused)vid.play().catch(()=>{})}
