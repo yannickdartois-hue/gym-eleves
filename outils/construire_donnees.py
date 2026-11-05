@@ -113,6 +113,13 @@ for nv, num, titre, fic in TRAMPO:
     TR_VIDS[f'v{num}'] = src
     next(n for n in ateliers[5]['niv'] if n['n'] == nv)['f'].append(num)
 
+def recoller(L):
+    # lignes coupées dans le PowerPoint (« … quand le » / « Corps monte … ») : on les recolle
+    out = []
+    for c in L:
+        if out and re.search(r'\b(le|la|les|de|du|des|quand|et)$', out[-1]): out[-1] += ' ' + c[0].lower() + c[1:]
+        else: out.append(c)
+    return out
 def txt(i):
     x = S[i]; return [net(l) for l in (x['lab'] + x['mat'] + x['cons'])]
 s3, s4, s132 = S[3], S[4], S[132]
@@ -125,7 +132,7 @@ GYM = {
         {'id': 'liaisons', 'nom': 'Éléments de liaison', 'info': 'Sauts, tours et pas pour relier les éléments d’un enchaînement.', 'f': BONUS['liaisons']},
         {'id': 'barres', 'nom': 'Barres asymétriques', 'info': 'Atelier gardé en réserve : le professeur l’affiche s’il en a besoin.', 'f': BONUS['barres'], 'cache': True},
     ],
-    'trampo': {'cons': [net(c) for c in s132['cons']], 'mat': [net(c) for c in s132['mat']], 'img': ['i80.png', 'i291.png']},
+    'trampo': {'cons': recoller([net(c) for c in s132['cons']]), 'mat': [net(c) for c in s132['mat']], 'img': ['i80.png', 'i291.png']},
     'securite': {
         'regles': [net(c) for c in s3['mat']],
         'parade': 'Parade : assurer la sécurité du partenaire en cas de difficulté (déséquilibre, mauvaise impulsion…).',

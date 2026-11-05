@@ -141,3 +141,105 @@ document.addEventListener('change',ev=>{
   const y=window.scrollY;rendre();window.scrollTo(0,y);
   const z=document.querySelector('.filmer');if(z)z.scrollIntoView({behavior:'smooth',block:'start'});
 });
+
+/* =====================================================================
+   5. Critère raté → aide ciblée (« Pas encore réussi »)
+   6. Quiz sécurité avant les niveaux « présence du professeur »
+   7. Lecture audio des consignes (voix de la tablette, sans réseau)
+   8. Rotation des ateliers (QR de rotation du professeur)
+   ===================================================================== */
+const ETIQ_CR=n=>[n.crit[0],n.crit[1],'Réussi du premier coup','Réception maîtrisée'];
+// S.rate[idEleve][k] = [nb échecs critère 1, critère 2, premier coup, réception]
+function noterRate(k){
+  const E=elv(),n=niveau(k),cases=[...document.querySelectorAll('[data-cr]')];
+  const rates=cases.map((c,i)=>c.checked?0:1);
+  if(!rates.some(Boolean)){toast('Décochez le ou les critères ratés.');return}
+  S.rate=S.rate||{};const R=(S.rate[E.id]=S.rate[E.id]||{});const L=(R[k]=R[k]||[0,0,0,0]);rates.forEach((x,i)=>L[i]+=x);
+  S.mod=Date.now();sauver();
+  const rat=ETIQ_CR(n).filter((_,i)=>rates[i]);
+  const aides=[...(n.f.flatMap(id=>(fiche(id).q||[]))),...n.r].filter((x,i,a)=>fiche(x)&&a.indexOf(x)===i).slice(0,3);
+  fen(`<h3>Pas encore… on progresse !</h3><p>Raté : <b>${rat.map(esc).join(' · ')}</b></p>
+   ${aides.length?`<p class="small">Pour travailler ce point, essaie d’abord :</p><div class="remlist">${aides.map((id,i)=>`<button class="rem" type="button" data-act="aide-ciblee" data-v="${id}"><img src="media/${(fiche(id).vid[0]||['v1.mp4'])[0].replace('.mp4','.jpg')}" alt=""><span><b>${esc(fiche(id).t)}</b>${fiche(id).cons[0]?`<br><span class="small muted">${esc(fiche(id).cons[0])}</span>`:''}</span></button>`).join('')}</div>`:'<p class="small">Regarde de nouveau la vidéo au ralenti, puis recommence.</p>'}
+   <div class="rangee" style="margin-top:12px;justify-content:flex-end"><button class="bt noir" type="button" data-act="fermer">Je recommence</button></div>`);
+}
+
+/* ---------- Quiz sécurité ---------- */
+const QUIZ=[
+  {q:'Combien d’élèves passent en même temps sur un atelier ?',r:['Un seul','Deux, pour aller plus vite','Tout le groupe'],b:0},
+  {q:'Avant chaque passage, le groupe vérifie que…',r:['Les tapis sont collés et à leur place, l’espace est libre','Le professeur regarde','La musique est lancée'],b:0},
+  {q:'La parade, c’est…',r:['Assurer la sécurité du partenaire s’il est en difficulté','Pousser le partenaire pour qu’il tourne','Applaudir le partenaire'],b:0},
+  {q:'Pour bien parer, je me place…',r:['Près de l’élément, de profil, ni trop près ni trop loin','Loin pour ne pas gêner','Devant, face à l’élève'],b:0},
+  {q:'Je peux travailler le salto…',r:['Seulement en présence du professeur, parade en place, niveau précédent validé','Quand je me sens prêt','Si un copain le fait déjà'],b:0},
+  {q:'Pendant le passage d’un camarade, je…',r:['Ne traverse pas la zone de travail et reste attentif','Prépare mon passage sur le tapis','Vais chercher du matériel en passant devant'],b:0},
+];
+const quizOk=id=>!!((S.quiz||{})[id]);
+let QZ=null;
+function ouvrirQuiz(){
+  const ordre=QUIZ.map((x,i)=>({...x,i,m:x.r.map((t,j)=>({t,j})).sort(()=>Math.random()-.5)}));QZ={rep:{},ordre};
+  fen(`<h3>🛡️ Quiz sécurité · ${esc(prenom(elv().nom))}</h3><p class="small muted">Toutes les réponses justes pour débloquer les niveaux avec ⚠️.</p>
+   ${ordre.map((x,k)=>`<div class="quiz-q"><b>${k+1}. ${esc(x.q)}</b>${x.m.map(o=>`<label class="coche"><input type="radio" name="qz${k}" value="${o.j}"> ${esc(o.t)}</label>`).join('')}</div>`).join('')}
+   <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Plus tard</button><button class="bt act" type="button" data-act="quiz-ok">Vérifier</button></div><p id="qz-msg" style="font-weight:700"></p>`);
+}
+function verifierQuiz(){
+  let faux=0;QZ.ordre.forEach((x,k)=>{const c=document.querySelector(`input[name=qz${k}]:checked`);const ok=c&&+c.value===x.b;if(!ok)faux++;const bloc=document.querySelectorAll('.quiz-q')[k];bloc.classList.toggle('faux',!ok)});
+  if(faux){$('#qz-msg').textContent=faux+' réponse'+(faux>1?'s':'')+' à revoir (en rouge). Relis la page Sécurité si besoin.';$('#qz-msg').style.color='var(--alerte)';return}
+  S.quiz=S.quiz||{};S.quiz[elv().id]=Date.now();S.mod=Date.now();sauver();fermer();rendre();toast('Quiz réussi : niveaux ⚠️ débloqués.');
+}
+
+/* ---------- Lecture audio ---------- */
+function lire(txt){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='fr-FR';u.rate=.95;const v=speechSynthesis.getVoices().find(x=>/^fr/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){toast('Lecture audio indisponible sur cette tablette.')}}
+const audioDispo=()=>'speechSynthesis' in window;
+
+/* ---------- Rotation des ateliers ---------- */
+// ROOT.rotation = {c, d (début ms), m (minutes), g (nb groupes), o ([ateliers dans l'ordre])} ; S.grp = n° de groupe
+function rotationActuelle(){
+  const R=ROOT.rotation;if(!R||!S||R.c!==S.classe||!S.grp)return null;
+  const t=Date.now()-R.d;if(t<0)return {avant:Math.ceil(-t/60000),at:R.o[(S.grp-1)%R.o.length]};
+  const tour=Math.floor(t/(R.m*60000));if(tour>=R.o.length)return {fini:true};
+  const at=R.o[(S.grp-1+tour)%R.o.length],reste=Math.ceil((R.m*60000-(t%(R.m*60000)))/60000);
+  return {at,reste,tour:tour+1,nb:R.o.length,suiv:tour+1<R.o.length?R.o[(S.grp+tour)%R.o.length]:null};
+}
+function bandeauRotation(){
+  const R=ROOT.rotation;if(!R||!S||R.c!==S.classe||new Date(R.d).toDateString()!==new Date().toDateString())return '';
+  if(!S.grp)return `<div class="rotation"><b>🔄 Rotation des ateliers</b><span class="small">Quel est le numéro de votre groupe ?</span><div class="rangee">${Array.from({length:R.g},(_,i)=>`<button class="bt mini" type="button" data-act="grp" data-v="${i+1}">${i+1}</button>`).join('')}</div></div>`;
+  const r=rotationActuelle();if(!r)return '';if(r.fini)return `<div class="rotation"><b>🔄 Rotation terminée</b></div>`;
+  const a=atelier(r.at);
+  return `<button type="button" class="rotation" ${st(r.at)} data-act="atelier" data-v="${r.at}"><span>🔄 Groupe ${S.grp} · ${r.avant!=null?'début dans '+r.avant+' min':'tour '+r.tour+'/'+r.nb}</span><b>Maintenant : atelier ${a.n} · ${esc(a.court)}</b><span class="small">${r.reste!=null?'encore '+r.reste+' min'+(r.suiv?' · ensuite atelier '+r.suiv:''):''}</span></button>`;
+}
+{
+  const _rc=recevoirClasse;
+  recevoirClasse=function(o){
+    if(o&&o.t==='T'){ROOT.rotation={c:o.c,d:o.d*1000,m:o.m,g:o.g,o:o.o};ecrireRoot();rendre();return 'Rotation reçue : '+o.o.length+' ateliers de '+o.m+' min.'}
+    return _rc(o);
+  };
+  const _vFiche2=vFiche;
+  vFiche=function(){const h=_vFiche2();return S.eleves.length?h.replace(/(<h2>Fiche de [^<]*<\/h2>)/,bandeauRotation()+'$1'):h};
+  setInterval(()=>{if(S&&ROOT.rotation&&!NAV.length&&S.tab==='fiche'&&!$('#modal').innerHTML){const y=scrollY;rendre();scrollTo(0,y)}},30000);
+  const _blocValid=blocValid;
+  blocValid=function(k){
+    const n=niveau(k),E=elv(),v=V(E.id,k)||{};
+    if(n.prof&&!v.e&&!v.p&&!quizOk(E.id))return `<div class="valid"><p><b>🛡️ Quiz sécurité d’abord</b> : ${esc(prenom(E.nom))} doit réussir le quiz sécurité avant de travailler ce niveau.</p><div class="rangee"><button class="bt act" type="button" data-act="quiz">Faire le quiz</button><button class="bt mini" type="button" data-act="info" data-v="securite">Relire la sécurité</button></div></div>`;
+    let h=_blocValid(k);
+    h=h.replace('<button class="bt ok" type="button" data-act="valE"',`<button class="bt danger" type="button" data-act="rate" data-v="${k}">✗ Pas encore réussi</button><button class="bt ok" type="button" data-act="valE"`);
+    return h;
+  };
+  // 🔊 à côté des consignes et des critères
+  const _blocFiche=blocFiche;
+  blocFiche=function(id,titre){const h=_blocFiche(id,titre);return audioDispo()&&fiche(id).cons.length?h.replace('<h4>Consignes</h4>',`<h4>Consignes <button type="button" class="ecoute" data-act="lire" data-v="${id}" aria-label="Écouter les consignes">🔊</button></h4>`):h};
+  const _vNiveau2=vNiveau;
+  vNiveau=function(k){const h=_vNiveau2(k);return audioDispo()?h.replace('<b>Critères de réussite</b>',`<b>Critères de réussite</b> <button type="button" class="ecoute" data-act="lirecrit" data-v="${k}" aria-label="Écouter les critères">🔊</button>`):h};
+  const _objetEnvoi2=objetEnvoi;
+  objetEnvoi=function(){const o=_objetEnvoi2();o.el.forEach((x,i)=>{const E=S.eleves[i],r=(S.rate||{})[E.id];if(r&&Object.keys(r).length)x.x=r;if(quizOk(E.id))x.qz=1});return o};
+}
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-act]');if(!b)return;const v=b.dataset.v;
+  switch(b.dataset.act){
+    case 'rate':if(S)noterRate(v);break;
+    case 'aide-ciblee':fermer();aller({v:'fiche',id:v,...listeDe(v)});break;
+    case 'quiz':if(S)ouvrirQuiz();break;
+    case 'quiz-ok':verifierQuiz();break;
+    case 'lire':{const f=fiche(v);lire(f.t+'. '+f.cons.join('. ')+(f.mat.length?'. Matériel : '+f.mat.join(', '):''));break}
+    case 'lirecrit':{const n=niveau(v);lire('Niveau '+n.n+', '+n.nom+'. Critères de réussite : '+n.crit.join('. '));break}
+    case 'grp':if(S){S.grp=+v;sauver();rendre()}break;
+  }
+});
