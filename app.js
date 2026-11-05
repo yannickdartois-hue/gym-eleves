@@ -1,12 +1,12 @@
 /* =====================================================================
    app.js — Gymnastique · appli élève (fiche CA3 + fiches de travail interactives)
-   Lycée Georges Pompidou · une tablette pour un groupe de 2 à 4 élèves
+   Lycée Georges Pompidou · une tablette pour un groupe de 2 à 8 élèves
    Données gardées sur la tablette uniquement (localStorage), carnet de
    chaque groupe chiffré avec son code secret.
    E = co-évaluation par un camarade · P = validation par le professeur
    ===================================================================== */
 'use strict';
-const CLE='gym-eleves-v1',VERSION=1,MAX_GROUPE=4;
+const CLE='gym-eleves-v1',VERSION=1,MAX_GROUPE=8;
 const NIVS=['A','B','C','D','E','F'];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -14,6 +14,8 @@ const uid=()=>Math.random().toString(36).slice(2,9);
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const dateFr=ms=>{const d=new Date(ms);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})};
 const prenom=n=>String(n||'').split(/\s+/)[0];
+// « Léa M. » : prénom + initiale du nom, pour distinguer deux élèves du même prénom dans un groupe de 8
+const court=n=>{const w=String(n||'').trim().split(/\s+/);return w.length>1?w[0]+' '+w[w.length-1][0].toUpperCase()+'.':w[0]};
 const atelier=a=>GYM.ateliers.find(x=>x.n===+a);
 const niveau=k=>{const a=atelier(k[0]);return a&&a.niv.find(x=>x.n===k[1])};
 const fiche=id=>GYM.fiches[id];
@@ -134,7 +136,7 @@ const barresVisibles=()=>S?!!(S.cfg&&S.cfg.barres):Object.values(ROOT.classes).s
 let NAV=[]; // pile de pages « Apprendre » : {v:'atelier',a} | {v:'niveau',k} | {v:'fiche',id} | {v:'bonus',id} | {v:'info',x}
 function rendre(){
   const app=$('#app');
-  $('#sous').textContent=S?(S.classe?S.classe+' · ':'')+(S.eleves.map(e=>prenom(e.nom)).join(', ')||'nouveau groupe'):'Lycée Georges Pompidou';
+  $('#sous').textContent=S?(S.classe?S.classe+' · ':'')+(S.eleves.map(e=>court(e.nom)).join(', ')||'nouveau groupe'):'Lycée Georges Pompidou';
   $('#haut').innerHTML=S?`<button class="bt mini" type="button" data-act="verrou" aria-label="Verrouiller le carnet">🔒 Fermer</button>`:'';
   let h='';
   if(NAV.length)h=vPile();
@@ -167,7 +169,7 @@ function vGroupe(){
   const C=S.cfg;
   return `<h2>Notre groupe</h2>
   <section class="carte"><p class="small muted">${S.classe?'Classe <b>'+esc(S.classe)+'</b>':'Classe non choisie'}${C&&C.eleves&&C.eleves.length?' · liste du professeur reçue':''}</p>
-  ${S.eleves.length?S.eleves.map((e,i)=>`<div class="rangee" style="justify-content:space-between;border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b><button class="bt mini danger" type="button" data-act="retirer" data-v="${i}">Retirer</button></div>`).join(''):'<p>Ajoutez les 2 à 4 élèves du groupe.</p>'}
+  ${S.eleves.length?S.eleves.map((e,i)=>`<div class="rangee" style="justify-content:space-between;border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b><button class="bt mini danger" type="button" data-act="retirer" data-v="${i}">Retirer</button></div>`).join(''):'<p>Ajoutez les élèves du groupe (2 à 8), avec leur prénom et leur nom.</p>'}
   ${S.eleves.length<MAX_GROUPE?`<div class="rangee" style="margin-top:10px">${C&&C.eleves&&C.eleves.length?'<button class="bt act" type="button" data-act="choisirnoms">＋ Choisir dans la liste de la classe</button>':''}<button class="bt" type="button" data-act="ajoutnom">＋ Écrire un prénom</button></div>`:''}
   </section>
   <section class="carte"><h3>Classe</h3><p class="small muted">Le QR de la classe (affiché par le professeur) donne la liste des élèves et le code de validation du professeur.</p><button class="bt" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></section>
@@ -177,8 +179,8 @@ function puces(id,a){return `<div class="etat-at">${NIVS.map(n=>{const s=etat(id
 function vFiche(){
   if(!S.eleves.length)return `<h2>Ma fiche</h2><p class="carte">Ajoutez d’abord les élèves du groupe (onglet Groupe).</p>`;
   const E=elv();
-  return `<div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(prenom(e.nom))}</button>`).join('')}</div>
-  <h2>Fiche de ${esc(prenom(E.nom))}</h2>
+  return `<div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
+  <h2>Fiche de ${esc(court(E.nom))}</h2>
   <p class="small muted">Touchez un niveau pour voir la vidéo, les consignes et le faire valider. <b>E</b> = validé par un camarade · <b>P</b> = validé par le professeur.</p>
   ${GYM.ateliers.map(a=>`<section class="atelier" ${st(a.n)}><header><span class="n">${a.n}</span><b>${esc(a.nom)}</b><span class="small">${(()=>{const p=meilleur(E.id,a.n,'p');return p?'Niveau '+p:''})()}</span></header>
     ${a.niv.map(n=>{const k=a.n+n.n,s=etat(E.id,k),o=ouvert(E.id,k);
@@ -272,10 +274,10 @@ function blocValid(k){
   const E=elv(),v=V(E.id,k)||{},o=ouvert(E.id,k),n=niveau(k);
   const autres=S.eleves.filter(x=>x.id!==E.id);
   if(v.p)return `<div class="valid"><span class="tampon p">✅ P · validé par le professeur le ${dateFr(v.p.t)}</span>${v.e?`<p class="small muted">E par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</p>`:''}<div class="rangee" style="margin-top:8px"><button class="bt mini" type="button" data-act="annulerP" data-v="${k}">Retirer P (professeur)</button></div></div>`;
-  if(!o)return `<div class="valid"><p><b>🔒 Niveau fermé pour ${esc(prenom(E.nom))}</b> : il faut d’abord valider le niveau ${NIVS[NIVS.indexOf(k[1])-1]} (E).</p><p class="small muted">Tu peux regarder la vidéo, mais on ne travaille pas un niveau au-dessus sans avoir validé le précédent.</p><button class="bt mini" type="button" data-act="debloquer" data-v="${k}">Le professeur ouvre ce niveau</button></div>`;
+  if(!o)return `<div class="valid"><p><b>🔒 Niveau fermé pour ${esc(court(E.nom))}</b> : il faut d’abord valider le niveau ${NIVS[NIVS.indexOf(k[1])-1]} (E).</p><p class="small muted">Tu peux regarder la vidéo, mais on ne travaille pas un niveau au-dessus sans avoir validé le précédent.</p><button class="bt mini" type="button" data-act="debloquer" data-v="${k}">Le professeur ouvre ce niveau</button></div>`;
   if(v.e)return `<div class="valid"><span class="tampon e">E · validé par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</span><p class="small">Montre-le au professeur pour la validation <b>P</b>.</p><div class="rangee"><button class="bt prof" type="button" data-act="valP" data-v="${k}">🔐 Validation P (professeur)</button><button class="bt mini" type="button" data-act="annulerE" data-v="${k}">Annuler E</button></div></div>`;
-  return `<div class="valid"><h3>Co-évaluation (E) de ${esc(prenom(E.nom))}</h3>
-    ${autres.length?`<p class="small"><b>Qui observe ?</b></p><div class="qui">${autres.map(x=>`<button type="button" class="${OBS===x.id?'ici':''}" data-act="obs" data-v="${x.id}">${esc(prenom(x.nom))}</button>`).join('')}</div>`:'<p class="small muted">Seul dans le groupe : la validation se fait avec le professeur.</p>'}
+  return `<div class="valid"><h3>Co-évaluation (E) de ${esc(court(E.nom))}</h3>
+    ${autres.length?`<p class="small"><b>Qui observe ?</b></p><div class="qui">${autres.map(x=>`<button type="button" class="${OBS===x.id?'ici':''}" data-act="obs" data-v="${x.id}">${esc(court(x.nom))}</button>`).join('')}</div>`:'<p class="small muted">Seul dans le groupe : la validation se fait avec le professeur.</p>'}
     ${n.crit.map((c,i)=>`<label class="coche"><input type="checkbox" data-cr="${i}"> ${esc(c)}</label>`).join('')}
     <label class="coche"><input type="checkbox" data-cr="r1"> Réussi du premier coup</label>
     <label class="coche"><input type="checkbox" data-cr="r2"> Réception maîtrisée</label>
@@ -307,7 +309,7 @@ function vInfo(x){
 function chaine(id){return GYM.ateliers.map(a=>NIVS.map(n=>{const v=V(id,a.n+n);return v&&v.p?'p':v&&v.e?'e':v&&v.deb?'d':'0'}).join('')).join('')}
 function objetEnvoi(){
   return {a:'GYM',v:1,t:'G',c:S.classe||'',g:ACTIF,ts:Math.round(Date.now()/1000),
-    el:S.eleves.map(e=>({n:e.nom,s:chaine(e.id),d:Object.fromEntries(Object.entries(S.val[e.id]||{}).map(([k,v])=>[k,[v.e?Math.round(v.e.t/1000):0,v.e?prenom(v.e.par):'',v.p?Math.round(v.p.t/1000):0]]))}))};
+    el:S.eleves.map(e=>({n:e.nom,s:chaine(e.id),d:Object.fromEntries(Object.entries(S.val[e.id]||{}).map(([k,v])=>[k,[v.e?Math.round(v.e.t/1000):0,v.e?v.e.par:'',v.p?Math.round(v.p.t/1000):0]]))}))};
 }
 function vEnvoi(){
   return `<h2>Envoyer au professeur</h2>
@@ -384,9 +386,14 @@ document.addEventListener('click',async ev=>{
       fen(`<h3>Qui est dans le groupe ?</h3><p class="small muted">Cochez 2 à ${MAX_GROUPE} élèves.</p><div class="liste-el">${S.cfg.eleves.filter(n=>!deja.has(n)).map(n=>`<label><input type="checkbox" value="${esc(n)}"> ${esc(n)}${pris.has(prenom(n))?' <span class="small muted">(autre groupe ?)</span>':''}</label>`).join('')}</div>
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="noms-ok">Ajouter</button></div>`);break}
     case 'noms-ok':{const L=[...document.querySelectorAll('.liste-el input:checked')].map(i=>i.value);
+      if(L.length>MAX_GROUPE-S.eleves.length){toast(MAX_GROUPE+' élèves maximum par groupe : décochez-en '+(L.length-(MAX_GROUPE-S.eleves.length))+'.');return}
       L.slice(0,MAX_GROUPE-S.eleves.length).forEach(n=>{const id=uid();S.eleves.push({id,nom:n})});fermer();sauver();rendre();break}
-    case 'ajoutnom':fen(`<h3>Ajouter un élève</h3><input id="nv-nom" type="text" placeholder="Prénom et initiale du nom" autocomplete="off"><div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nom-ok">Ajouter</button></div>`);setTimeout(()=>$('#nv-nom').focus(),50);break;
-    case 'nom-ok':{const n=($('#nv-nom').value||'').trim();if(!n)return;S.eleves.push({id:uid(),nom:n});fermer();sauver();rendre();break}
+    case 'ajoutnom':fen(`<h3>Ajouter un élève</h3><label class="small"><b>Prénom</b></label><input id="nv-pre" type="text" autocomplete="off" autocapitalize="words"><label class="small" style="display:block;margin-top:8px"><b>Nom de famille</b></label><input id="nv-nom" type="text" autocomplete="off" autocapitalize="characters"><p id="nv-msg" class="small" style="color:var(--alerte);font-weight:700;min-height:1.3em"></p><div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nom-ok">Ajouter</button></div>`);setTimeout(()=>{const i=$('#nv-pre');if(i)i.focus()},50);break;
+    case 'nom-ok':{const p=($('#nv-pre').value||'').trim().replace(/\s+/g,' '),f=($('#nv-nom').value||'').trim().replace(/\s+/g,' ');
+      if(!p||!f||f.length<2){$('#nv-msg').textContent='Prénom ET nom de famille complets, s’il te plaît.';return}
+      const n=p.charAt(0).toUpperCase()+p.slice(1)+' '+f.toUpperCase();
+      if(S.eleves.some(e=>e.nom.toLowerCase()===n.toLowerCase())){$('#nv-msg').textContent='Cet élève est déjà dans le groupe.';return}
+      S.eleves.push({id:uid(),nom:n});fermer();sauver();rendre();break}
     case 'retirer':{const e=S.eleves[+v];fen(`<h3>Retirer ${esc(e.nom)} ?</h3><p class="small">Ses validations sur cette tablette seront effacées (celles déjà envoyées restent chez le professeur).</p><div class="rangee" style="justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt danger" type="button" data-act="retirer-ok" data-v="${v}">Retirer</button></div>`);break}
     case 'retirer-ok':{const e=S.eleves.splice(+v,1)[0];delete S.val[e.id];S.cur=0;fermer();sauver();rendre();break}
     case 'suppgroupe':fen(`<h3>Supprimer ce groupe ?</h3><p class="small">Pensez à envoyer la fiche au professeur avant.</p><div class="rangee" style="justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt danger" type="button" data-act="supp-ok">Supprimer</button></div>`);break;

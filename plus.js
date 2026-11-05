@@ -73,7 +73,7 @@ function nomPiece(p){if(p[0]==='L'){const f=fiche(p.slice(1));return f?'Liaison 
 function vEnch(){
   const E=elv(),L=(S.ench||{})[E.id]||[];
   const valides=[];GYM.ateliers.forEach(a=>a.niv.forEach(n=>{if(etat(E.id,a.n+n.n))valides.push(a.n+n.n)}));
-  return `<h2>🧩 Enchaînement de ${esc(prenom(E.nom))}</h2>
+  return `<h2>🧩 Enchaînement de ${esc(court(E.nom))}</h2>
   <p class="small muted">Assemble les éléments que tu as validés (E ou P) et relie-les avec des éléments de liaison. Touche ↑ ↓ pour changer l’ordre.</p>
   <ol class="ench">${L.map((p,i)=>`<li ${p[0]==='L'?st('liaisons'):st(p[0])}><span class="n">${i+1}</span><span class="nm">${p[0]==='L'?'':`<span class="L L${p[1]}" style="width:30px;height:30px;font-size:18px">${p[1]}</span> `}${esc(nomPiece(p))}</span>
     <button type="button" class="bt mini" data-act="en-mv" data-v="${i}" data-d="-1" ${i?'':'disabled'} aria-label="Monter">↑</button><button type="button" class="bt mini" data-act="en-mv" data-v="${i}" data-d="1" ${i<L.length-1?'':'disabled'} aria-label="Descendre">↓</button><button type="button" class="bt mini danger" data-act="en-sup" data-v="${i}" aria-label="Retirer">✕</button></li>`).join('')||'<p class="carte small">Ton enchaînement est vide.</p>'}</ol>
@@ -98,7 +98,7 @@ function vEnch(){
     let h=_vNiveau(k);
     if(!S||!S.eleves.length)return h;
     const E=elv(),moi=objectif(E.id)===k;
-    const bt=`<div class="rangee" style="margin:6px 0"><button type="button" class="bt mini ${moi?'act':''}" data-act="obj" data-v="${k}">🎯 ${moi?'Mon objectif du jour ✔':'Mon objectif du jour'}</button><span class="small muted">pour ${esc(prenom(E.nom))}</span></div>`;
+    const bt=`<div class="rangee" style="margin:6px 0"><button type="button" class="bt mini ${moi?'act':''}" data-act="obj" data-v="${k}">🎯 ${moi?'Mon objectif du jour ✔':'Mon objectif du jour'}</button><span class="small muted">pour ${esc(court(E.nom))}</span></div>`;
     h=h.replace('<div class="critbox">',bt+'<div class="critbox">');
     const i=h.indexOf('<h4>Je n’y arrive pas encore');
     return i>0?h.slice(0,i)+blocFilm(k)+h.slice(i):h+blocFilm(k);
@@ -176,7 +176,7 @@ const quizOk=id=>!!((S.quiz||{})[id]);
 let QZ=null;
 function ouvrirQuiz(){
   const ordre=QUIZ.map((x,i)=>({...x,i,m:x.r.map((t,j)=>({t,j})).sort(()=>Math.random()-.5)}));QZ={rep:{},ordre};
-  fen(`<h3>🛡️ Quiz sécurité · ${esc(prenom(elv().nom))}</h3><p class="small muted">Toutes les réponses justes pour débloquer les niveaux avec ⚠️.</p>
+  fen(`<h3>🛡️ Quiz sécurité · ${esc(court(elv().nom))}</h3><p class="small muted">Toutes les réponses justes pour débloquer les niveaux avec ⚠️.</p>
    ${ordre.map((x,k)=>`<div class="quiz-q"><b>${k+1}. ${esc(x.q)}</b>${x.m.map(o=>`<label class="coche"><input type="radio" name="qz${k}" value="${o.j}"> ${esc(o.t)}</label>`).join('')}</div>`).join('')}
    <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Plus tard</button><button class="bt act" type="button" data-act="quiz-ok">Vérifier</button></div><p id="qz-msg" style="font-weight:700"></p>`);
 }
@@ -218,7 +218,7 @@ function bandeauRotation(){
   const _blocValid=blocValid;
   blocValid=function(k){
     const n=niveau(k),E=elv(),v=V(E.id,k)||{};
-    if(n.prof&&!v.e&&!v.p&&!quizOk(E.id))return `<div class="valid"><p><b>🛡️ Quiz sécurité d’abord</b> : ${esc(prenom(E.nom))} doit réussir le quiz sécurité avant de travailler ce niveau.</p><div class="rangee"><button class="bt act" type="button" data-act="quiz">Faire le quiz</button><button class="bt mini" type="button" data-act="info" data-v="securite">Relire la sécurité</button></div></div>`;
+    if(n.prof&&!v.e&&!v.p&&!quizOk(E.id))return `<div class="valid"><p><b>🛡️ Quiz sécurité d’abord</b> : ${esc(court(E.nom))} doit réussir le quiz sécurité avant de travailler ce niveau.</p><div class="rangee"><button class="bt act" type="button" data-act="quiz">Faire le quiz</button><button class="bt mini" type="button" data-act="info" data-v="securite">Relire la sécurité</button></div></div>`;
     let h=_blocValid(k);
     h=h.replace('<button class="bt ok" type="button" data-act="valE"',`<button class="bt danger" type="button" data-act="rate" data-v="${k}">✗ Pas encore réussi</button><button class="bt ok" type="button" data-act="valE"`);
     return h;
