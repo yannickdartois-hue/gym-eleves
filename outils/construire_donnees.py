@@ -134,7 +134,7 @@ for p in imgs_utiles | {'image80.png', 'image291.png', 'image9.png', 'image11.pn
 from PIL import Image
 for p in os.listdir(B + '/pictos'):
     im = Image.open(B + '/pictos/' + p).convert('RGBA'); bg = Image.new('RGBA', im.size, 'white'); bg.alpha_composite(im); bg = bg.convert('RGB')
-    if bg.height > 120: bg = bg.resize((int(bg.width * 120 / bg.height), 120), Image.LANCZOS)
+    if bg.height > 160: bg = bg.resize((int(bg.width * 160 / bg.height), 160), Image.LANCZOS)
     bg.quantize(32).save(OUT + '/pictos/' + p, optimize=True)
 dur = {}
 for m in sorted(vids_utiles):

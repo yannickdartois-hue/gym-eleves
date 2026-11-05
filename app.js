@@ -240,7 +240,7 @@ function blocFiche(id,titre){
   ${f.vid.map(v=>video(v,id)).join('')}
   ${f.cons.length?`<h4>Consignes</h4><ol class="cons">${f.cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:''}
   ${f.mat.length?`<h4>Matériel</h4><div class="mat">${f.mat.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}
-  ${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="" loading="lazy">`).join('')}</div>`:''}
+  ${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="" loading="lazy" data-zoom>`).join('')}</div>`:''}
   ${boutonsQ(id)}`;
 }
 /* Le « ? » du PowerPoint : sur chaque exercice, un lien vers l'exercice de remédiation plus facile */
@@ -260,7 +260,7 @@ function vNiveau(k){
   const a=atelier(k[0]),n=niveau(k);
   let h=`<h2><span class="L L${n.n}" style="vertical-align:4px">${n.n}</span> ${esc(n.nom)}</h2><p class="muted small" style="margin-top:-2px">Atelier ${a.n} · ${esc(a.nom)}</p>`;
   if(n.prof)h+=`<div class="alerte">⚠️ Seulement en présence du professeur, avec la parade en place.</div>`;
-  h+=`<div class="critbox"><b>Critères de réussite</b><ul>${n.crit.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${n.picto?`<img src="${n.picto}" alt="" style="max-height:80px">`:''}</div>`;
+  h+=`<div class="critbox"><b>Critères de réussite</b><ul>${n.crit.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${n.picto?`<img class="picto-grand" src="${n.picto}" alt="Pictogramme du niveau" data-zoom>`:''}</div>`;
   h+=S&&S.eleves.length?blocValid(k):'';
   if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom)}</div>`).join('');
   else if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
@@ -359,6 +359,7 @@ function aller(p){NAV.push(p);rendre();window.scrollTo(0,0)}
 
 /* ---------- Évènements ---------- */
 document.addEventListener('click',async ev=>{
+  const z=ev.target.closest('img[data-zoom]');if(z){fen(`<div class="zoom"><img src="${z.getAttribute('src')}" alt=""></div><div class="rangee" style="margin-top:10px;justify-content:flex-end"><button class="bt noir" type="button" data-act="fermer">Fermer</button></div>`);return}
   const b=ev.target.closest('[data-act]');if(!b)return;
   const act=b.dataset.act,v=b.dataset.v;
   if(act==='fermerVoile'){if(ev.target===b)fermer();return}
