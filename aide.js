@@ -1,6 +1,12 @@
 /* aide.js — mode d'emploi de l'appli élève de gymnastique (lu par eps-aide.js) */
 window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 {id:'eleve',titre:'Élève',chapitres:[
+{t:'🔑 Code du cours',html:`<ul>
+<li>Au début du cours, le professeur écrit un <b>code à 4 chiffres</b>. Touche <span class="bouton">🔑 Code du cours</span> et tape-le : les niveaux ⚠️ peuvent être validés E pendant 2 heures.</li>
+<li>Le code n’est demandé que pour les niveaux ⚠️, au moment de valider E.</li>
+<li>Code refusé ? Vérifie que la date du téléphone est juste. Après 5 erreurs, attends 1 minute.</li>
+</ul>`},
+
 {t:'Commencer (premier cours)',html:`<ol>
 <li><span class="bouton">📷 QR de la classe (prof)</span> : vise le QR que le professeur affiche. La liste de la classe arrive sur la tablette.</li>
 <li><span class="bouton">＋ Nouveau groupe</span> : choisis ta classe, puis un <b>code secret à 4 chiffres</b> (tapé deux fois). Retenez-le : il ouvre votre carnet à chaque cours. Un autre groupe ne peut pas le lire.</li>

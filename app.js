@@ -337,6 +337,7 @@ function marquerEnvoye(){S.envoi=Date.now();sauver();rendre();toast('Fiche envoy
 function recevoirClasse(o){
   if(o.t!=='C')throw new Error('Ce n’est pas le QR de la classe.');
   const cfg={classe:o.c,eleves:o.l||[],lien:o.u||'',pin:o.k||'',barres:!!o.b};
+  if(window.EPSCode)EPSCode.memoriserCle(o.c,o.cc);
   ROOT.classes[o.c]=cfg;ecrireRoot();
   if(S&&(!S.classe||S.classe===o.c)){S.classe=o.c;S.cfg=JSON.parse(JSON.stringify(cfg));sauver()}
   rendre();
@@ -407,6 +408,8 @@ document.addEventListener('click',async ev=>{
     case 'info':aller({v:'info',x:v});break;
     case 'obs':OBS=v;document.querySelectorAll('[data-act="obs"]').forEach(x=>x.classList.toggle('ici',x.dataset.v===v));break;
     case 'valE':{
+      // Niveaux ⚠️ : validation E seulement en cours (code du cours du professeur, eps-code.js).
+      if(window.EPSCode&&niveau(v).prof&&EPSCode.etat()==='fermee'){const k=v;EPSCode.exiger(()=>{const b=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(b)b.click()});return}
       const coches=[...document.querySelectorAll('[data-cr]')];
       if(coches.some(c=>!c.checked)){toast('Toutes les cases doivent être cochées : sinon, on recommence !');return}
       const autres=S.eleves.filter(x=>x.id!==elv().id);
@@ -436,3 +439,6 @@ document.addEventListener('touchend',e=>{if(!TX||$('#modal').innerHTML)return;co
 document.addEventListener('keydown',e=>{if(e.key==='Enter'){if($('#code'))validerCode();else if($('#pin'))validerPin()}});
 if(/[?&]demo\b/.test(location.search))ouvrirDemo().then(rendre);
 rendre();compterHL();
+
+/* Code du cours (eps-code.js, commun) : en gym, seuls les niveaux ⚠️ le demandent pour valider E, avec le code à 4 chiffres du professeur (2 h). */
+if(window.EPSCode)EPSCode.eleve({app:'gye',classe:()=>S&&S.classe||'',seance:()=>'G',seances:()=>['G'],nom:()=>'Le cours du jour',ouvrir:()=>{},actif:()=>false,bandeau:false,demo:()=>DEMO});
