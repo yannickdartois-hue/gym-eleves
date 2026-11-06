@@ -96,6 +96,11 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   await V.fill('#eps-code-in',cc.code);await V.waitForTimeout(500);
   verif('Code du cours : le bon code ouvre le cours',await V.evaluate(()=>EPSCode.etat()==='ouverte'));
 
+  /* ---------- 6. Rotation : 3 tours par cours, cours B décalé de 3 ateliers ---------- */
+  const rot=await T.evaluate(()=>{const S0=S.grp;S.grp=1;const r=[];for(const s of [0,3])for(const k of [0,1,2,3]){ROOT.rotation={c:S.classe,d:Date.now()-k*20*60000-1000,m:20,g:6,o:[1,2,3,4,5,6],n:3,s};const x=rotationActuelle();r.push(x.fini?'fin':x.at)}
+    ROOT.rotation={c:S.classe,d:Date.now()-1000,m:8,g:6,o:[1,2,3,4,5,6]};const ancien=rotationActuelle();ROOT.rotation=null;S.grp=S0;return {r:r.join(','),ancien:ancien.at+'/'+ancien.nb}});
+  verif('Rotation : cours A 1→2→3 puis fin, cours B 4→5→6 puis fin',rot.r==='1,2,3,fin,4,5,6,fin',rot.r);
+  verif('Rotation : un ancien QR (sans tours ni décalage) marche comme avant',rot.ancien==='1/6',rot.ancien);
   verif('Aucune erreur JavaScript',errs.length===0,errs.join(' | '));
   await b.close();
   console.log('\n'+ok+' réussis, '+ko+' échoués');

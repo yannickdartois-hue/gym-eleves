@@ -191,13 +191,14 @@ function lire(txt){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtter
 const audioDispo=()=>'speechSynthesis' in window;
 
 /* ---------- Rotation des ateliers ---------- */
-// ROOT.rotation = {c, d (début ms), m (minutes), g (nb groupes), o ([ateliers dans l'ordre])} ; S.grp = n° de groupe
+// ROOT.rotation = {c, d (début ms), m (minutes), g (nb groupes), o ([ateliers dans l'ordre]), n (nb de tours, défaut : tous), s (décalage de départ : 0 cours A, 3 cours B)} ; S.grp = n° de groupe
 function rotationActuelle(){
   const R=ROOT.rotation;if(!R||!S||R.c!==S.classe||!S.grp)return null;
-  const t=Date.now()-R.d;if(t<0)return {avant:Math.ceil(-t/60000),at:R.o[(S.grp-1)%R.o.length]};
-  const tour=Math.floor(t/(R.m*60000));if(tour>=R.o.length)return {fini:true};
-  const at=R.o[(S.grp-1+tour)%R.o.length],reste=Math.ceil((R.m*60000-(t%(R.m*60000)))/60000);
-  return {at,reste,tour:tour+1,nb:R.o.length,suiv:tour+1<R.o.length?R.o[(S.grp+tour)%R.o.length]:null};
+  const L=R.o.length,NT=R.n||L,DEC=R.s||0,ici=k=>R.o[(S.grp-1+DEC+k)%L];
+  const t=Date.now()-R.d;if(t<0)return {avant:Math.ceil(-t/60000),at:ici(0)};
+  const tour=Math.floor(t/(R.m*60000));if(tour>=NT)return {fini:true};
+  const at=ici(tour),reste=Math.ceil((R.m*60000-(t%(R.m*60000)))/60000);
+  return {at,reste,tour:tour+1,nb:NT,suiv:tour+1<NT?ici(tour+1):null};
 }
 function bandeauRotation(){
   const R=ROOT.rotation;if(!R||!S||R.c!==S.classe||new Date(R.d).toDateString()!==new Date().toDateString())return '';
@@ -209,7 +210,7 @@ function bandeauRotation(){
 {
   const _rc=recevoirClasse;
   recevoirClasse=function(o){
-    if(o&&o.t==='T'){ROOT.rotation={c:o.c,d:o.d*1000,m:o.m,g:o.g,o:o.o};ecrireRoot();rendre();return 'Rotation reçue : '+o.o.length+' ateliers de '+o.m+' min.'}
+    if(o&&o.t==='T'){ROOT.rotation={c:o.c,d:o.d*1000,m:o.m,g:o.g,o:o.o,n:o.n,s:o.s};ecrireRoot();rendre();return 'Rotation reçue : '+(o.n||o.o.length)+' tours de '+o.m+' min.'}
     return _rc(o);
   };
   const _vFiche2=vFiche;
