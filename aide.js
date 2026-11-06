@@ -17,7 +17,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 <li>6 ateliers, niveaux <b>A à F</b>. Touche un niveau pour voir la vidéo, les consignes, le matériel et les critères.</li>
 <li><b>E</b> : un camarade t’observe. Il choisit son nom dans « Qui observe ? », coche les 2 critères, « réussi du premier coup » et « réception maîtrisée », puis <span class="bouton">✔ Valider E</span>.</li>
 <li>Raté ? Il laisse décochés les critères ratés et touche <span class="bouton">✗ Pas encore réussi</span> : l’appli te propose un exercice plus facile pour travailler ce point.</li>
-<li><b>P</b> : touche <span class="bouton">📲 Montrer au professeur</span>. Il scanne le QR, te regarde faire et valide sur son iPad. Puis touche <span class="bouton">📷 Scanner la réponse du prof</span> et vise son écran : le P s’affiche. S’il n’a pas le temps, le P arrivera avec le QR de la classe.</li>
+<li><b>P</b> : le professeur valide les P <b>à partir de la 3<sup>e</sup> séance</b> seulement. Touche <span class="bouton">📲 Montrer au professeur</span>. Il scanne le QR, te regarde faire et valide sur son iPad. Puis touche <span class="bouton">📷 Scanner la réponse du prof</span> et vise son écran : le P s’affiche. S’il n’a pas le temps, le P arrivera avec le QR de la classe.</li>
 <li>Un niveau s’ouvre quand le précédent est validé E (🔒 sinon). « Simple et correct vaut mieux que difficile et incorrect ».</li>
 </ul>`},
 {t:'Sécurité et niveaux ⚠️',html:`<ul>
