@@ -5,6 +5,8 @@
    chaque groupe chiffré avec son code secret.
    E = co-évaluation par un camarade · P = validation par le professeur
    ===================================================================== */
+const AVT=(n,b,c)=>window.EPSAvatar?EPSAvatar(n,b,c):'',AVM=n=>window.EPSAvatar?EPSAvatar.mini(n):'';
+
 'use strict';
 const CLE='gym-eleves-v1',VERSION=1,MAX_GROUPE=8;
 const NIVS=['A','B','C','D','E','F'];
@@ -316,7 +318,7 @@ function objetEnvoi(){
 function vEnvoi(){
   return `<h2>Envoyer au professeur</h2>
   <p class="muted">À la fin du cours, envoyez la fiche du groupe : par QR code (le professeur le scanne) ou par fichier dans le Nuage.</p>
-  ${aEnvoyer()?'<p class="alerte">Des validations n’ont pas encore été envoyées.</p>':S.envoi?`<p class="tampon p">Envoyé le ${dateFr(S.envoi)}</p>`:''}
+  ${aEnvoyer()?'<p class="alerte eps-av-ligne">'+AVM('envoyer')+'<span>Des validations n’ont pas encore été envoyées.</span></p>':S.envoi?AVT('bravo','Fiche envoyée. Bravo, à la prochaine !')+`<p class="tampon p">Envoyé le ${dateFr(S.envoi)}</p>`:''}
   <div class="rangee"><button class="bt act" type="button" data-act="qr">▦ Montrer le QR code</button><button class="bt" type="button" data-act="fichier">📄 Enregistrer le fichier</button>
   ${S.cfg&&S.cfg.lien?`<a class="bt" href="${esc(S.cfg.lien)}" target="_blank" rel="noopener">☁️ Ouvrir le dépôt Nuage</a>`:''}</div>
   <section class="carte" style="margin-top:16px"><h3>Résumé</h3>${S.eleves.map(e=>`<div style="border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b>${GYM.ateliers.map(a=>`<div class="rangee small" style="gap:6px"><span style="min-width:150px">${a.n}. ${esc(a.court)}</span>${puces(e.id,a.n)}</div>`).join('')}</div>`).join('')}</section>`;
