@@ -42,6 +42,11 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 <li>Onglet <b>Envoyer</b> : <span class="bouton">▦ Montrer le QR code</span> au professeur, qui le scanne. Ou <span class="bouton">📄 Enregistrer le fichier</span> puis déposez-le dans le Nuage (lien donné par le professeur).</li>
 <li><span class="bouton">🔒 Fermer</span> en haut pour verrouiller le carnet.</li>
 </ol><p class="astuce">Code oublié ? Personne ne peut rouvrir le carnet. Créez un nouveau groupe et choisissez vos noms dans la liste : les niveaux déjà reçus par le professeur reviennent quand il fait scanner le QR de la classe.</p>`},
+{t:'Changer de téléphone ou de tablette',html:`<ol>
+<li>Sur l’<b>ancien</b> téléphone : ouvrez le carnet → onglet <b>Groupe</b> → <span class="bouton">Transférer vers un autre téléphone</span>. Un QR code s’affiche.</li>
+<li>Sur le <b>nouveau</b> téléphone : Accueil → <span class="bouton">📲 Reprendre un carnet</span> → <span class="bouton">📷 Scanner le QR</span>, puis tapez votre code secret habituel.</li>
+<li>Quand le carnet s’affiche sur le nouveau téléphone : sur l’ancien, touchez <span class="bouton">C’est transféré : retirer d’ici</span>. Ensuite, travaillez seulement sur le nouveau.</li>
+</ol><p class="astuce">Pas de caméra ou QR trop gros ? <span class="bouton">📄 Fichier (secours)</span> : envoyez le fichier au nouveau téléphone (AirDrop, Bluetooth, message), puis <b>Reprendre un carnet → Choisir le fichier</b>. Le fichier est chiffré : sans votre code, il ne s’ouvre pas.</p>`},
 {t:'Nouvelle version, hors ligne, démo',html:`<ul>
 <li>Un bandeau jaune « Nouvelle version » : touche <span class="bouton">Mettre à jour</span> (le carnet est enregistré avant).</li>
 <li>Sans Wi-Fi, l’appli fonctionne. Pour voir les vidéos au gymnase sans Wi-Fi : Accueil → <b>Réglages : vidéos hors ligne</b> → <span class="bouton">⬇ Garder</span> sur les ateliers que tu travailles (le poids est affiché), avec le Wi-Fi. <span class="bouton">Effacer les vidéos du téléphone</span> libère la place.</li>
