@@ -11,7 +11,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 <li><span class="bouton">📷 QR de la classe (prof)</span> : vise le QR que le professeur affiche. La liste de la classe arrive sur la tablette.</li>
 <li><span class="bouton">＋ Nouveau groupe</span> : choisis ta classe, puis un <b>code secret à 4 chiffres</b> (tapé deux fois). Retenez-le : il ouvre votre carnet à chaque cours. Un autre groupe ne peut pas le lire.</li>
 <li>Onglet <b>Groupe</b> : cochez vos noms dans la liste de la classe (2 à 8 élèves). Sans liste, <span class="bouton">Écrire prénom et nom</span> : prénom ET nom de famille.</li>
-</ol><p class="astuce">Aux cours suivants : touche votre groupe sur l’accueil, puis le code. Le carnet se verrouille seul après 10 minutes sans toucher l’écran.</p>`},
+</ol><p class="astuce">Aux cours suivants : touche votre groupe sur l’accueil, puis le code. Le carnet se verrouille seul après 20 minutes sans toucher l’écran.</p>`},
 {t:'Ma fiche : E et P',html:`<ul>
 <li>En haut, touche le <b>prénom de l’élève</b> qui travaille : chacun a sa fiche.</li>
 <li>6 ateliers, niveaux <b>A à F</b>. Touche un niveau pour voir la vidéo, les consignes, le matériel et les critères.</li>

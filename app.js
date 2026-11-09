@@ -72,9 +72,9 @@ async function nouveauGroupe(classe,code){
   if(classe&&ROOT.classes[classe]){S.classe=classe;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[classe]))}
   S.tab='groupe';NAV=[];await enregistrer();
 }
-// Verrouillage automatique : 10 min sans toucher l'écran.
+// Verrouillage automatique : 20 min sans toucher l'écran.
 let tInactif=null;
-function reveil(){clearTimeout(tInactif);if(S)tInactif=setTimeout(async()=>{if(S){await verrouiller();fermer();rendre();toast('Carnet verrouillé (10 min sans activité).')}},10*60*1000)}
+function reveil(){clearTimeout(tInactif);if(S)tInactif=setTimeout(async()=>{if(S){await verrouiller();fermer();rendre();toast('Carnet verrouillé (20 min sans activité).')}},20*60*1000)}
 ['click','input','touchstart'].forEach(e=>document.addEventListener(e,reveil,{passive:true}));
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S)enregistrer()});
 
