@@ -41,7 +41,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 {t:'Fin du cours : envoyer',html:`<ol>
 <li>Onglet <b>Envoyer</b> : <span class="bouton">▦ Montrer le QR code</span> au professeur, qui le scanne. Ou <span class="bouton">📄 Enregistrer le fichier</span> puis déposez-le dans le Nuage (lien donné par le professeur).</li>
 <li><span class="bouton">🔒 Fermer</span> en haut pour verrouiller le carnet.</li>
-</ol><p class="astuce">Code oublié ? Personne ne peut rouvrir le carnet. Créez un nouveau groupe et choisissez vos noms dans la liste : les niveaux déjà reçus par le professeur reviennent quand il fait scanner le QR de la classe.</p>`},
+</ol><p class="astuce">Code oublié ? Touchez votre groupe, puis <b>Code oublié ?</b> : un QR s’affiche, le professeur le scanne et vous redonne votre code. (Possible dès que le groupe a scanné le QR de la classe puis tapé son code une fois.) Sinon : créez un nouveau groupe et choisissez vos noms dans la liste ; les niveaux déjà reçus par le professeur reviennent avec le QR de la classe.</p>`},
 {t:'Changer de téléphone ou de tablette',html:`<ol>
 <li>Sur l’<b>ancien</b> téléphone : ouvrez le carnet → onglet <b>Groupe</b> → <span class="bouton">Transférer vers un autre téléphone</span>. Un QR code s’affiche.</li>
 <li>Sur le <b>nouveau</b> téléphone : Accueil → <span class="bouton">📲 Reprendre un carnet</span> → <span class="bouton">📷 Scanner le QR</span>, puis tapez votre code secret habituel.</li>

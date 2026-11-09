@@ -342,6 +342,7 @@ function recevoirClasse(o){
   if(o.t!=='C')throw new Error('Ce n’est pas le QR de la classe.');
   const cfg={classe:o.c,eleves:o.l||[],lien:o.u||'',pk:o.pk||'',barres:!!o.b,tc:!!o.tc};
   if(window.EPSCode)EPSCode.memoriserCle(o.c,o.cc);
+  if(window.EPSCode&&EPSCode.appliquerJour&&o.cj)EPSCode.appliquerJour(o.c,o.cj); // QR du jour : ouvre la séance sans taper le code
   ROOT.classes[o.c]=cfg;ecrireRoot();
   if(S&&(!S.classe||S.classe===o.c)){S.classe=o.c;S.cfg=JSON.parse(JSON.stringify(cfg));sauver()}
   rendre();
