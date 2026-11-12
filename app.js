@@ -284,6 +284,7 @@ function vNiveau(k){
   let h=`<h2><span class="L L${n.n}" style="vertical-align:4px">${n.n}</span> ${esc(n.nom)}</h2><p class="muted small" style="margin-top:-2px">Atelier ${a.n} · ${esc(a.nom)}</p>`;
   if(n.prof)h+=`<div class="alerte">⚠️ Seulement en présence du professeur, avec la parade en place.</div>`;
   h+=`<div class="critbox"><b>Critères de réussite</b><ul>${n.crit.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${n.picto?`<img class="picto-grand" src="${n.picto}" alt="Pictogramme du niveau" data-zoom>`:''}</div>`;
+  if(S&&S.eleves.length>1)h+=quiNiveau(k);
   h+=S&&S.eleves.length?blocValid(k):'';
   if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom)}</div>`).join('');
   if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
@@ -291,12 +292,18 @@ function vNiveau(k){
   if(n.r.length)h+=`<h4>Je n’y arrive pas encore ? Essaie d’abord :</h4><div class="remlist" data-lst="${n.r.join(',')}" data-at="${k[0]}">${n.r.map((id,i)=>carteRem(id,i)).join('')}</div>`;
   return h;
 }
+/* Sur la page d'un niveau : la liste des élèves du groupe reste là, avec leur état pour CE niveau.
+   Toucher un nom change d'élève sans quitter la page (avant : il fallait revenir à « Ma fiche »). */
+function quiNiveau(k){const ic=x=>{const s=etat(x.id,k);return s==='p'?'✅ P':s==='e'?'✔ E':ouvert(x.id,k)?'à faire':'🔒'};
+  return `<div class="quiniv"><span class="small"><b>Élève évalué :</b> touchez un nom pour passer au suivant</span><div class="qui">${S.eleves.map((x,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(x.nom))}<small>${ic(x)}</small></button>`).join('')}</div></div>`}
+function suivantA(k){const n=S.eleves.length;for(let j=1;j<n;j++){const i=(S.cur+j)%n,x=S.eleves[i];if(!etat(x.id,k)&&ouvert(x.id,k))return i}return -1}
 function blocValid(k){
   const E=elv(),v=V(E.id,k)||{},o=ouvert(E.id,k),n=niveau(k);
   const autres=S.eleves.filter(x=>x.id!==E.id);
-  if(v.p)return `<div class="valid"><span class="tampon p">✅ P · validé par le professeur le ${dateFr(v.p.t)}</span>${v.e?`<p class="small muted">E par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</p>`:''}</div>`;
+  const nx=suivantA(k),suiv=nx>=0?`<div class="rangee" style="margin-top:10px"><button class="bt act" type="button" data-act="qui" data-v="${nx}">▶ Élève suivant : ${esc(court(S.eleves[nx].nom))}</button></div>`:'';
+  if(v.p)return `<div class="valid">${suiv}<span class="tampon p">✅ P · validé par le professeur le ${dateFr(v.p.t)}</span>${v.e?`<p class="small muted">E par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</p>`:''}</div>`;
   if(!o)return `<div class="valid"><p><b>🔒 Niveau fermé pour ${esc(court(E.nom))}</b> : il faut d’abord valider le niveau ${NIVS[NIVS.indexOf(k[1])-1]} (E).</p><p class="small muted">Tu peux regarder la vidéo, mais on ne travaille pas un niveau au-dessus sans avoir validé le précédent.</p><button class="bt mini" type="button" data-act="montrer" data-v="${k}" data-x="d">📲 Le professeur ouvre ce niveau</button></div>`;
-  if(v.e)return `<div class="valid"><span class="tampon e">E · validé par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</span><p class="small">Montre-le au professeur pour la validation <b>P</b>. Le professeur valide les P <b>à partir de la 3<sup>e</sup> séance</b> ; avant, refais-le 3 fois de suite pour être prêt.</p><div class="rangee"><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Montrer au professeur (P)</button><button class="bt mini" type="button" data-act="annulerE" data-v="${k}">Annuler E</button></div></div>`;
+  if(v.e)return `<div class="valid">${suiv}<span class="tampon e">E · validé par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</span><p class="small">Montre-le au professeur pour la validation <b>P</b>. Le professeur valide les P <b>à partir de la 3<sup>e</sup> séance</b> ; avant, refais-le 3 fois de suite pour être prêt.</p><div class="rangee"><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Montrer au professeur (P)</button><button class="bt mini" type="button" data-act="annulerE" data-v="${k}">Annuler E</button></div></div>`;
   return `<div class="valid"><h3>Co-évaluation (E) de ${esc(court(E.nom))}</h3>
     ${autres.length?`<p class="small"><b>Qui observe ?</b></p><div class="qui">${autres.map(x=>`<button type="button" class="${OBS===x.id?'ici':''}" data-act="obs" data-v="${x.id}">${esc(court(x.nom))}</button>`).join('')}</div>`:'<p class="small muted">Seul dans le groupe : la validation se fait avec le professeur.</p>'}
     ${n.crit.map((c,i)=>`<label class="coche"><input type="checkbox" data-cr="${i}"> ${esc(c)}</label>`).join('')}
@@ -440,7 +447,7 @@ document.addEventListener('click',async ev=>{
     case 'retirer-ok':{const e=S.eleves.splice(+v,1)[0];delete S.val[e.id];S.cur=0;fermer();sauver();rendre();break}
     case 'suppgroupe':fen(`<h3>Supprimer ce groupe ?</h3><p class="small">Pensez à envoyer la fiche au professeur avant.</p><div class="rangee" style="justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt danger" type="button" data-act="supp-ok">Supprimer</button></div>`);break;
     case 'supp-ok':delete ROOT.groupes[ACTIF];S=null;ACTIF=null;CLEF=null;ecrireRoot();fermer();VUE='accueil';rendre();break;
-    case 'qui':S.cur=+v;OBS=null;sauver();rendre();break;
+    case 'qui':{S.cur=+v;OBS=null;sauver();rendre();const z=document.querySelector('.quiniv');if(z)z.scrollIntoView({block:'start'});break}
     case 'atelier':aller({v:'atelier',a:+v});break;
     case 'niveau':OBS=null;aller({v:'niveau',k:v});break;
     case 'fiche':{const L=b.dataset.q?null:b.closest('[data-lst]'),D=L?{lst:L.dataset.lst.split(',').filter(Boolean),at:L.dataset.at}:listeDe(v);aller({v:'fiche',id:v,lst:D.lst,at:D.at});break}
