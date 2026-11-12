@@ -88,7 +88,7 @@ function demanderCode(titre,texte,cb,creer){
     <input id="code" class="code" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Code à 4 chiffres">
     <p id="code-msg" class="small" style="min-height:1.4em;font-weight:700;color:var(--alerte)"></p>
     <div class="rangee" style="justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt noir" type="button" data-act="codeok">Valider</button></div>
-    ${creer?'':'<p class="small" style="margin-top:12px"><button class="lien" type="button" data-act="codeoubli">Code oublié ?</button></p>'}`);
+    ${creer?'<p class="small" style="margin-top:10px">✎ <b>Notez ce code</b> au dos de votre carnet ou dans votre agenda : sans lui, le carnet ne s’ouvre plus.</p>':'<p class="small" style="margin-top:12px"><button class="lien" type="button" data-act="codeoubli">Code oublié ?</button></p>'}`);
   setTimeout(()=>{const i=$('#code');if(i)i.focus()},50);
 }
 async function validerCode(){
@@ -403,7 +403,7 @@ document.addEventListener('click',async ev=>{
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nvsuite">Choisir notre code</button></div>`);break}
     case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c),true);break}
     case 'codeok':validerCode();break;
-    case 'codeoubli':fen(`<h3>Code oublié</h3><p>Le carnet est chiffré : sans le code, personne ne peut l’ouvrir, même le professeur.</p><p class="small muted">Le professeur a reçu vos validations envoyées (QR ou fichier). Créez un nouveau groupe ; le professeur peut vous redonner vos niveaux P en débloquant les niveaux.</p><div class="rangee"><button class="bt noir" type="button" data-act="fermer">Compris</button></div>`);break;
+    case 'codeoubli':fen(`<h3>Code oublié</h3><p>Ce carnet est trop ancien pour que le professeur retrouve le code. Voici quoi faire :</p><ol class="small"><li><b>Créez un nouveau groupe</b> avec un nouveau code : notez-le.</li><li><b>Scannez le QR de la classe</b> du professeur dans ce nouveau groupe : à l’avenir, il pourra retrouver votre code.</li><li><b>Prévenez le professeur</b> : vos validations envoyées sont chez lui, il peut vous redonner vos niveaux.</li></ol><div class="rangee"><button class="bt noir" type="button" data-act="fermer">Compris</button></div>`);break;
     case 'verrou':if(DEMO){quitterDemo();fermer();rendre();break}await verrouiller();fermer();VUE='accueil';rendre();break;
     case 'scanclasse':GQR.scanner(async t=>recevoirClasse(await GQR.decoder(t)),{titre:'QR de la classe',aide:'Visez le QR affiché par le professeur.'});break;
     case 'choisirnoms':{
