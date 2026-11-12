@@ -220,25 +220,26 @@ const NIVC={A:'#ff0000',B:'#ff6600',C:'#ffc000',D:'#ffff00',E:'#92d050',F:'#00b0
 const liaisonsVisibles=()=>S?!!(S.cfg&&S.cfg.liaisons):Object.values(ROOT.classes).some(c=>c.liaisons);
 /* jauge A→F : plein = validé P, rayé = validé E (à confirmer), gris = à faire */
 function jauge(id,a){return `<span class="jauge">${a.niv.map(n=>{const s=etat(id,a.n+n.n);return `<i class="${s==='p'?'p':s==='e'?'e':''}" style="--n:${NIVC[n.n]}">${n.n}</i>`}).join('')}</span>`}
-function prochainNiv(id){for(const a of GYM.ateliers)for(const n of a.niv){const k=a.n+n.n;if(!etat(id,k)&&ouvert(id,k))return {a,n,k}}return null}
+/* niveau à travailler dans un atelier : le premier pas encore validé par le professeur (un E reste à reprendre) */
+function aTravailler(id,a){return a.niv.find(n=>etat(id,a.n+n.n)!=='p'&&(ouvert(id,a.n+n.n)||etat(id,a.n+n.n)==='e'))||null}
 function vFiche(){
   if(!S.eleves.length)return sansClasse()+`<h2>Ma fiche</h2><p class="carte">Ajoutez d’abord les élèves du groupe (onglet Groupe).</p>`;
-  const E=elv(),pre=esc(prenom(E.nom)),duJour=typeof objectif==='function'&&objectif(E.id),o=duJour?null:prochainNiv(E.id);
+  const E=elv(),pre=esc(prenom(E.nom));
   const B=GYM.bonus.filter(b=>(b.id==='barres'&&barresVisibles())||(b.id==='liaisons'&&liaisonsVisibles()));
-  return sansClasse()+`<p class="leg">Fiche de :</p><div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
- <h2 class="vh">Fiche de ${esc(court(E.nom))}</h2>
-  ${duJour?'':o?`<button class="prochain" type="button" data-act="niveau" data-v="${o.k}" style="--c:${COUL[o.a.n]}">${o.n.picto?`<img src="${o.n.picto}" alt="">`:''}<span><b>Prochain objectif de ${pre}</b><small>${esc(o.a.nom)} · niveau ${o.n.n} · ${esc(o.n.nom)}</small></span><em>Y aller ▶</em></button>`:`<p class="carte">🏆 ${pre} a validé tous les niveaux ouverts.</p>`}
+  return sansClasse()+`<p class="leg">Fiche de :</p><div class="qui quif">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
+<h2>Fiche de ${esc(court(E.nom))}</h2>
   <p class="leg">Niveaux de <b>${pre}</b> · plein = validé par le prof (P) · rayé = validé par un camarade (E)</p>
   <div class="ats">${GYM.ateliers.map(a=>`<button class="atb" type="button" data-act="atel" data-v="${a.n}" style="--c:${COUL[a.n]}"><span class="atn">${esc(a.nom)}</span>${jauge(E.id,a)}</button>`).join('')}
   ${B.map(b=>`<button class="atb opt" type="button" data-act="bonus" data-v="${b.id}" style="--c:${COUL[b.id]}"><span class="atn">${esc(b.nom)}</span></button>`).join('')}</div>
   <button class="secu" type="button" data-act="info" data-v="securite">⚠️ Consignes de sécurité</button>`;
 }
 /* atelier : le « thermomètre » A rouge → F vert du PowerPoint */
-function vThermo(an){const a=atelier(an),E=elv();
+function vThermo(an){const a=atelier(an),E=elv(),cible=aTravailler(E.id,a);
   return `<div class="ban" style="--c:${COUL[a.n]}">${esc(a.nom)}</div><p class="leg" style="text-align:center">${esc(court(E.nom))} · touche un niveau</p>
   <div class="thermo">${a.niv.map(n=>{const k=a.n+n.n,st=etat(E.id,k),o=ouvert(E.id,k);
-    return `<button class="tniv ${o?'':'verrou'}" type="button" data-act="niveau" data-v="${k}" style="--n:${NIVC[n.n]}"><span class="TL">${n.n}</span>
-     <span class="tt"><b>${esc(n.nom)}${n.prof?' ⚠️':''}</b>${st==='p'?'<span class="etq">✅ P · validé</span>':st==='e'?'<span class="etq">✔ E · à confirmer</span>':o?'<small>'+n.crit.map(esc).join(' · ')+'</small>':''}</span>
+    const ci=cible&&cible.n===n.n;
+    return `<button class="tniv ${o?'':'verrou'} ${ci?'cible':''}" type="button" data-act="niveau" data-v="${k}" style="--n:${NIVC[n.n]}"><span class="TL">${n.n}</span>
+     <span class="tt">${ci?'<span class="vise">🎯 À travailler</span>':''}<b>${esc(n.nom)}${n.prof?' ⚠️':''}</b>${st==='p'?'<span class="etq">✅ P · validé</span>':st==='e'?'<span class="etq">✔ E · à confirmer</span>':o?'<small>'+n.crit.map(esc).join(' · ')+'</small>':''}</span>
      ${o?(n.picto?`<img src="${n.picto}" alt="">`:'<span></span>'):'<span class="cad">🔒</span>'}</button>`}).join('')}</div>`}
 function vApprendre(){
   const a=GYM.ateliers;

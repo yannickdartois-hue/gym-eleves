@@ -205,7 +205,7 @@ function bandeauRotation(){
   if(!S.grp)return `<div class="rotation"><b>🔄 Rotation des ateliers</b><span class="small">Quel est le numéro de votre groupe ?</span><div class="rangee">${Array.from({length:R.g},(_,i)=>`<button class="bt mini" type="button" data-act="grp" data-v="${i+1}">${i+1}</button>`).join('')}</div></div>`;
   const r=rotationActuelle();if(!r)return '';if(r.fini)return `<div class="rotation"><b>🔄 Rotation terminée</b></div>`;
   const a=atelier(r.at);
-  return `<button type="button" class="rotation" ${st(r.at)} data-act="atelier" data-v="${r.at}"><span>🔄 Groupe ${S.grp} · ${r.avant!=null?'début dans '+r.avant+' min':'tour '+r.tour+'/'+r.nb}</span><b>Maintenant : atelier ${a.n} · ${esc(a.court)}</b><span class="small">${r.reste!=null?'encore '+r.reste+' min'+(r.suiv?' · ensuite atelier '+r.suiv:''):''}</span></button>`;
+  return `<button type="button" class="rotation" ${st(r.at)} data-act="atel" data-v="${r.at}"><span>🔄 Groupe ${S.grp} · ${r.avant!=null?'début dans '+r.avant+' min':'tour '+r.tour+'/'+r.nb}</span><b>Maintenant : atelier ${a.n} · ${esc(a.court)}</b><span class="small">${r.reste!=null?'encore '+r.reste+' min'+(r.suiv?' · ensuite atelier '+r.suiv:''):''}</span>${(()=>{if(r.avant!=null||typeof aTravailler!=='function')return '';const E=elv(),n=aTravailler(E.id,a);return n?`<span class="vise">🎯 ${esc(court(E.nom))} travaille le niveau ${n.n} · ${esc(n.nom)}</span>`:`<span class="vise">🏆 ${esc(court(E.nom))} a tout validé ici</span>`})()}</button>`;
 }
 {
   const _rc=recevoirClasse;
