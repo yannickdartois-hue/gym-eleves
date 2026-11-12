@@ -74,6 +74,9 @@ async function nouveauGroupe(classe,code,lt){
   CLEF=await deriver(code,sel);ACTIF=id;S=vide();
   if(classe&&ROOT.classes[classe]){S.classe=classe;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[classe]))}
   S.lt=lt||'';S.tab='groupe';NAV=[];await enregistrer();
+  try{localStorage.setItem('gym-bienvenue','1')}catch(e){}
+  /* enchaîne directement sur le choix des noms */
+  if(S.cfg&&S.cfg.eleves&&S.cfg.eleves.length)setTimeout(()=>{rendre();const x=document.createElement('button');x.type='button';x.dataset.act='choisirnoms';x.hidden=true;document.body.appendChild(x);x.click();x.remove()},300);
 }
 // Verrouillage automatique : 20 min sans toucher l'écran.
 let tInactif=null;
@@ -170,7 +173,9 @@ function vBienvenue(){const inst=installee();
   <section class="carte etape"><h3>② Télécharger les vidéos</h3><p class="small">Sans ce téléchargement, <b>certaines vidéos ne se chargeront pas au gymnase</b>. Restez sur cet écran jusqu’à la fin.</p>
    ${inst?'':'<p class="small alerte">Faites-le <b>après</b> l’installation, dans l’appli ouverte depuis son icône : ce qui est téléchargé dans Safari n’est pas gardé par l’icône.</p>'}
    <div id="bandhl">${bandeauHLtxt()}</div></section>
-  <div class="rangee" style="margin-top:14px"><button class="bt" type="button" data-act="bienvenueok">${'Continuer'}</button></div>`}
+  ${(C=>`<section class="carte etape ${C.length?'faite':''}"><h3>③ Scanner le QR de la classe ${C.length?'✓':''}</h3>${C.length?`<p class="small">Classe reçue : <b>${C.map(esc).join(', ')}</b>.</p>`:'<p class="small">Le professeur l’affiche au tableau ou sur l’affiche du premier cours.</p>'}<div class="rangee"><button class="bt ${C.length?'':'act'}" type="button" data-act="scanclasse">📷 ${C.length?'Scanner une autre classe':'Scanner le QR de la classe'}</button></div></section>`)(Object.keys(ROOT.classes))}
+  <section class="carte etape"><h3>④ Créer notre groupe</h3><p class="small">Lettre du groupe, code secret à 4 chiffres, puis vous cochez vos noms dans la liste.</p><div class="rangee"><button class="bt ${Object.keys(ROOT.classes).length?'act':''}" type="button" data-act="nouveau">＋ Créer notre groupe</button></div></section>
+  <div class="rangee" style="margin-top:14px"><button class="bt" type="button" data-act="bienvenueok">Passer : nous avons déjà un groupe</button></div>`}
 function vAccueil(){
   const G=Object.entries(ROOT.groupes).sort((a,b)=>(b[1].vu||0)-(a[1].vu||0));
   if(!bienvenueVue())return vBienvenue();
