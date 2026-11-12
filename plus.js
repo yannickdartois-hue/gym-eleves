@@ -91,7 +91,7 @@ function vEnch(){
   vFiche=function(){
     const h=_vFiche();if(!S.eleves.length)return h;
     const E=elv(),nb=((S.ench||{})[E.id]||[]).length;
-    return h.replace(/(<h2>Fiche de [^<]*<\/h2>)/,`$1${bandeauObjectif()}<button type="button" class="bt mini" data-act="ench" style="margin:4px 0 8px">🧩 Mon enchaînement${nb?' ('+nb+' éléments)':''}</button>`);
+    return h.replace(/(<h2>Fiche de [^<]*<\/h2>)/,`$1${bandeauObjectif()}`).replace('<!--ench-->',`<button type="button" class="atb mini-at" data-act="ench" style="--c:#64748b"><span class="atn">🧩 Mon enchaînement${nb?' ('+nb+' éléments)':''}</span></button>`);
   };
   const _vNiveau=vNiveau;
   vNiveau=function(k){

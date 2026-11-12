@@ -230,7 +230,9 @@ function vFiche(){
 <h2>Fiche de ${esc(court(E.nom))}</h2>
   <p class="leg">Niveaux de <b>${pre}</b> · plein = validé par le prof (P) · rayé = validé par un camarade (E)</p>
   <div class="ats">${GYM.ateliers.map(a=>`<button class="atb" type="button" data-act="atel" data-v="${a.n}" style="--c:${COUL[a.n]}"><span class="atn">${esc(a.nom)}</span>${jauge(E.id,a)}</button>`).join('')}
-  ${B.map(b=>`<button class="atb opt" type="button" data-act="bonus" data-v="${b.id}" style="--c:${COUL[b.id]}"><span class="atn">${esc(b.nom)}</span></button>`).join('')}</div>
+</div>
+  <details class="plusat"><summary>➕ Plus : mon enchaînement${B.length?', '+B.map(b=>esc(b.nom.toLowerCase())).join(', '):''}</summary><div class="ats"><!--ench-->
+  ${B.map(b=>`<button class="atb opt" type="button" data-act="bonus" data-v="${b.id}" style="--c:${COUL[b.id]}"><span class="atn">${esc(b.nom)}</span></button>`).join('')}</div></details>
   <button class="secu" type="button" data-act="info" data-v="securite">⚠️ Consignes de sécurité</button>`;
 }
 /* atelier : le « thermomètre » A rouge → F vert du PowerPoint */
