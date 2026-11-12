@@ -44,7 +44,7 @@ recevoirClasse=function(o){
 /* --- Retenir le code quand le groupe le tape --- */
 const _ouvrir=ouvrir,_nouveauGroupe=nouveauGroupe,_verrouiller=verrouiller;
 ouvrir=async function(id,code){await _ouvrir(id,code);CODE=code;await proteger()};
-nouveauGroupe=async function(classe,code){await _nouveauGroupe(classe,code);CODE=code;await proteger()};
+nouveauGroupe=async function(classe,code,lt){await _nouveauGroupe(classe,code,lt);CODE=code;await proteger()};
 verrouiller=async function(){CODE=null;return _verrouiller()};
 
 /* --- « Code oublié ? » --- */

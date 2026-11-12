@@ -48,7 +48,7 @@ async function enregistrer(){
   const g=ROOT.groupes[ACTIF]||(ROOT.groupes[ACTIF]={});
   const iv=crypto.getRandomValues(new Uint8Array(12));
   const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},CLEF,new TextEncoder().encode(JSON.stringify(S)));
-  Object.assign(g,{classe:S.classe,noms:S.eleves.map(e=>prenom(e.nom)),iv:b64(iv),data:b64(ct),vu:Date.now(),aEnvoyer:aEnvoyer()});
+  Object.assign(g,{classe:S.classe,lt:S.lt||'',noms:S.eleves.map(e=>prenom(e.nom)),iv:b64(iv),data:b64(ct),vu:Date.now(),aEnvoyer:aEnvoyer()});
   ecrireRoot();
 }
 async function ouvrir(id,code){
@@ -65,12 +65,15 @@ async function ouvrir(id,code){
   await enregistrer();
 }
 async function verrouiller(){await enregistrer();DEMO=false;S=null;ACTIF=null;CLEF=null;NAV=[]}
-async function nouveauGroupe(classe,code){
+/* Lettre du groupe (A à H) : signale celles déjà prises dans la classe sur cette tablette */
+function choixLettre(cur,classe){const pris=new Set(Object.entries(ROOT.groupes).filter(([id,g])=>id!==ACTIF&&g.lt&&(!classe||g.classe===classe)).map(([,g])=>g.lt));
+  return `<div class="qui lettres">${'ABCDEFGH'.split('').map(l=>`<button type="button" class="${l===cur?'ici':''}" data-act="lettre" data-v="${l}" title="${pris.has(l)?'déjà prise sur cette tablette':''}">${l}${pris.has(l)?'<small>prise</small>':''}</button>`).join('')}</div>`}
+async function nouveauGroupe(classe,code,lt){
   const id=uid(),sel=crypto.getRandomValues(new Uint8Array(16));
   ROOT.groupes[id]={classe:classe||'',noms:[],sel:b64(sel)};
   CLEF=await deriver(code,sel);ACTIF=id;S=vide();
   if(classe&&ROOT.classes[classe]){S.classe=classe;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[classe]))}
-  S.tab='groupe';NAV=[];await enregistrer();
+  S.lt=lt||'';S.tab='groupe';NAV=[];await enregistrer();
 }
 // Verrouillage automatique : 20 min sans toucher l'écran.
 let tInactif=null;
@@ -173,7 +176,7 @@ function vAccueil(){
   if(!bienvenueVue())return vBienvenue();
   return `<h2>Bonjour !</h2>${bandeauHL()}
   <p class="muted">Ouvrez le carnet de votre groupe avec votre code secret.</p>
-  ${G.length?G.map(([id,g])=>`<button class="groupe" type="button" data-act="ouvrir" data-v="${id}"><span style="font-size:28px">🔒</span><b>${esc(g.noms&&g.noms.length?g.noms.join(', '):'Groupe sans élève')}<br><span class="small muted">${esc(g.classe||'classe ?')}${g.vu?' · '+dateFr(g.vu):''}${g.aEnvoyer?' · <span style="color:var(--alerte)">à envoyer</span>':''}</span></b><span aria-hidden="true">›</span></button>`).join(''):'<p class="carte small">Aucun groupe sur cette tablette pour l’instant.</p>'}
+  ${G.length?G.map(([id,g])=>`<button class="groupe" type="button" data-act="ouvrir" data-v="${id}"><span style="font-size:28px">🔒</span><b>${g.lt?'Groupe '+esc(g.lt)+' · ':''}${esc(g.noms&&g.noms.length?g.noms.join(', '):'Groupe sans élève')}<br><span class="small muted">${esc(g.classe||'classe ?')}${g.vu?' · '+dateFr(g.vu):''}${g.aEnvoyer?' · <span style="color:var(--alerte)">à envoyer</span>':''}</span></b><span aria-hidden="true">›</span></button>`).join(''):'<p class="carte small">Aucun groupe sur cette tablette pour l’instant.</p>'}
   <div class="rangee" style="margin-top:14px"><button class="bt act" type="button" data-act="nouveau">＋ Nouveau groupe</button><button class="bt" type="button" data-act="scanclasse">📷 QR de la classe (prof)</button></div>
   <section class="carte" style="margin-top:20px"><h3>🎬 Apprendre sans ouvrir de carnet</h3><p class="small muted">Vidéos, consignes et aides de tous les ateliers.</p><button class="bt" type="button" data-act="onglet" data-v="apprendre">Voir les ateliers</button></section>
   ${carteDemo()}
@@ -188,11 +191,12 @@ function vAccueil(){
 }
 function vGroupe(){
   const C=S.cfg;
-  return `<h2>Notre groupe</h2>
+  return `<h2>Notre groupe${S.lt?' · '+esc(S.lt):''}</h2>
   <section class="carte"><p class="small muted">${S.classe?'Classe <b>'+esc(S.classe)+'</b>':'Classe non choisie'}${C&&C.eleves&&C.eleves.length?' · liste du professeur reçue':''}</p>
   ${S.eleves.length?S.eleves.map((e,i)=>`<div class="rangee" style="justify-content:space-between;border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b><button class="bt mini danger" type="button" data-act="retirer" data-v="${i}">Retirer</button></div>`).join(''):'<p>Ajoutez les élèves du groupe (2 à 8), avec leur prénom et leur nom.</p>'}
   ${S.eleves.length<MAX_GROUPE?`<div class="rangee" style="margin-top:10px">${C&&C.eleves&&C.eleves.length?'<button class="bt act" type="button" data-act="choisirnoms">＋ Choisir dans la liste de la classe</button>':''}<button class="bt" type="button" data-act="ajoutnom">＋ Écrire prénom et nom</button></div>`:''}
   </section>
+  <section class="carte"><h3>Lettre du groupe ${S.lt?'· '+esc(S.lt):''}</h3><p class="small muted">Celle que le professeur vous donne pour la rotation des ateliers.</p>${choixLettre(S.lt||'',S.classe).replace('class="qui lettres"','class="qui lettres" data-groupe="1"')}</section>
   <section class="carte"><h3>Classe</h3><p class="small muted">Le QR de la classe (affiché par le professeur) donne la liste des élèves et le code de validation du professeur.</p><button class="bt" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></section>
   <section class="carte"><h3>Fin d’année ou erreur</h3><button class="bt danger" type="button" data-act="suppgroupe">Supprimer ce groupe de la tablette</button></section>`;
 }
@@ -338,7 +342,7 @@ function vInfo(x){
 // Une ligne par élève : 6 ateliers × 6 niveaux, '0' rien, 'e' validé E, 'p' validé P, 'd' débloqué par le prof
 function chaine(id){return GYM.ateliers.map(a=>NIVS.map(n=>{const v=V(id,a.n+n);return v&&v.p?'p':v&&v.e?'e':v&&v.deb?'d':'0'}).join('')).join('')}
 function objetEnvoi(){
-  return {a:'GYM',v:1,t:'G',c:S.classe||'',g:ACTIF,ts:Math.round(Date.now()/1000),
+  return {a:'GYM',v:1,t:'G',c:S.classe||'',g:ACTIF,lt:S.lt||'',ts:Math.round(Date.now()/1000),
     el:S.eleves.map(e=>({n:e.nom,s:chaine(e.id),d:Object.fromEntries(Object.entries(S.val[e.id]||{}).map(([k,v])=>[k,[v.e?Math.round(v.e.t/1000):0,v.e?v.e.par:'',v.p?Math.round(v.p.t/1000):0]]))}))};
 }
 function vEnvoi(){
@@ -425,9 +429,11 @@ document.addEventListener('click',async ev=>{
       const C=Object.keys(ROOT.classes).sort();
       fen(`<h3>Nouveau groupe</h3><p class="small muted">Choisissez votre classe (elle apparaît quand le professeur a fait scanner son QR).</p>
       ${C.length?`<select id="nv-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}<option value="">Autre / pas de liste</option></select>`:'<p class="alerte small">Aucune classe sur cette tablette : scannez d’abord le QR de la classe du professeur, sinon votre groupe ne sera pas rangé dans votre classe chez le professeur.</p><div class="rangee"><button class="bt act" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></div>'}
+      <p class="small" style="margin-top:12px"><b>Lettre du groupe</b> (celle que donne le professeur pour la rotation des ateliers)</p>${choixLettre('',C[0]||'')}
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nvsuite">Choisir notre code</button></div>`);break}
     case 'rattacher':{const c=$('#rat-cl')&&$('#rat-cl').value;if(!c)return;S.classe=c;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[c]));if(ROOT.groupes[ACTIF])ROOT.groupes[ACTIF].classe=c;sauver();ecrireRoot();toast('Groupe rangé dans la classe '+c+'.');rendre();break}
-    case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';if(!cl&&Object.keys(ROOT.classes).length&&!confirm('Sans classe, votre groupe ne sera pas rangé dans votre classe chez le professeur. Continuer quand même ?'))return;demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c),true);break}
+    case 'lettre':{const box=b.closest('.lettres');box.querySelectorAll('button').forEach(x=>x.classList.toggle('ici',x===b));if(S&&box.dataset.groupe){S.lt=v;sauver();toast('Groupe '+v+'.');rendre()}break}
+    case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';if(!cl&&Object.keys(ROOT.classes).length&&!confirm('Sans classe, votre groupe ne sera pas rangé dans votre classe chez le professeur. Continuer quand même ?'))return;const lt=(document.querySelector('.lettres .ici')||{}).dataset;const L0=lt?lt.v:'';demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c,L0),true);break}
     case 'codeok':validerCode();break;
     case 'codeoubli':fen(`<h3>Code oublié</h3><p>Ce carnet est trop ancien pour que le professeur retrouve le code. Voici quoi faire :</p><ol class="small"><li><b>Créez un nouveau groupe</b> avec un nouveau code : notez-le.</li><li><b>Scannez le QR de la classe</b> du professeur dans ce nouveau groupe : à l’avenir, il pourra retrouver votre code.</li><li><b>Prévenez le professeur</b> : vos validations envoyées sont chez lui, il peut vous redonner vos niveaux.</li></ol><div class="rangee"><button class="bt noir" type="button" data-act="fermer">Compris</button></div>`);break;
     case 'verrou':if(DEMO){quitterDemo();fermer();rendre();break}await verrouiller();fermer();VUE='accueil';rendre();break;
@@ -439,7 +445,8 @@ document.addEventListener('click',async ev=>{
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="noms-ok">Ajouter</button></div>`);break}
     case 'noms-ok':{const L=[...document.querySelectorAll('.liste-el input:checked')].map(i=>i.value);
       if(L.length>MAX_GROUPE-S.eleves.length){toast(MAX_GROUPE+' élèves maximum par groupe : décochez-en '+(L.length-(MAX_GROUPE-S.eleves.length))+'.');return}
-      L.slice(0,MAX_GROUPE-S.eleves.length).forEach(n=>{const id=uid();S.eleves.push({id,nom:n})});fermer();sauver();rendre();break}
+      L.slice(0,MAX_GROUPE-S.eleves.length).forEach(n=>{const id=uid();S.eleves.push({id,nom:n})});fermer();sauver();rendre();
+      if(L.length)fen(`<h3>✅ Groupe ${S.lt?esc(S.lt)+' ':''}créé</h3><p>${S.classe?'Classe <b>'+esc(S.classe)+'</b> · ':''}${S.eleves.length} élève${S.eleves.length>1?'s':''} :</p><ul>${S.eleves.map(e=>`<li><b>${esc(e.nom)}</b></li>`).join('')}</ul><p class="small">✎ <b>Notez votre code</b> au dos du carnet ou dans l’agenda.</p><div class="rangee"><button class="bt act" type="button" data-act="fermer">C’est parti</button></div>`);break}
     case 'ajoutnom':fen(`<h3>Ajouter un élève</h3><label class="small"><b>Prénom</b></label><input id="nv-pre" type="text" autocomplete="off" autocapitalize="words"><label class="small" style="display:block;margin-top:8px"><b>Nom de famille</b></label><input id="nv-nom" type="text" autocomplete="off" autocapitalize="characters"><p id="nv-msg" class="small" style="color:var(--alerte);font-weight:700;min-height:1.3em"></p><div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nom-ok">Ajouter</button></div>`);setTimeout(()=>{const i=$('#nv-pre');if(i)i.focus()},50);break;
     case 'nom-ok':{const p=($('#nv-pre').value||'').trim().replace(/\s+/g,' '),f=($('#nv-nom').value||'').trim().replace(/\s+/g,' ');
       if(!p||!f||f.length<2){$('#nv-msg').textContent='Prénom ET nom de famille complets, s’il te plaît.';return}
@@ -458,7 +465,9 @@ document.addEventListener('click',async ev=>{
     case 'bonus':aller({v:'bonus',id:v});break;
     case 'info':aller({v:'info',x:v});break;
     case 'obs':OBS=v;document.querySelectorAll('[data-act="obs"]').forEach(x=>x.classList.toggle('ici',x.dataset.v===v));break;
+    case 'exigeok':{S.exige=new Date().toDateString();sauver();fermer();const k=v;setTimeout(()=>{const x=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(x)x.click()},50);break}
     case 'valE':{
+      if(!DEMO&&S.exige!==new Date().toDateString()){fen(`<h3>⚠️ La gym est une activité exigeante</h3><p>On ne valide que ce qui est <b>parfait</b> et <b>identique à la vidéo</b> : un seul critère raté, et on recommence.</p><p class="small">« Simple et correct vaut mieux que difficile et incorrect. » Le professeur contrôle les validations, et peut les annuler.</p><div class="rangee"><button class="bt act" type="button" data-act="exigeok" data-v="${v}">J’ai compris, on est exigeants</button><button class="bt" type="button" data-act="fermer">On recommence d’abord</button></div>`);return}
       // Niveaux ⚠️ (ou tous si le prof l’a choisi pour la classe) : validation E seulement en cours (code du cours du professeur, eps-code.js).
       if(window.EPSCode&&(niveau(v).prof||(S.cfg&&S.cfg.tc))&&EPSCode.etat()==='fermee'){const k=v;EPSCode.exiger(()=>{const b=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(b)b.click()});return}
       const coches=[...document.querySelectorAll('[data-cr]')];
