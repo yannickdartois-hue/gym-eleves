@@ -22,13 +22,23 @@ async function decoder(txt){
 /* Ouvre la caméra dans une fenêtre et appelle onCode(texte) à chaque QR lu.
    opts.continu : reste ouvert (outil prof) ; sinon se ferme au premier QR.
    opts.titre, opts.aide : textes. Renvoie une fonction pour fermer. */
+/* Bip de scan, fort : onde carrée, volume maximal, deux notes montantes (réussi) ou une note grave (refusé).
+   Le contexte audio est créé à l'ouverture du scanner (geste de l'utilisateur, exigé par iPad/iPhone). */
+let AC=null;
+function sonScan(ok){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
+  const t0=AC.currentTime,comp=AC.createDynamicsCompressor();comp.connect(AC.destination);
+  (ok?[[1568,0,.12],[2093,.13,.22]]:[[330,0,.35]]).forEach(([f,d,l])=>{const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=f;o.connect(g);g.connect(comp);
+    g.gain.setValueAtTime(0.0001,t0+d);g.gain.exponentialRampToValueAtTime(1,t0+d+.01);g.gain.setValueAtTime(1,t0+d+l-.03);g.gain.exponentialRampToValueAtTime(0.0001,t0+d+l);o.start(t0+d);o.stop(t0+d+l+.02)})}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate(ok?[90,60,90]:[300])}catch(e){}}
 function scanner(onCode,opts){
   opts=opts||{};
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){}
   const v=document.createElement('div');
   v.className='scan-voile';
   v.innerHTML=`<div class="scan-fen" role="dialog" aria-modal="true"><h3>${opts.titre||'Scanner un QR code'}</h3>
     <div class="scan-cadre"><video playsinline muted></video><div class="scan-viseur"></div></div>
     <p class="scan-msg">${opts.aide||'Place le QR code dans le cadre.'}</p>
+    <div class="scan-manque" style="font-size:14px;margin:4px 0;max-height:22vh;overflow:auto">${opts.reste?opts.reste():''}</div>
     <div class="scan-bas"><span class="scan-compte"></span><button type="button" class="bt noir scan-fin">${opts.continu?'Terminé':'Annuler'}</button></div></div>`;
   document.body.appendChild(v);
   const video=v.querySelector('video'),msg=v.querySelector('.scan-msg'),cpt=v.querySelector('.scan-compte');
@@ -48,10 +58,10 @@ function scanner(onCode,opts){
         try{
           const res=await onCode(r.data);
           n++;cpt.textContent=n+' lu'+(n>1?'s':'');
-          message(res||'QR code lu.',true);
-          try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}
+          message(res||'QR code lu.',true);sonScan(true);
+          if(opts.reste){const z=v.querySelector('.scan-manque');if(z)z.innerHTML=opts.reste()}
           if(!opts.continu){fermer();return}
-        }catch(e){message(e.message||String(e),false)}
+        }catch(e){message(e.message||String(e),false);sonScan(false)}
       }
     }
     timer=setTimeout(tic,160);
