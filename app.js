@@ -15,9 +15,11 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const uid=()=>Math.random().toString(36).slice(2,9);
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const dateFr=ms=>{const d=new Date(ms);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})};
-const prenom=n=>String(n||'').split(/\s+/)[0];
+/* noms Pronote « NOM Prénom » ou « Prénom NOM » : le prénom = les mots qui ne sont pas tout en majuscules */
+const _mots=n=>String(n||'').trim().split(/\s+/).filter(Boolean),_maj=x=>x===x.toUpperCase()&&/[A-ZÀ-Ý]/.test(x);
+const prenom=n=>{const w=_mots(n),p=w.filter(x=>!_maj(x));return p.length&&p.length<w.length?p.join(' '):w[0]||''};
 // « Léa M. » : prénom + initiale du nom, pour distinguer deux élèves du même prénom dans un groupe de 8
-const court=n=>{const w=String(n||'').trim().split(/\s+/);return w.length>1?w[0]+' '+w[w.length-1][0].toUpperCase()+'.':w[0]};
+const court=n=>{const w=_mots(n),p=w.filter(x=>!_maj(x)),f=w.filter(_maj);if(p.length&&f.length)return p.join(' ')+' '+f[0][0]+'.';return w.length>1?w[0]+' '+w[w.length-1][0].toUpperCase()+'.':w[0]||''};
 const atelier=a=>GYM.ateliers.find(x=>x.n===+a);
 const niveau=k=>{const a=atelier(k[0]);return a&&a.niv.find(x=>x.n===k[1])};
 const fiche=id=>GYM.fiches[id];
