@@ -197,10 +197,13 @@ function vGroupe(){
   <section class="carte"><h3>Fin d’année ou erreur</h3><button class="bt danger" type="button" data-act="suppgroupe">Supprimer ce groupe de la tablette</button></section>`;
 }
 function puces(id,a){return `<div class="etat-at">${NIVS.map(n=>{const s=etat(id,a+n);return `<i class="${s}">${n}</i>`}).join('')}</div>`}
+/* Groupe sans classe : bandeau pour le rattacher (sinon il arrive isolé chez le prof et le code du cours ne s'applique pas) */
+function sansClasse(){if(!S||S.classe||DEMO)return '';const C=Object.keys(ROOT.classes).sort();
+  return `<div class="alerte">⚠ Votre groupe n’est rangé dans aucune classe : chez le professeur, il arriverait à part.${C.length?`<div class="rangee" style="margin-top:8px"><select id="rat-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}</select><button class="bt act" type="button" data-act="rattacher">Ranger dans cette classe</button></div>`:`<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></div>`}</div>`}
 function vFiche(){
-  if(!S.eleves.length)return `<h2>Ma fiche</h2><p class="carte">Ajoutez d’abord les élèves du groupe (onglet Groupe).</p>`;
+  if(!S.eleves.length)return sansClasse()+`<h2>Ma fiche</h2><p class="carte">Ajoutez d’abord les élèves du groupe (onglet Groupe).</p>`;
   const E=elv();
-  return `<div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
+  return sansClasse()+`<div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
   <h2>Fiche de ${esc(court(E.nom))}</h2>
   <p class="small muted">Touchez un niveau pour voir la vidéo, les consignes et le faire valider. <b>E</b> = validé par un camarade · <b>P</b> = validé par le professeur.</p>
   ${GYM.ateliers.map(a=>`<section class="atelier" ${st(a.n)}><header><span class="n">${a.n}</span><b>${esc(a.nom)}</b><span class="small">${(()=>{const p=meilleur(E.id,a.n,'p');return p?'Niveau '+p:''})()}</span></header>
@@ -306,9 +309,8 @@ function blocValid(k){
   if(v.e)return `<div class="valid">${suiv}<span class="tampon e">E · validé par ${esc(prenom(v.e.par))} le ${dateFr(v.e.t)}</span><p class="small">Montre-le au professeur pour la validation <b>P</b>. Le professeur valide les P <b>à partir de la 3<sup>e</sup> séance</b> ; avant, refais-le 3 fois de suite pour être prêt.</p><div class="rangee"><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Montrer au professeur (P)</button><button class="bt mini" type="button" data-act="annulerE" data-v="${k}">Annuler E</button></div></div>`;
   return `<div class="valid"><h3>Co-évaluation (E) de ${esc(court(E.nom))}</h3>
     ${autres.length?`<p class="small"><b>Qui observe ?</b></p><div class="qui">${autres.map(x=>`<button type="button" class="${OBS===x.id?'ici':''}" data-act="obs" data-v="${x.id}">${esc(court(x.nom))}</button>`).join('')}</div>`:'<p class="small muted">Seul dans le groupe : la validation se fait avec le professeur.</p>'}
-    ${n.crit.map((c,i)=>`<label class="coche"><input type="checkbox" data-cr="${i}"> ${esc(c)}</label>`).join('')}
-    <label class="coche"><input type="checkbox" data-cr="r1"> Réussi du premier coup</label>
-    <label class="coche"><input type="checkbox" data-cr="r2"> Réception maîtrisée</label>
+    ${n.crit.slice(0,2).map((c,i)=>`<label class="coche"><input type="checkbox" data-cr="${i}"> ${esc(c)}</label>`).join('')}
+    <label class="coche"><input type="checkbox" data-cr="r1"> Conforme à la vidéo, du premier coup</label>
     <div class="rangee" style="margin-top:12px"><button class="bt ok" type="button" data-act="valE" data-v="${k}">✔ Valider E</button><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Directement P</button></div>
     <p class="small muted">« Simple et correct vaut mieux que difficile et incorrect »</p></div>`;
 }
@@ -422,9 +424,10 @@ document.addEventListener('click',async ev=>{
     case 'nouveau':{
       const C=Object.keys(ROOT.classes).sort();
       fen(`<h3>Nouveau groupe</h3><p class="small muted">Choisissez votre classe (elle apparaît quand le professeur a fait scanner son QR).</p>
-      ${C.length?`<select id="nv-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}<option value="">Autre / pas de liste</option></select>`:'<p class="small">Aucune classe reçue : vous écrirez vos prénoms à la main.</p>'}
+      ${C.length?`<select id="nv-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}<option value="">Autre / pas de liste</option></select>`:'<p class="alerte small">Aucune classe sur cette tablette : scannez d’abord le QR de la classe du professeur, sinon votre groupe ne sera pas rangé dans votre classe chez le professeur.</p><div class="rangee"><button class="bt act" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></div>'}
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nvsuite">Choisir notre code</button></div>`);break}
-    case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c),true);break}
+    case 'rattacher':{const c=$('#rat-cl')&&$('#rat-cl').value;if(!c)return;S.classe=c;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[c]));if(ROOT.groupes[ACTIF])ROOT.groupes[ACTIF].classe=c;sauver();ecrireRoot();toast('Groupe rangé dans la classe '+c+'.');rendre();break}
+    case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';if(!cl&&Object.keys(ROOT.classes).length&&!confirm('Sans classe, votre groupe ne sera pas rangé dans votre classe chez le professeur. Continuer quand même ?'))return;demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c),true);break}
     case 'codeok':validerCode();break;
     case 'codeoubli':fen(`<h3>Code oublié</h3><p>Ce carnet est trop ancien pour que le professeur retrouve le code. Voici quoi faire :</p><ol class="small"><li><b>Créez un nouveau groupe</b> avec un nouveau code : notez-le.</li><li><b>Scannez le QR de la classe</b> du professeur dans ce nouveau groupe : à l’avenir, il pourra retrouver votre code.</li><li><b>Prévenez le professeur</b> : vos validations envoyées sont chez lui, il peut vous redonner vos niveaux.</li></ol><div class="rangee"><button class="bt noir" type="button" data-act="fermer">Compris</button></div>`);break;
     case 'verrou':if(DEMO){quitterDemo();fermer();rendre();break}await verrouiller();fermer();VUE='accueil';rendre();break;

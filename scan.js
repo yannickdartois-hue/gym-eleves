@@ -74,7 +74,8 @@ function svgQR(txt){
   const q=qrcode(0,'L');q.addData(txt,'Byte');q.make();
   const c=q.getModuleCount(),m=4;let p='';
   for(let y=0;y<c;y++)for(let x=0;x<c;x++)if(q.isDark(y,x))p+=`M${x+m} ${y+m}h1v1h-1z`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${c+2*m} ${c+2*m}" shape-rendering="crispEdges" role="img" aria-label="QR code"><rect width="100%" height="100%" fill="#fff"/><path d="${p}" fill="#000"/></svg>`;
+  /* fond blanc forcé, même en mode sombre ou « assombrissement automatique » de la tablette (sinon la caméra ne lit pas) */
+  return `<div class="qrblanc" style="background:#fff!important;padding:10px;border-radius:12px;color-scheme:only light;filter:none!important;forced-color-adjust:none"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${c+2*m} ${c+2*m}" shape-rendering="crispEdges" role="img" aria-label="QR code" style="display:block;width:100%;height:auto;background:#fff!important"><rect width="100%" height="100%" fill="#fff"/><path d="${p}" fill="#000"/></svg></div>`;
 }
 root.GQR={decoder,scanner,encoder,svgQR};
 })(window);
