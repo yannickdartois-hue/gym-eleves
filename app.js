@@ -545,7 +545,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'){if($('#code'))valide
 if(/[?&]demo\b/.test(location.search))ouvrirDemo().then(rendre);
 rendre();compterHL();
 
-/* Code du cours (eps-code.js, commun) : en gym, seuls les niveaux ⚠️ le demandent pour valider E, avec le code à 4 chiffres du professeur (2 h). */
+/* Code du cours (eps-code.js, commun) : en gym, seuls les niveaux ⚠️ le demandent pour valider E, avec le code à 4 chiffres du professeur (valable toute la journée). */
 if(window.EPSCode)EPSCode.eleve({app:'gye',classe:()=>S&&S.classe||'',seance:()=>'G',seances:()=>['G'],nom:()=>'Le cours du jour',ouvrir:()=>{},actif:()=>false,bandeau:false,demo:()=>DEMO});
 
 /* ---------- Validation P par QR signé (le code du prof n’est plus tapé sur les téléphones) ----------

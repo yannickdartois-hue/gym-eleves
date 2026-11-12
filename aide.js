@@ -2,7 +2,7 @@
 window.EPS_AIDE={appli:'Gymnastique · Élève',partageNote:'Juste après l’installation, <b>ouvre l’appli depuis son icône, avec le Wi-Fi, et touche « Télécharger les vidéos »</b> (environ 90 Mo) : sinon certaines vidéos ne se chargeront pas au gymnase.',bouton:false,publics:[
 {id:'eleve',titre:'Élève',chapitres:[
 {t:'🔑 Code du cours',html:`<ul>
-<li>Au début du cours, le professeur écrit un <b>code à 4 chiffres</b>. Touche <span class="bouton">🔑 Code du cours</span> et tape-le : les niveaux ⚠️ peuvent être validés E pendant 2 heures.</li>
+<li>Au début du cours, le professeur écrit un <b>code à 4 chiffres</b>. Touche <span class="bouton">🔑 Code du cours</span> et tape-le : les niveaux ⚠️ peuvent être validés E toute la journée.</li>
 <li>Le code n’est demandé que pour les niveaux ⚠️, au moment de valider E.</li>
 <li>Code refusé ? Vérifie que la date du téléphone est juste. Après 5 erreurs, attends 1 minute.</li>
 </ul>`},
