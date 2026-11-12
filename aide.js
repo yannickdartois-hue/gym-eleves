@@ -1,5 +1,5 @@
 /* aide.js — mode d'emploi de l'appli élève de gymnastique (lu par eps-aide.js) */
-window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
+window.EPS_AIDE={appli:'Gymnastique · Élève',partageNote:'Juste après l’installation, <b>ouvre l’appli depuis son icône, avec le Wi-Fi, et touche « Télécharger les vidéos »</b> (environ 90 Mo) : sinon certaines vidéos ne se chargeront pas au gymnase.',bouton:false,publics:[
 {id:'eleve',titre:'Élève',chapitres:[
 {t:'🔑 Code du cours',html:`<ul>
 <li>Au début du cours, le professeur écrit un <b>code à 4 chiffres</b>. Touche <span class="bouton">🔑 Code du cours</span> et tape-le : les niveaux ⚠️ peuvent être validés E pendant 2 heures.</li>
@@ -8,6 +8,7 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',bouton:false,publics:[
 </ul>`},
 
 {t:'Commencer (premier cours)',html:`<ol>
+<li><b>Avant tout, avec le Wi-Fi</b> : installe l’appli sur l’écran d’accueil, ouvre-la depuis son icône et touche <span class="bouton">⬇ Télécharger les vidéos</span> (environ 90 Mo). Sans ça, certaines vidéos ne se chargeront pas au gymnase. Tant qu’il en manque, un bandeau orange le rappelle sur l’accueil.</li>
 <li><span class="bouton">📷 QR de la classe (prof)</span> : vise le QR que le professeur affiche. La liste de la classe arrive sur la tablette.</li>
 <li><span class="bouton">＋ Nouveau groupe</span> : choisis ta classe, puis un <b>code secret à 4 chiffres</b> (tapé deux fois). Retenez-le : il ouvre votre carnet à chaque cours. Un autre groupe ne peut pas le lire.</li>
 <li>Onglet <b>Groupe</b> : cochez vos noms dans la liste de la classe (2 à 8 élèves). Sans liste, <span class="bouton">Écrire prénom et nom</span> : prénom ET nom de famille.</li>

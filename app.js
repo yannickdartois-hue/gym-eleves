@@ -154,9 +154,24 @@ function rendre(){
 }
 let VUE='accueil';
 
+/* Vidéos : bandeau tant qu'elles ne sont pas toutes sur le téléphone ; écran de bienvenue au premier lancement */
+const installee=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
+const bienvenueVue=()=>{try{return localStorage.getItem('gym-bienvenue')==='1'}catch(e){return true}};
+const bandeauHL=()=>`<div id="bandhl" class="bandhl">${bandeauHLtxt()}</div>`;
+function bandeauHLtxt(){const tous=[...new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>v[0])))],n=tous.filter(f=>HL.has(f)),reste=tous.filter(f=>!HL.has(f));
+  if(!reste.length)return `<p class="hlok">✓ ${tous.length} vidéos sur le téléphone : elles marchent sans réseau.</p>`;
+  return `<div class="hlko"><b>⚠ ${n.length} / ${tous.length} vidéos sur ce téléphone.</b> Sans elles, certaines vidéos ne se chargeront pas au gymnase.<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="charger" data-v="tout">⬇ Télécharger ${n.length?'le reste':'les vidéos'} (${mo(poids(reste))})</button></div><p class="small" style="margin:6px 0 0">Avec le Wi-Fi, pas les données mobiles.</p><div class="progres" id="prog2" hidden><i></i></div></div>`}
+function vBienvenue(){const inst=installee();
+  return `<h2>Bienvenue dans l’appli Gym</h2><p class="muted">Deux choses à faire une seule fois, avec le Wi-Fi.</p>
+  <section class="carte etape ${inst?'faite':''}"><h3>① Installer l’appli ${inst?'✓':''}</h3>${inst?'<p class="small">C’est fait : l’appli est ouverte depuis son icône.</p>':'<p class="small"><b>iPhone, iPad</b> : dans Safari, bouton Partager → « Sur l’écran d’accueil ». <b>Android</b> : menu ⋮ de Chrome → « Installer l’appli ». Puis ouvrez l’appli avec sa nouvelle icône.</p>'}</section>
+  <section class="carte etape"><h3>② Télécharger les vidéos</h3><p class="small">Sans ce téléchargement, <b>certaines vidéos ne se chargeront pas au gymnase</b>. Restez sur cet écran jusqu’à la fin.</p>
+   ${inst?'':'<p class="small alerte">Faites-le <b>après</b> l’installation, dans l’appli ouverte depuis son icône : ce qui est téléchargé dans Safari n’est pas gardé par l’icône.</p>'}
+   <div id="bandhl">${bandeauHLtxt()}</div></section>
+  <div class="rangee" style="margin-top:14px"><button class="bt" type="button" data-act="bienvenueok">${'Continuer'}</button></div>`}
 function vAccueil(){
   const G=Object.entries(ROOT.groupes).sort((a,b)=>(b[1].vu||0)-(a[1].vu||0));
-  return `<h2>Bonjour !</h2>
+  if(!bienvenueVue())return vBienvenue();
+  return `<h2>Bonjour !</h2>${bandeauHL()}
   <p class="muted">Ouvrez le carnet de votre groupe avec votre code secret.</p>
   ${G.length?G.map(([id,g])=>`<button class="groupe" type="button" data-act="ouvrir" data-v="${id}"><span style="font-size:28px">🔒</span><b>${esc(g.noms&&g.noms.length?g.noms.join(', '):'Groupe sans élève')}<br><span class="small muted">${esc(g.classe||'classe ?')}${g.vu?' · '+dateFr(g.vu):''}${g.aEnvoyer?' · <span style="color:var(--alerte)">à envoyer</span>':''}</span></b><span aria-hidden="true">›</span></button>`).join(''):'<p class="carte small">Aucun groupe sur cette tablette pour l’instant.</p>'}
   <div class="rangee" style="margin-top:14px"><button class="bt act" type="button" data-act="nouveau">＋ Nouveau groupe</button><button class="bt" type="button" data-act="scanclasse">📷 QR de la classe (prof)</button></div>
@@ -197,7 +212,7 @@ function vFiche(){
 }
 function vApprendre(){
   const a=GYM.ateliers;
-  return `<h2>Apprendre</h2>
+  return `<h2>Apprendre</h2>${bandeauHL()}
   <div class="ateliers">
     <button class="tuile info" type="button" data-act="info" data-v="securite"><span class="num">Avant tout</span><b>🛡️ Sécurité, parade et aide</b></button>
     <button class="tuile info" type="button" data-act="info" data-v="validation"><span class="num">Règle du jeu</span><b>✅ Valider un niveau</b></button>
@@ -352,7 +367,7 @@ function recevoirClasse(o){
 }
 
 /* ---------- Vidéos ---------- */
-function brancherVideos(){document.querySelectorAll('video[data-vid]').forEach(v=>{v.addEventListener('play',()=>{if(v.closest('.duo'))return;document.querySelectorAll('video').forEach(o=>{if(o!==v&&!o.closest('.duo'))o.pause()})})})}
+function brancherVideos(){document.querySelectorAll('video[data-vid]').forEach(v=>{if(!v.dataset.err){v.dataset.err=1;v.addEventListener('error',()=>{const m=document.createElement('p');m.className='alerte small';m.innerHTML='Cette vidéo n’est pas encore sur le téléphone. Avec le Wi-Fi : <b>Accueil → Télécharger les vidéos</b>.';v.after(m);v.style.display='none'},true)}v.addEventListener('play',()=>{if(v.closest('.duo'))return;document.querySelectorAll('video').forEach(o=>{if(o!==v&&!o.closest('.duo'))o.pause()})})})}
 /* Vidéos hors ligne par atelier (poids : media-tailles.js, généré par outils/tailles_media.py) */
 function groupesHL(){
   const vids=id=>(GYM.fiches[id]||{vid:[]}).vid.map(v=>v[0]);
@@ -372,12 +387,13 @@ async function chargerHL(id){
 async function viderHL(){try{const ks=await caches.keys();await Promise.all(ks.filter(x=>/^gym-eleves-media-v\d+$/.test(x)).map(k=>caches.delete(k)))}catch(e){}HL=new Set();toast('Vidéos effacées du téléphone : elles se rechargent avec le Wi-Fi.');compterHL()}
 async function toutCharger(L){
   L=L||[...new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>'media/'+v[0])))];
-  const p=$('#prog');if(p)p.hidden=false;let n=0,err=0;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+  const p=$('#prog')||$('#prog2');if(p)p.hidden=false;const bb=document.querySelector('#bandhl .bt');if(bb)bb.textContent='Téléchargement… restez sur cet écran';let n=0,err=0;
   for(const u of L){try{const r=await fetch(u);if(!r.ok)err++;else await r.arrayBuffer()}catch(e){err++}n++;if(p)p.firstChild.style.width=Math.round(100*n/L.length)+'%'}
   if(p)p.hidden=true;
   toast(err?err+' vidéo(s) non téléchargée(s) : réessayez avec le Wi-Fi.':(L.length?'Vidéos gardées sur le téléphone.':'Déjà sur le téléphone.'));compterHL();
 }
-async function compterHL(){await etatHL();const el=$('#nb-hl');const tous=new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>v[0])));const n=[...tous].filter(f=>HL.has(f));if(el)el.textContent=n.length+' / '+tous.size+' vidéos ('+mo(poids(n))+')';const z=$('#hl-liste');if(z)z.innerHTML=blocHL()}
+async function compterHL(){await etatHL();const el=$('#nb-hl');const tous=new Set(Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>v[0])));const n=[...tous].filter(f=>HL.has(f));if(el)el.textContent=n.length+' / '+tous.size+' vidéos ('+mo(poids(n))+')';document.querySelectorAll('#bandhl').forEach(b=>b.innerHTML=bandeauHLtxt());const z=$('#hl-liste');if(z)z.innerHTML=blocHL()}
 
 /* ---------- Fenêtres ---------- */
 function fen(html){$('#modal').innerHTML=`<div class="voile" data-act="fermerVoile"><div class="fen" role="dialog" aria-modal="true">${html}</div></div>`}
@@ -451,6 +467,7 @@ document.addEventListener('click',async ev=>{
     case 'fichier':if(DEMO){toast('Démo : le fichier n’est pas créé. En vrai, il part dans le Nuage.');break}enregistrerFichier();break;
     case 'demo':await ouvrirDemo();rendre();window.scrollTo(0,0);break;
     case 'demofin':quitterDemo();rendre();window.scrollTo(0,0);break;
+    case 'bienvenueok':try{localStorage.setItem('gym-bienvenue','1')}catch(e){}rendre();window.scrollTo(0,0);break;
     case 'toutcharger':case 'charger':b.disabled=true;await chargerHL(v||'tout');b.disabled=false;break;
     case 'viderhl':if(confirm('Effacer les vidéos gardées sur ce téléphone ?'))await viderHL();break;
     case 'vitesse':case 'boucle':{const bar=b.closest('.ralenti'),vid=document.querySelector(`video[data-vid="${bar.dataset.pour}"]`);if(!vid)return;
