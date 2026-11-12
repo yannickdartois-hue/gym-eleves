@@ -65,15 +65,15 @@ async function ouvrir(id,code){
   await enregistrer();
 }
 async function verrouiller(){await enregistrer();DEMO=false;S=null;ACTIF=null;CLEF=null;NAV=[]}
-/* Lettre du groupe (A à H) : signale celles déjà prises dans la classe sur cette tablette */
+/* Numéro du groupe (1 à 8 ; les lettres sont réservées aux niveaux A à F) : signale ceux déjà pris dans la classe sur cette tablette */
 function choixLettre(cur,classe){const pris=new Set(Object.entries(ROOT.groupes).filter(([id,g])=>id!==ACTIF&&g.lt&&(!classe||g.classe===classe)).map(([,g])=>g.lt));
-  return `<div class="qui lettres">${'ABCDEFGH'.split('').map(l=>`<button type="button" class="${l===cur?'ici':''}" data-act="lettre" data-v="${l}" title="${pris.has(l)?'déjà prise sur cette tablette':''}">${l}${pris.has(l)?'<small>prise</small>':''}</button>`).join('')}</div>`}
+  return `<div class="qui lettres">${'12345678'.split('').map(l=>`<button type="button" class="${l===cur?'ici':''}" data-act="lettre" data-v="${l}" title="${pris.has(l)?'déjà pris sur cette tablette':''}">${l}${pris.has(l)?'<small>pris</small>':''}</button>`).join('')}</div>`}
 async function nouveauGroupe(classe,code,lt){
   const id=uid(),sel=crypto.getRandomValues(new Uint8Array(16));
   ROOT.groupes[id]={classe:classe||'',noms:[],sel:b64(sel)};
   CLEF=await deriver(code,sel);ACTIF=id;S=vide();
   if(classe&&ROOT.classes[classe]){S.classe=classe;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[classe]))}
-  S.lt=lt||'';S.tab='groupe';NAV=[];await enregistrer();
+  S.lt=lt||'';if(lt)S.grp=+lt;S.tab='groupe';NAV=[];await enregistrer();
   try{localStorage.setItem('gym-bienvenue','1')}catch(e){}
   /* enchaîne directement sur le choix des noms */
   if(S.cfg&&S.cfg.eleves&&S.cfg.eleves.length)setTimeout(()=>{rendre();const x=document.createElement('button');x.type='button';x.dataset.act='choisirnoms';x.hidden=true;document.body.appendChild(x);x.click();x.remove()},300);
@@ -146,8 +146,8 @@ const barresVisibles=()=>S?!!(S.cfg&&S.cfg.barres):Object.values(ROOT.classes).s
 let NAV=[]; // pile de pages « Apprendre » : {v:'atelier',a} | {v:'niveau',k} | {v:'fiche',id} | {v:'bonus',id} | {v:'info',x}
 function rendre(){
   const app=$('#app');
-  $('#sous').textContent=S?(S.classe?S.classe+' · ':'')+(S.eleves.map(e=>court(e.nom)).join(', ')||'nouveau groupe'):'Lycée Georges Pompidou';
-  $('#haut').innerHTML=S?`<button class="bt mini" type="button" data-act="verrou" aria-label="Verrouiller le carnet">🔒 Fermer</button>`:'';
+  $('#sous').textContent=S?((S.lt||S.grp)?'Groupe '+(S.lt||S.grp)+' · ':'')+(S.classe||'')+(S.eleves.length?'':' · nouveau groupe'):'Lycée Georges Pompidou';
+  $('#haut').innerHTML=S?((S.lt||S.grp)?`<span class="gnum" style="--g:${GCOUL[(+(S.lt||S.grp)-1)%8]}" title="Groupe ${esc(S.lt||S.grp)}">${esc(S.lt||S.grp)}</span>`:'')+`<button class="bt mini" type="button" data-act="verrou" aria-label="Verrouiller le carnet" title="Fermer le carnet">🔒</button>`:'';
   let h='';
   if(NAV.length)h=vPile();
   else if(!S)h=VUE==='apprendre'?vApprendre():vAccueil();
@@ -174,7 +174,7 @@ function vBienvenue(){const inst=installee();
    ${inst?'':'<p class="small alerte">Faites-le <b>après</b> l’installation, dans l’appli ouverte depuis son icône : ce qui est téléchargé dans Safari n’est pas gardé par l’icône.</p>'}
    <div id="bandhl">${bandeauHLtxt()}</div></section>
   ${(C=>`<section class="carte etape ${C.length?'faite':''}"><h3>③ Scanner le QR de la classe ${C.length?'✓':''}</h3>${C.length?`<p class="small">Classe reçue : <b>${C.map(esc).join(', ')}</b>.</p>`:'<p class="small">Le professeur l’affiche au tableau ou sur l’affiche du premier cours.</p>'}<div class="rangee"><button class="bt ${C.length?'':'act'}" type="button" data-act="scanclasse">📷 ${C.length?'Scanner une autre classe':'Scanner le QR de la classe'}</button></div></section>`)(Object.keys(ROOT.classes))}
-  <section class="carte etape"><h3>④ Créer notre groupe</h3><p class="small">Lettre du groupe, code secret à 4 chiffres, puis vous cochez vos noms dans la liste.</p><div class="rangee"><button class="bt ${Object.keys(ROOT.classes).length?'act':''}" type="button" data-act="nouveau">＋ Créer notre groupe</button></div></section>
+  <section class="carte etape"><h3>④ Créer notre groupe</h3><p class="small">Numéro du groupe, code secret à 4 chiffres, puis vous cochez vos noms dans la liste.</p><div class="rangee"><button class="bt ${Object.keys(ROOT.classes).length?'act':''}" type="button" data-act="nouveau">＋ Créer notre groupe</button></div></section>
   <div class="rangee" style="margin-top:14px"><button class="bt" type="button" data-act="bienvenueok">Passer : nous avons déjà un groupe</button></div>`}
 function vAccueil(){
   const G=Object.entries(ROOT.groupes).sort((a,b)=>(b[1].vu||0)-(a[1].vu||0));
@@ -201,7 +201,7 @@ function vGroupe(){
   ${S.eleves.length?S.eleves.map((e,i)=>`<div class="rangee" style="justify-content:space-between;border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b><button class="bt mini danger" type="button" data-act="retirer" data-v="${i}">Retirer</button></div>`).join(''):'<p>Ajoutez les élèves du groupe (2 à 8), avec leur prénom et leur nom.</p>'}
   ${S.eleves.length<MAX_GROUPE?`<div class="rangee" style="margin-top:10px">${C&&C.eleves&&C.eleves.length?'<button class="bt act" type="button" data-act="choisirnoms">＋ Choisir dans la liste de la classe</button>':''}<button class="bt" type="button" data-act="ajoutnom">＋ Écrire prénom et nom</button></div>`:''}
   </section>
-  <section class="carte"><h3>Lettre du groupe ${S.lt?'· '+esc(S.lt):''}</h3><p class="small muted">Celle que le professeur vous donne pour la rotation des ateliers.</p>${choixLettre(S.lt||'',S.classe).replace('class="qui lettres"','class="qui lettres" data-groupe="1"')}</section>
+  <section class="carte"><h3>Numéro du groupe ${S.lt?'· '+esc(S.lt):''}</h3><p class="small muted">Celui que le professeur vous donne pour la rotation des ateliers.</p>${choixLettre(S.lt||'',S.classe).replace('class="qui lettres"','class="qui lettres" data-groupe="1"')}</section>
   <section class="carte"><h3>Classe</h3><p class="small muted">Le QR de la classe (affiché par le professeur) donne la liste des élèves et le code de validation du professeur.</p><button class="bt" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></section>
   <section class="carte"><h3>Fin d’année ou erreur</h3><button class="bt danger" type="button" data-act="suppgroupe">Supprimer ce groupe de la tablette</button></section>`;
 }
@@ -209,19 +209,37 @@ function puces(id,a){return `<div class="etat-at">${NIVS.map(n=>{const s=etat(id
 /* Groupe sans classe : bandeau pour le rattacher (sinon il arrive isolé chez le prof et le code du cours ne s'applique pas) */
 function sansClasse(){if(!S||S.classe||DEMO)return '';const C=Object.keys(ROOT.classes).sort();
   return `<div class="alerte">⚠ Votre groupe n’est rangé dans aucune classe : chez le professeur, il arriverait à part.${C.length?`<div class="rangee" style="margin-top:8px"><select id="rat-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}</select><button class="bt act" type="button" data-act="rattacher">Ranger dans cette classe</button></div>`:`<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></div>`}</div>`}
+/* Célébration : seulement pour une validation P (par le professeur) */
+function tampon(k,nom){const L=k[k.length-1],c=(typeof NIVC!=='undefined'&&NIVC[L])||'#ffc000',d=document.createElement('div');d.className='tampon-voile';
+  const cf=Array.from({length:60},()=>`<i style="left:${Math.random()*100}%;background:${['#ff0000','#ff6600','#ffc000','#ffff00','#92d050','#00b050','#2563eb','#c20e93'][Math.floor(Math.random()*8)]};animation-delay:${Math.random()*.4}s;transform:rotate(${Math.random()*90}deg)"></i>`).join('');
+  d.innerHTML=`<div class="confettis">${cf}</div><div class="tampg" style="background:${c}"><b>NIVEAU</b><span>${L}</span><b>VALIDÉ !</b><small>${esc(court(nom))} · validé par le professeur</small></div>`;
+  d.onclick=()=>d.remove();document.body.appendChild(d);setTimeout(()=>d.remove(),2200);
+  try{const A=new (window.AudioContext||window.webkitAudioContext)(),t=A.currentTime;[523,659,784,1047].forEach((f,i)=>{const o=A.createOscillator(),g=A.createGain();o.type='triangle';o.frequency.value=f;o.connect(g);g.connect(A.destination);g.gain.setValueAtTime(.0001,t+i*.11);g.gain.exponentialRampToValueAtTime(.6,t+i*.11+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.11+.3);o.start(t+i*.11);o.stop(t+i*.11+.32)})}catch(e){}}
+const GCOUL=['#dc2626','#ea580c','#2563eb','#16a34a','#7c3aed','#db2777','#0891b2','#854d0e'];
+const NIVC={A:'#ff0000',B:'#ff6600',C:'#ffc000',D:'#ffff00',E:'#92d050',F:'#00b050'};
+const liaisonsVisibles=()=>S?!!(S.cfg&&S.cfg.liaisons):Object.values(ROOT.classes).some(c=>c.liaisons);
+/* jauge A→F : plein = validé P, rayé = validé E (à confirmer), gris = à faire */
+function jauge(id,a){return `<span class="jauge">${a.niv.map(n=>{const s=etat(id,a.n+n.n);return `<i class="${s==='p'?'p':s==='e'?'e':''}" style="--n:${NIVC[n.n]}">${n.n}</i>`}).join('')}</span>`}
+function prochainNiv(id){for(const a of GYM.ateliers)for(const n of a.niv){const k=a.n+n.n;if(!etat(id,k)&&ouvert(id,k))return {a,n,k}}return null}
 function vFiche(){
   if(!S.eleves.length)return sansClasse()+`<h2>Ma fiche</h2><p class="carte">Ajoutez d’abord les élèves du groupe (onglet Groupe).</p>`;
-  const E=elv();
-  return sansClasse()+`<div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
-  <h2>Fiche de ${esc(court(E.nom))}</h2>
-  <p class="small muted">Touchez un niveau pour voir la vidéo, les consignes et le faire valider. <b>E</b> = validé par un camarade · <b>P</b> = validé par le professeur.</p>
-  ${GYM.ateliers.map(a=>`<section class="atelier" ${st(a.n)}><header><span class="n">${a.n}</span><b>${esc(a.nom)}</b><span class="small">${(()=>{const p=meilleur(E.id,a.n,'p');return p?'Niveau '+p:''})()}</span></header>
-    ${a.niv.map(n=>{const k=a.n+n.n,s=etat(E.id,k),o=ouvert(E.id,k);
-      return `<button class="niv ${o?'':'verrou'}" type="button" data-act="niveau" data-v="${k}"><span class="L L${n.n}">${n.n}</span>
-      <span><span class="nom">${o?'':'🔒 '}${esc(n.nom)}${n.prof?' <span title="en présence du professeur">⚠️</span>':''}</span><div class="crit">${n.crit.map(esc).join(' · ')}</div>${n.picto?`<img class="picto" src="${n.picto}" alt="" loading="lazy">`:''}</span>
-      <span class="ep"><span class="${s?'e v':''}">E</span><span class="${s==='p'?'p':''}">P</span></span></button>`}).join('')}
-  </section>`).join('')}`;
+  const E=elv(),pre=esc(prenom(E.nom)),duJour=typeof objectif==='function'&&objectif(E.id),o=duJour?null:prochainNiv(E.id);
+  const B=GYM.bonus.filter(b=>(b.id==='barres'&&barresVisibles())||(b.id==='liaisons'&&liaisonsVisibles()));
+  return sansClasse()+`<p class="leg">Fiche de :</p><div class="qui">${S.eleves.map((e,i)=>`<button type="button" class="${i===S.cur?'ici':''}" data-act="qui" data-v="${i}">${esc(court(e.nom))}</button>`).join('')}</div>
+ <h2 class="vh">Fiche de ${esc(court(E.nom))}</h2>
+  ${duJour?'':o?`<button class="prochain" type="button" data-act="niveau" data-v="${o.k}" style="--c:${COUL[o.a.n]}">${o.n.picto?`<img src="${o.n.picto}" alt="">`:''}<span><b>Prochain objectif de ${pre}</b><small>${esc(o.a.nom)} · niveau ${o.n.n} · ${esc(o.n.nom)}</small></span><em>Y aller ▶</em></button>`:`<p class="carte">🏆 ${pre} a validé tous les niveaux ouverts.</p>`}
+  <p class="leg">Niveaux de <b>${pre}</b> · plein = validé par le prof (P) · rayé = validé par un camarade (E)</p>
+  <div class="ats">${GYM.ateliers.map(a=>`<button class="atb" type="button" data-act="atel" data-v="${a.n}" style="--c:${COUL[a.n]}"><span class="atn">${esc(a.nom)}</span>${jauge(E.id,a)}</button>`).join('')}
+  ${B.map(b=>`<button class="atb opt" type="button" data-act="bonus" data-v="${b.id}" style="--c:${COUL[b.id]}"><span class="atn">${esc(b.nom)}</span></button>`).join('')}</div>
+  <button class="secu" type="button" data-act="info" data-v="securite">⚠️ Consignes de sécurité</button>`;
 }
+/* atelier : le « thermomètre » A rouge → F vert du PowerPoint */
+function vThermo(an){const a=atelier(an),E=elv();
+  return `<div class="ban" style="--c:${COUL[a.n]}">${esc(a.nom)}</div><p class="leg" style="text-align:center">${esc(court(E.nom))} · touche un niveau</p>
+  <div class="thermo">${a.niv.map(n=>{const k=a.n+n.n,st=etat(E.id,k),o=ouvert(E.id,k);
+    return `<button class="tniv ${o?'':'verrou'}" type="button" data-act="niveau" data-v="${k}" style="--n:${NIVC[n.n]}"><span class="TL">${n.n}</span>
+     <span class="tt"><b>${esc(n.nom)}${n.prof?' ⚠️':''}</b>${st==='p'?'<span class="etq">✅ P · validé</span>':st==='e'?'<span class="etq">✔ E · à confirmer</span>':o?'<small>'+n.crit.map(esc).join(' · ')+'</small>':''}</span>
+     ${o?(n.picto?`<img src="${n.picto}" alt="">`:'<span></span>'):'<span class="cad">🔒</span>'}</button>`}).join('')}</div>`}
 function vApprendre(){
   const a=GYM.ateliers;
   return `<h2>Apprendre</h2>${bandeauHL()}
@@ -232,11 +250,12 @@ function vApprendre(){
   <h4>Les 6 ateliers</h4>
   <div class="ateliers">${a.map(x=>`<button class="tuile at" ${st(x.n)} type="button" data-act="atelier" data-v="${x.n}"><span class="num">Atelier ${x.n}</span><b>${esc(x.nom)}</b>${S&&S.eleves.length?puces(elv().id,x.n):''}</button>`).join('')}</div>
   <h4>Pour aller plus loin</h4>
-  <div class="ateliers">${GYM.bonus.filter(b=>!b.cache||barresVisibles()).map(b=>`<button class="tuile bonus at" ${st(b.id)} type="button" data-act="bonus" data-v="${b.id}"><b>${esc(b.nom)}</b><span class="small muted">${esc(b.info)}</span></button>`).join('')}</div>`;
+  <div class="ateliers">${GYM.bonus.filter(b=>(b.id!=='barres'||barresVisibles())&&(b.id!=='liaisons'||liaisonsVisibles())).map(b=>`<button class="tuile bonus at" ${st(b.id)} type="button" data-act="bonus" data-v="${b.id}"><b>${esc(b.nom)}</b><span class="small muted">${esc(b.info)}</span></button>`).join('')}</div>`;
 }
 function vPile(){
   const p=NAV[NAV.length-1];
   const ret=`<button class="retour" type="button" data-act="retour">‹ Retour</button>`;
+  if(p.v==='atel')return `<div class="cadre-at">${ret}${vThermo(p.a)}</div>`;
   if(p.v==='atelier'){const f=fleches(p);return `<div ${st(p.a)} class="cadre-at">${ret}${f}${vAtelier(p.a)}</div>`}
   if(p.v==='niveau'){const f=fleches(p);return `<div ${st(p.k[0])} class="cadre-at">${ret}${f}${vNiveau(p.k)}${f}</div>`}
   if(p.v==='fiche'){const f=fleches(p);return `<div ${st(p.at)} class="cadre-at">${ret}${f}<div class="carte">${p.lst&&p.lst.length>1?`<p class="small muted" style="margin:0 0 6px">${p.lst.indexOf(p.id)+1} sur ${p.lst.length}</p>`:''}${blocFiche(p.id,true)}</div>${f}</div>`}
@@ -267,7 +286,7 @@ function vAtelier(n){
 function video(v,id){
   const [src,leg]=v,base=src.replace('.mp4','');
   return `<div class="video"><video controls playsinline preload="none" poster="media/${base}.jpg" src="media/${src}" data-vid="${base}"></video>${leg?`<div class="leg">${esc(leg)}</div>`:''}</div>
-  <div class="ralenti" data-pour="${base}"><button type="button" class="ici" data-act="vitesse" data-v="1">Normal</button><button type="button" data-act="vitesse" data-v="0.5">Ralenti ×½</button><button type="button" data-act="vitesse" data-v="0.25">×¼</button><button type="button" data-act="boucle">🔁 En boucle</button></div>`;
+  <div class="ralenti" data-pour="${base}"><button type="button" class="ici" data-act="vitesse" data-v="1">Normal</button><button type="button" data-act="vitesse" data-v="0.5">Ralenti ×½</button><button type="button" data-act="vitesse" data-v="0.25">×¼</button><button type="button" data-act="boucle">🔁 En boucle</button><button type="button" data-act="recul">⏮ −1 s</button></div>`;
 }
 /* Installation de l'atelier en premier ; repliée une fois « installé » (mémorisé pour la journée sur l'appareil) */
 const INST_K='gym-installe';
@@ -277,13 +296,13 @@ function instMarquer(id,oui){const o=instLu();o.ids=o.ids.filter(x=>x!==String(i
 function blocInstall(id,f){if(!f.mat.length&&!f.img.length)return '';const ok=instFait(id);
   const corps=`${f.mat.length?`<div class="mat">${f.mat.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="Installation" loading="lazy" data-zoom>`).join('')}</div>`:''}`;
   return ok?`<details class="install fait"><summary>🧰 Atelier installé ✓ <span class="small">· revoir l’installation</span></summary>${corps}<button class="bt mini" type="button" data-act="install" data-v="${id}" data-x="0">Ce n’est plus installé</button></details>`
-   :`<section class="install"><h4>🧰 Installation de l’atelier</h4>${corps}<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="install" data-v="${id}" data-x="1">✓ Atelier installé</button></div></section>`}
+   :`<section class="install"><h4>🧰 Matériel nécessaire</h4>${corps}<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="install" data-v="${id}" data-x="1">✓ Atelier installé</button></div></section>`}
 function blocFiche(id,titre,sansInst){
   const f=fiche(id);if(!f)return '';
   return `${titre?`<h3>${esc(f.t)}</h3>`:''}
   ${sansInst?'':blocInstall(id,f)}
   ${f.vid.map(v=>video(v,id)).join('')}
-  ${f.cons.length?`<h4>Consignes</h4><ol class="cons">${f.cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:''}
+  ${f.cons.length?`<h4 class="h-cons">Consignes</h4><ol class="cons">${f.cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:''}
   ${boutonsQ(id)}`;
 }
 /* Le « ? » du PowerPoint : sur chaque exercice, un lien vers l'exercice de remédiation plus facile */
@@ -301,7 +320,7 @@ function blocTrampo(){const t=GYM.trampo;return `<h3>Trampoline : les bases</h3>
 function carteRem(id,i){const f=fiche(id),v=f.vid[0];return `<button class="rem" type="button" data-act="fiche" data-v="${id}">${v?`<img src="media/${v[0].replace('.mp4','.jpg')}" alt="" loading="lazy">`:'<span style="width:96px;text-align:center;font-size:28px">📄</span>'}<span><b>${typeof i==='number'?'Aide '+(i+1)+' · ':''}${esc(f.t)}</b>${f.cons[0]?`<br><span class="small muted">${esc(f.cons[0])}</span>`:''}</span></button>`}
 function vNiveau(k){
   const a=atelier(k[0]),n=niveau(k);
-  let h=`<h2><span class="L L${n.n}" style="vertical-align:4px">${n.n}</span> ${esc(n.nom)}</h2><p class="muted small" style="margin-top:-2px">Atelier ${a.n} · ${esc(a.nom)}</p>`;
+  let h=`<div class="ttl" style="--c:${COUL[a.n]}">${esc(a.nom)}<small><span class="L L${n.n}">${n.n}</span> ${esc(n.nom)}</small></div>`;
   if(n.prof)h+=`<div class="alerte">⚠️ Seulement en présence du professeur, avec la parade en place.</div>`;
   {const vus=new Set();n.f.forEach(id=>{const f=fiche(id);if(!f)return;const sig=f.mat.join('|')+'#'+f.img.join('|');if(vus.has(sig))return;vus.add(sig);h+=blocInstall(id,f)})}
   h+=`<div class="critbox"><b>Critères de réussite</b><ul>${n.crit.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${n.picto?`<img class="picto-grand" src="${n.picto}" alt="Pictogramme du niveau" data-zoom>`:''}</div>`;
@@ -384,7 +403,7 @@ function marquerEnvoye(){S.envoi=Date.now();sauver();rendre();toast('Fiche envoy
 /* ---------- QR de la classe (donné par le prof) ---------- */
 function recevoirClasse(o){
   if(o.t!=='C')throw new Error('Ce n’est pas le QR de la classe.');
-  const cfg={classe:o.c,eleves:o.l||[],lien:o.u||'',pk:o.pk||'',barres:!!o.b,tc:!!o.tc};
+  const cfg={classe:o.c,eleves:o.l||[],lien:o.u||'',pk:o.pk||'',barres:!!o.b,liaisons:!!o.li,tc:!!o.tc};
   if(window.EPSCode)EPSCode.memoriserCle(o.c,o.cc);
   if(window.EPSCode&&EPSCode.appliquerJour&&o.cj)EPSCode.appliquerJour(o.c,o.cj); // QR du jour : ouvre la séance sans taper le code
   ROOT.classes[o.c]=cfg;ecrireRoot();
@@ -394,11 +413,13 @@ function recevoirClasse(o){
 }
 
 /* ---------- Vidéos ---------- */
-function brancherVideos(){document.querySelectorAll('video[data-vid]').forEach(v=>{if(!v.dataset.err){v.dataset.err=1;v.addEventListener('error',()=>{const m=document.createElement('p');m.className='alerte small';m.innerHTML='Cette vidéo n’est pas encore sur le téléphone. Avec le Wi-Fi : <b>Accueil → Télécharger les vidéos</b>.';v.after(m);v.style.display='none'},true)}v.addEventListener('play',()=>{if(v.closest('.duo'))return;document.querySelectorAll('video').forEach(o=>{if(o!==v&&!o.closest('.duo'))o.pause()})})})}
+let VVIT=1,VBOUCLE=false; /* ralenti et boucle gardés d'une vidéo à l'autre */
+function brancherVideos(){document.querySelectorAll('.ralenti').forEach(bar=>{bar.querySelectorAll('[data-act="vitesse"]').forEach(x=>x.classList.toggle('ici',+x.dataset.v===VVIT));const bo=bar.querySelector('[data-act="boucle"]');if(bo)bo.classList.toggle('ici',VBOUCLE)});
+  document.querySelectorAll('video[data-vid]').forEach(v=>{v.defaultPlaybackRate=VVIT;v.playbackRate=VVIT;v.loop=VBOUCLE;if(!v.dataset.err){v.dataset.err=1;v.addEventListener('error',()=>{const m=document.createElement('p');m.className='alerte small';m.innerHTML='Cette vidéo n’est pas encore sur le téléphone. Avec le Wi-Fi : <b>Accueil → Télécharger les vidéos</b>.';v.after(m);v.style.display='none'},true)}v.addEventListener('play',()=>{if(v.closest('.duo'))return;document.querySelectorAll('video').forEach(o=>{if(o!==v&&!o.closest('.duo'))o.pause()})})})}
 /* Vidéos hors ligne par atelier (poids : media-tailles.js, généré par outils/tailles_media.py) */
 function groupesHL(){
   const vids=id=>(GYM.fiches[id]||{vid:[]}).vid.map(v=>v[0]);
-  const G=[...GYM.ateliers.map(a=>({id:'a'+a.n,nom:a.n+' · '+a.court,f:a.niv.flatMap(n=>n.f.concat(n.r))})),...GYM.bonus.filter(b=>b.id!=='barres'||barresVisibles()).map(b=>({id:b.id,nom:b.nom,f:b.f}))];
+  const G=[...GYM.ateliers.map(a=>({id:'a'+a.n,nom:a.n+' · '+a.court,f:a.niv.flatMap(n=>n.f.concat(n.r))})),...GYM.bonus.filter(b=>(b.id!=='barres'||barresVisibles())&&(b.id!=='liaisons'||liaisonsVisibles())).map(b=>({id:b.id,nom:b.nom,f:b.f}))];
   G.forEach(g=>g.v=[...new Set(g.f.flatMap(vids))]);return G;
 }
 const poids=L=>[...new Set(L)].reduce((s,f)=>s+((typeof TAILLES!=='undefined'&&TAILLES[f])||0),0);
@@ -443,11 +464,11 @@ document.addEventListener('click',async ev=>{
       const C=Object.keys(ROOT.classes).sort();
       fen(`<h3>Nouveau groupe</h3><p class="small muted">Choisissez votre classe (elle apparaît quand le professeur a fait scanner son QR).</p>
       ${C.length?`<select id="nv-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}<option value="">Autre / pas de liste</option></select>`:'<p class="alerte small">Aucune classe sur cette tablette : scannez d’abord le QR de la classe du professeur, sinon votre groupe ne sera pas rangé dans votre classe chez le professeur.</p><div class="rangee"><button class="bt act" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></div>'}
-      <p class="small" style="margin-top:12px"><b>Lettre du groupe</b> (celle que donne le professeur pour la rotation des ateliers)</p>${choixLettre('',C[0]||'')}
+      <p class="small" style="margin-top:12px"><b>Numéro du groupe</b> (celui que donne le professeur pour la rotation des ateliers)</p>${choixLettre('',C[0]||'')}
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nvsuite">Choisir notre code</button></div>`);break}
     case 'rattacher':{const c=$('#rat-cl')&&$('#rat-cl').value;if(!c)return;S.classe=c;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[c]));if(ROOT.groupes[ACTIF])ROOT.groupes[ACTIF].classe=c;sauver();ecrireRoot();toast('Groupe rangé dans la classe '+c+'.');rendre();break}
     case 'install':{instMarquer(v,b.dataset.x==='1');const y=window.scrollY;rendre();window.scrollTo(0,y);break}
-    case 'lettre':{const box=b.closest('.lettres');box.querySelectorAll('button').forEach(x=>x.classList.toggle('ici',x===b));if(S&&box.dataset.groupe){S.lt=v;sauver();toast('Groupe '+v+'.');rendre()}break}
+    case 'lettre':{const box=b.closest('.lettres');box.querySelectorAll('button').forEach(x=>x.classList.toggle('ici',x===b));if(S&&box.dataset.groupe){S.lt=v;S.grp=+v;sauver();toast('Groupe '+v+'.');rendre()}break}
     case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';if(!cl&&Object.keys(ROOT.classes).length&&!confirm('Sans classe, votre groupe ne sera pas rangé dans votre classe chez le professeur. Continuer quand même ?'))return;const lt=(document.querySelector('.lettres .ici')||{}).dataset;const L0=lt?lt.v:'';demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c,L0),true);break}
     case 'codeok':validerCode();break;
     case 'codeoubli':fen(`<h3>Code oublié</h3><p>Ce carnet est trop ancien pour que le professeur retrouve le code. Voici quoi faire :</p><ol class="small"><li><b>Créez un nouveau groupe</b> avec un nouveau code : notez-le.</li><li><b>Scannez le QR de la classe</b> du professeur dans ce nouveau groupe : à l’avenir, il pourra retrouver votre code.</li><li><b>Prévenez le professeur</b> : vos validations envoyées sont chez lui, il peut vous redonner vos niveaux.</li></ol><div class="rangee"><button class="bt noir" type="button" data-act="fermer">Compris</button></div>`);break;
@@ -475,6 +496,7 @@ document.addEventListener('click',async ev=>{
     case 'qui':{S.cur=+v;OBS=null;sauver();rendre();const z=document.querySelector('.quiniv');if(z)z.scrollIntoView({block:'start'});break}
     case 'atelier':aller({v:'atelier',a:+v});break;
     case 'niveau':OBS=null;aller({v:'niveau',k:v});break;
+    case 'atel':aller({v:'atel',a:isNaN(+v)?v:+v});break;
     case 'fiche':{const L=b.dataset.q?null:b.closest('[data-lst]'),D=L?{lst:L.dataset.lst.split(',').filter(Boolean),at:L.dataset.at}:listeDe(v);aller({v:'fiche',id:v,lst:D.lst,at:D.at});break}
     case 'fleche':flecher(+v);break;
     case 'bonus':aller({v:'bonus',id:v});break;
@@ -493,7 +515,7 @@ document.addEventListener('click',async ev=>{
       maj(elv().id,v,x=>{x.e={t:Date.now(),par:obs?obs.nom:'?'}});toast('Niveau '+v[1]+' validé E. Le niveau suivant est ouvert.');rendre();break}
     case 'montrer':montrerDemande(v,b.dataset.x||'p');break;
     case 'scanP':GQR.scanner(async t=>recevoirReponse(await GQR.decoder(t)),{titre:'Réponse du professeur',aide:'Vise le QR affiché sur l’iPad du professeur.'});break;
-    case 'demoP':{const k=v,x=b.dataset.x;maj(elv().id,k,y=>{if(x==='d')y.deb={t:Date.now()};else{y.p={t:Date.now()};if(!y.e)y.e={t:Date.now(),par:'professeur'}}});fermer();toast(x==='d'?'Niveau ouvert (démo).':'Validé P ✔ (démo)');rendre();break}
+    case 'demoP':{const k=v,x=b.dataset.x;maj(elv().id,k,y=>{if(x==='d')y.deb={t:Date.now()};else{y.p={t:Date.now()};if(!y.e)y.e={t:Date.now(),par:'professeur'}}});fermer();if(x!=='d')setTimeout(()=>tampon(k,elv().nom),100);toast(x==='d'?'Niveau ouvert (démo).':'Validé P ✔ (démo)');rendre();break}
     case 'annulerE':maj(elv().id,v,x=>{delete x.e});rendre();break;
     case 'pinok':validerPin();break;
     case 'qr':montrerQR();break;
@@ -504,9 +526,10 @@ document.addEventListener('click',async ev=>{
     case 'bienvenueok':try{localStorage.setItem('gym-bienvenue','1')}catch(e){}rendre();window.scrollTo(0,0);break;
     case 'toutcharger':case 'charger':b.disabled=true;await chargerHL(v||'tout');b.disabled=false;break;
     case 'viderhl':if(confirm('Effacer les vidéos gardées sur ce téléphone ?'))await viderHL();break;
+    case 'recul':{const bar=b.closest('.ralenti'),vid=document.querySelector(`video[data-vid="${bar.dataset.pour}"]`);if(vid){vid.currentTime=Math.max(0,vid.currentTime-1);vid.pause()}break}
     case 'vitesse':case 'boucle':{const bar=b.closest('.ralenti'),vid=document.querySelector(`video[data-vid="${bar.dataset.pour}"]`);if(!vid)return;
-      if(act==='boucle'){vid.loop=!vid.loop;b.classList.toggle('ici',vid.loop)}
-      else{vid.playbackRate=+v;vid.defaultPlaybackRate=+v;bar.querySelectorAll('[data-act="vitesse"]').forEach(x=>x.classList.toggle('ici',x===b));if(vid.paused)vid.play().catch(()=>{})}
+      if(act==='boucle'){vid.loop=!vid.loop;VBOUCLE=vid.loop;b.classList.toggle('ici',vid.loop)}
+      else{VVIT=+v;vid.playbackRate=+v;vid.defaultPlaybackRate=+v;bar.querySelectorAll('[data-act="vitesse"]').forEach(x=>x.classList.toggle('ici',x===b));if(vid.paused)vid.play().catch(()=>{})}
       break}
   }
 });
@@ -548,6 +571,6 @@ async function recevoirReponse(o){
   const E=S.eleves.find(e=>nrm(e.nom)===nrm(o.n));
   if(!E)throw new Error('Ce QR concerne '+o.n+' : ouvre le carnet de son groupe.');
   maj(E.id,o.k,y=>{if(o.x==='d')y.deb={t:o.p*1000};else{y.p={t:o.p*1000};if(!y.e)y.e={t:o.p*1000,par:'professeur'}}});
-  setTimeout(()=>{fermer();toast(o.x==='d'?'Niveau '+o.k[1]+' ouvert ✔':'Validé P ✔ · '+court(E.nom)+' · '+o.k);rendre()},300);
+  setTimeout(()=>{fermer();toast(o.x==='d'?'Niveau '+o.k[1]+' ouvert ✔':'Validé P ✔ · '+court(E.nom)+' · '+o.k);rendre();if(o.x!=='d')tampon(o.k,E.nom)},300);
   return o.x==='d'?'Niveau ouvert.':'Validé P ✔';
 }

@@ -170,13 +170,52 @@ ol.ench .n{font:800 24px/1 var(--d);min-width:28px;text-align:center}ol.ench .nm
 .quiz-q .coche input{accent-color:var(--act)}
 .ecoute{min-width:44px;min-height:40px;border-radius:10px;border:1.5px solid var(--trait);background:var(--craie);font-size:20px;vertical-align:middle;margin-left:6px}
 @media print{nav.onglets,.barre button,.retour{display:none}}
+
+/* ===== Design « PowerPoint » : noir, couleurs d'ateliers, thermomètre A→F ===== */
+body{background:linear-gradient(#fff,#eceef1 60%,#e3e6ea) fixed}
+.barre{background:#111;color:#fff}.barre .app{color:#fff}.barre .app small{color:#cbd5e1}.barre .bt.mini{background:#222;color:#fff;border-color:#555}
+.trace{height:6px;background:linear-gradient(90deg,#92d050,#ffff00,#00b0f0,#7030a0,#ffc000,#ff6600)}
+.gnum{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--g);color:#fff;font:900 22px var(--t);border:3px solid #fff;margin-right:6px;flex:none}
+nav.onglets{background:#111;border-top:0}nav.onglets button{color:#9ca3af}nav.onglets button.ici{color:#ffc000;box-shadow:inset 0 4px 0 #ffc000}
+.leg{margin:8px 0 4px;font-weight:600;color:#374151;font-size:max(15px,var(--fs-min,15px))}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.objectif.vide{display:none}
+.prochain{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:4px solid var(--c);border-radius:16px;padding:8px 12px;margin:8px 0;font:inherit;color:#111;box-shadow:0 2px 0 #0002}
+.prochain img{width:58px;height:58px;object-fit:contain;border:2px solid #111;border-radius:10px;background:#fff;flex:none}
+.prochain b{display:block;font-size:18px}.prochain small{display:block;color:#374151;font-size:15px}
+.prochain em{margin-left:auto;font-style:normal;background:#111;color:#fff;border-radius:12px;padding:10px 12px;font-weight:800;white-space:nowrap}
+.ats{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0}
+@media (min-width:700px){.ats{grid-template-columns:1fr 1fr}}
+.atb{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;min-height:76px;max-height:100px;background:#111;color:#fff;border:5px solid var(--c);border-radius:16px;padding:8px 14px;font:800 21px/1.1 var(--t);text-align:left;box-shadow:0 3px 0 #0003}
+.atb.opt{border-style:dashed}.atb:active{transform:translateY(2px)}
+.jauge{display:flex;gap:4px}.jauge i{width:30px;height:22px;border-radius:6px;background:#3a3a3a;color:#8b8b8b;font:900 13px/22px var(--t);text-align:center;font-style:normal}
+.jauge i.p{background:var(--n);color:#111}.jauge i.e{background:repeating-linear-gradient(135deg,var(--n) 0 5px,#3a3a3a 5px 9px);color:#fff;text-shadow:0 0 3px #000}
+.secu{display:block;width:100%;margin:12px 0;background:#fff;border:3px solid #dc2626;color:#b91c1c;border-radius:14px;min-height:52px;font:800 18px var(--t)}
+.ban{display:block;width:fit-content;margin:6px auto 4px;background:#111;color:#fff;border:5px solid var(--c);border-radius:14px;padding:8px 20px;font:800 26px/1.1 var(--d);font-stretch:74%;text-transform:uppercase;text-align:center}
+.thermo{border-radius:16px;overflow:hidden;box-shadow:0 3px 10px #0002;margin:8px 0}
+.tniv{display:grid;grid-template-columns:56px 1fr 66px;align-items:center;gap:6px;width:100%;min-height:88px;background:var(--n);border:0;border-bottom:2px solid #fff6;padding:6px 10px 6px 0;color:#111;text-align:left;font:inherit}
+.tniv .TL{font:900 42px var(--t);text-align:center}.tniv b{display:block;font-size:19px;line-height:1.15}.tniv small{display:block;font-size:14px;font-weight:600;opacity:.85;line-height:1.2}
+.tniv img{width:62px;height:62px;object-fit:contain;background:#fff;border:2px solid #111;border-radius:10px}
+.tniv .etq{display:inline-block;margin-top:4px;background:#fff;border:2px solid #111;border-radius:99px;padding:1px 10px;font-weight:800;font-size:14px}
+.tniv .cad{font-size:26px;text-align:center}.tniv.verrou{filter:saturate(.55) brightness(.95)}
+.ttl{display:block;width:fit-content;max-width:100%;margin:6px auto 10px;background:#fff;border:5px solid var(--c);border-radius:14px;padding:6px 16px;text-align:center;font:800 21px/1.2 var(--t)}.ttl small{display:block;font-size:17px;font-weight:700}
+.ttl .L{vertical-align:1px}
+.install h4{color:#2f6fd6;text-transform:none;letter-spacing:0;font-size:21px}.install .bt.act{background:#111;border:3px solid #16a34a}.barre .app{font:800 21px/1.1 var(--d);font-stretch:74%;letter-spacing:.01em;white-space:nowrap}h4{color:var(--repere)}
+.carte h4:first-child{margin-top:0}
+.h-cons{color:#d97706!important}
+.tampon-voile{position:fixed;inset:0;z-index:80;background:#0009;display:grid;place-items:center;overflow:hidden}
+.tampg{display:block;transform:rotate(-8deg) scale(.4);animation:tamp .35s cubic-bezier(.2,1.6,.4,1) forwards;border:8px solid #111;border-radius:24px;padding:22px 30px;text-align:center;color:#111;box-shadow:0 12px 40px #000a}
+.tampg b{display:block;font:900 32px var(--t)}.tampg span{display:block;font:900 110px/1 var(--t)}.tampg small{display:block;font:700 16px var(--t);margin-top:6px}
+@keyframes tamp{to{transform:rotate(-8deg) scale(1)}}
+.confettis i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:tombe 1.8s linear forwards}
+@keyframes tombe{to{top:110%}}
+@media (prefers-reduced-motion:reduce){.tampg{animation:none;transform:rotate(-8deg)}.confettis{display:none}}
 </style>
 <link rel="stylesheet" href="eps-charte-v1.css">
 <style>/* Charte v1 : couleur de la gym (à valider) */ :root{--act:#0f766e;--act-fonce:#0b4f4a;--act-pale:#dff2ef}</style>
 <style>@media print{:root{--fs-min:0px}}</style>
 </head>
 <body>
-<header class="barre"><img src="icon-192.png" alt=""><div class="app">Gymnastique · Élève<small id="sous">Lycée Georges Pompidou</small></div><button type="button" class="bt mini" onclick="EPSAide.ouvrir()" aria-label="Mode d’emploi" title="Mode d’emploi">?</button><span id="haut"></span></header>
+<header class="barre"><img src="icon-192.png" alt=""><div class="app">GYMNASTIQUE<small id="sous">Lycée Georges Pompidou</small></div><button type="button" class="bt mini" onclick="EPSAide.ouvrir()" aria-label="Mode d’emploi" title="Mode d’emploi">?</button><span id="haut"></span></header>
 <div class="trace"></div>
 <main id="app"></main>
 <nav class="onglets" id="onglets"></nav>

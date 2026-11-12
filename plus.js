@@ -241,7 +241,7 @@ document.addEventListener('click',ev=>{
     case 'quiz-ok':verifierQuiz();break;
     case 'lire':{const f=fiche(v);lire(f.t+'. '+f.cons.join('. ')+(f.mat.length?'. Matériel : '+f.mat.join(', '):''));break}
     case 'lirecrit':{const n=niveau(v);lire('Niveau '+n.n+', '+n.nom+'. Critères de réussite : '+n.crit.join('. '));break}
-    case 'grp':if(S){S.grp=+v;sauver();rendre()}break;
+    case 'grp':if(S){S.grp=+v;S.lt=String(v);sauver();rendre()}break;
   }
 });
 
