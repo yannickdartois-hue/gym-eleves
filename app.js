@@ -264,13 +264,21 @@ function video(v,id){
   return `<div class="video"><video controls playsinline preload="none" poster="media/${base}.jpg" src="media/${src}" data-vid="${base}"></video>${leg?`<div class="leg">${esc(leg)}</div>`:''}</div>
   <div class="ralenti" data-pour="${base}"><button type="button" class="ici" data-act="vitesse" data-v="1">Normal</button><button type="button" data-act="vitesse" data-v="0.5">Ralenti ×½</button><button type="button" data-act="vitesse" data-v="0.25">×¼</button><button type="button" data-act="boucle">🔁 En boucle</button></div>`;
 }
-function blocFiche(id,titre){
+/* Installation de l'atelier en premier ; repliée une fois « installé » (mémorisé pour la journée sur l'appareil) */
+const INST_K='gym-installe';
+function instLu(){try{const o=JSON.parse(localStorage.getItem(INST_K)||'{}');return o.j===new Date().toDateString()?o:{j:new Date().toDateString(),ids:[]}}catch(e){return {ids:[]}}}
+function instFait(id){return instLu().ids.includes(String(id))}
+function instMarquer(id,oui){const o=instLu();o.ids=o.ids.filter(x=>x!==String(id));if(oui)o.ids.push(String(id));try{localStorage.setItem(INST_K,JSON.stringify(o))}catch(e){}}
+function blocInstall(id,f){if(!f.mat.length&&!f.img.length)return '';const ok=instFait(id);
+  const corps=`${f.mat.length?`<div class="mat">${f.mat.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="Installation" loading="lazy" data-zoom>`).join('')}</div>`:''}`;
+  return ok?`<details class="install fait"><summary>🧰 Atelier installé ✓ <span class="small">· revoir l’installation</span></summary>${corps}<button class="bt mini" type="button" data-act="install" data-v="${id}" data-x="0">Ce n’est plus installé</button></details>`
+   :`<section class="install"><h4>🧰 Installation de l’atelier</h4>${corps}<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="install" data-v="${id}" data-x="1">✓ Atelier installé</button></div></section>`}
+function blocFiche(id,titre,sansInst){
   const f=fiche(id);if(!f)return '';
   return `${titre?`<h3>${esc(f.t)}</h3>`:''}
+  ${sansInst?'':blocInstall(id,f)}
   ${f.vid.map(v=>video(v,id)).join('')}
   ${f.cons.length?`<h4>Consignes</h4><ol class="cons">${f.cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:''}
-  ${f.mat.length?`<h4>Matériel</h4><div class="mat">${f.mat.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}
-  ${f.img.length?`<div class="imgs">${f.img.map(i=>`<img src="img/${i}" alt="" loading="lazy" data-zoom>`).join('')}</div>`:''}
   ${boutonsQ(id)}`;
 }
 /* Le « ? » du PowerPoint : sur chaque exercice, un lien vers l'exercice de remédiation plus facile */
@@ -290,10 +298,11 @@ function vNiveau(k){
   const a=atelier(k[0]),n=niveau(k);
   let h=`<h2><span class="L L${n.n}" style="vertical-align:4px">${n.n}</span> ${esc(n.nom)}</h2><p class="muted small" style="margin-top:-2px">Atelier ${a.n} · ${esc(a.nom)}</p>`;
   if(n.prof)h+=`<div class="alerte">⚠️ Seulement en présence du professeur, avec la parade en place.</div>`;
+  {const vus=new Set();n.f.forEach(id=>{const f=fiche(id);if(!f)return;const sig=f.mat.join('|')+'#'+f.img.join('|');if(vus.has(sig))return;vus.add(sig);h+=blocInstall(id,f)})}
   h+=`<div class="critbox"><b>Critères de réussite</b><ul>${n.crit.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${n.picto?`<img class="picto-grand" src="${n.picto}" alt="Pictogramme du niveau" data-zoom>`:''}</div>`;
   if(S&&S.eleves.length>1)h+=quiNiveau(k);
   h+=S&&S.eleves.length?blocValid(k):'';
-  if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom)}</div>`).join('');
+  if(n.f.length)h+=n.f.map(id=>`<div class="carte">${blocFiche(id,n.f.length>1||fiche(id).t!==n.nom,true)}</div>`).join('');
   if(+k[0]===6)h+=`<div class="carte">${blocTrampo()}</div>`;
   else if(!n.f.length)h+=`<p class="carte small muted">Pas de vidéo pour ce niveau : regardez le pictogramme et les critères.</p>`;
   if(n.r.length)h+=`<h4>Je n’y arrive pas encore ? Essaie d’abord :</h4><div class="remlist" data-lst="${n.r.join(',')}" data-at="${k[0]}">${n.r.map((id,i)=>carteRem(id,i)).join('')}</div>`;
@@ -432,6 +441,7 @@ document.addEventListener('click',async ev=>{
       <p class="small" style="margin-top:12px"><b>Lettre du groupe</b> (celle que donne le professeur pour la rotation des ateliers)</p>${choixLettre('',C[0]||'')}
       <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt act" type="button" data-act="nvsuite">Choisir notre code</button></div>`);break}
     case 'rattacher':{const c=$('#rat-cl')&&$('#rat-cl').value;if(!c)return;S.classe=c;S.cfg=JSON.parse(JSON.stringify(ROOT.classes[c]));if(ROOT.groupes[ACTIF])ROOT.groupes[ACTIF].classe=c;sauver();ecrireRoot();toast('Groupe rangé dans la classe '+c+'.');rendre();break}
+    case 'install':{instMarquer(v,b.dataset.x==='1');const y=window.scrollY;rendre();window.scrollTo(0,y);break}
     case 'lettre':{const box=b.closest('.lettres');box.querySelectorAll('button').forEach(x=>x.classList.toggle('ici',x===b));if(S&&box.dataset.groupe){S.lt=v;sauver();toast('Groupe '+v+'.');rendre()}break}
     case 'nvsuite':{const s=$('#nv-cl'),cl=s?s.value:'';if(!cl&&Object.keys(ROOT.classes).length&&!confirm('Sans classe, votre groupe ne sera pas rangé dans votre classe chez le professeur. Continuer quand même ?'))return;const lt=(document.querySelector('.lettres .ici')||{}).dataset;const L0=lt?lt.v:'';demanderCode('Code secret du groupe','Choisissez 4 chiffres et retenez-les : ils seront demandés à chaque cours. Un autre groupe ne pourra pas ouvrir votre carnet.',c=>nouveauGroupe(cl,c,L0),true);break}
     case 'codeok':validerCode();break;
