@@ -126,6 +126,15 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   verif('Prof : élève de la classe « ? » rattaché au nom de la liste, validations gardées',gr.mv,JSON.stringify(gr));
   verif('Prof : groupe choisi à la main affiché',gr.man);
   verif('Prof : une fiche plus récente de la tablette reprend la main',gr.fiche);
+  /* ---------- 8. Apprendre : volet du groupe ---------- */
+  const AP=await page('/gym-eleves/?demo');
+  const ap=await AP.evaluate(()=>{try{fermer()}catch(e){}NAV=[];S.tab='apprendre';S.cur=0;rendre();const r={};r.lignes=document.querySelectorAll('.vgr tbody tr').length;r.n=S.eleves.length;
+    document.querySelector('.vgr tbody tr[data-v="1"]').click();r.cur=S.cur;r.tab=S.tab;
+    r.abr=document.querySelector('.etat-at .qui-at').textContent;NAV=[{v:'atelier',a:1}];rendre();r.chips=document.querySelectorAll('.qui-niv span').length;return r});
+  verif('Apprendre : une ligne par élève dans « Où en est le groupe »',ap.lignes===ap.n&&ap.n>1,JSON.stringify(ap));
+  verif('Apprendre : toucher un nom le rend actif sans quitter Apprendre',ap.cur===1&&ap.tab==='apprendre');
+  verif('Apprendre : abréviation devant les pastilles des ateliers',ap.abr.length>=2);
+  verif('Apprendre : page atelier, élèves ayant validé chaque niveau',ap.chips>0);
   verif('Aucune erreur JavaScript',errs.length===0,errs.join(' | '));
   await b.close();
   console.log('\n'+ok+' réussis, '+ko+' échoués');

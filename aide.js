@@ -53,6 +53,8 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',partageNote:'Juste après l’in
 <li>Sans Wi-Fi, l’appli fonctionne. Pour voir les vidéos au gymnase sans Wi-Fi : Accueil → <b>Réglages : vidéos hors ligne</b> → <span class="bouton">⬇ Garder</span> sur les ateliers que tu travailles (le poids est affiché), avec le Wi-Fi. <span class="bouton">Effacer les vidéos du téléphone</span> libère la place.</li>
 <li><span class="bouton">Essayer l’appli (démo)</span> sur l’accueil : un groupe fictif pour tout essayer, rien n’est enregistré (le bouton « Démo : simuler le prof » remplace l’iPad du professeur).</li>
 </ul>`},
+{t:'Apprendre en groupe',html:`<ul><li>Volet <b>👥 Où en est le groupe</b> : la meilleure lettre de chacun dans chaque atelier (pleine = validée par le professeur, contour = validée par un camarade). Touchez un nom pour le choisir, sans quitter Apprendre. Le triangle replie le volet.</li>
+<li>Dans un atelier, sous chaque niveau : les prénoms (abrégés) de ceux qui l’ont validé.</li></ul>`},
 {t:'Mon personnage',html:`<ul><li>Sur <b>Ma fiche</b>, chaque élève a son personnage gymnaste. Bouton <span class="bouton">Changer de personnage</span> pour en choisir un autre.</li>
 <li><b>Un nouveau personnage tous les 3 niveaux validés</b> (par un camarade ou par le professeur). 12 personnages en tout.</li>
 <li><b>Ton personnage grandit</b> avec ton meilleur niveau validé par le professeur : A–B petit, C–D plus grand avec sa figure (ATR, roue, saut), E–F grand et habile (salto, vrille, saut écart).</li>
