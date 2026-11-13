@@ -1,10 +1,10 @@
 /* Hors ligne : l'appli est gardée sur la tablette après la 1re ouverture.
    À chaque mise en ligne : augmenter VERSION (gym-eleves-vN). Les vidéos ont leur propre cache
    (gym-eleves-media-v1) : il n'est pas effacé par une mise à jour, inutile de les retélécharger. */
-const VERSION='gym-eleves-v1';
+const VERSION='gym-eleves-v1.0';
 const MEDIA='gym-eleves-media-v1';
 // Toutes les applis partagent le même stockage (même adresse github.io) : on n'efface QUE les anciennes versions de CETTE appli.
-const MES_CACHES=/^gym-eleves-(?:media-)?v\d+$/;
+const MES_CACHES=/^gym-eleves-(?:media-)?v\d+(?:\.\d+)?$/;
 const sous3s=p=>{p.catch(()=>{});return Promise.race([p,new Promise((_,non)=>setTimeout(()=>non(new Error('réseau lent')),3000))])};
 const FICHIERS=['./','eps-rappel.js','index.html','app.js','eps-code.js','eps-maj.js','eps-avatars.js','img/avatars/stop.webp','img/avatars/bravo.webp','img/avatars/envoyer.webp','aide.js','eps-aide.js','demo.js','plus.js','transfert.js','oubli.js','avatars-gym.js','avatar-eleve.js','groupe-apprendre.js','donnees.js','media-tailles.js','qrcode.js','jsqr.js','scan.js','eps-charte-v1.css','manifest.webmanifest',
   'icon-32.png','icon-180.png','icon-192.png','icon-512.png','polices/archivo.woff2','polices/atkinson-400.woff2','polices/atkinson-700.woff2',
