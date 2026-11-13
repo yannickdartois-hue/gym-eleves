@@ -177,7 +177,8 @@ function vBienvenue(){const inst=installee();
    <div id="bandhl">${bandeauHLtxt()}</div></section>
   ${(C=>`<section class="carte etape ${C.length?'faite':''}"><h3>③ Scanner le QR de la classe ${C.length?'✓':''}</h3>${C.length?`<p class="small">Classe reçue : <b>${C.map(esc).join(', ')}</b>.</p>`:'<p class="small">Le professeur l’affiche au tableau ou sur l’affiche du premier cours.</p>'}<div class="rangee"><button class="bt ${C.length?'':'act'}" type="button" data-act="scanclasse">📷 ${C.length?'Scanner une autre classe':'Scanner le QR de la classe'}</button></div></section>`)(Object.keys(ROOT.classes))}
   <section class="carte etape"><h3>④ Créer notre groupe</h3><p class="small">Numéro du groupe, code secret à 4 chiffres, puis vous cochez vos noms dans la liste.</p><div class="rangee"><button class="bt ${Object.keys(ROOT.classes).length?'act':''}" type="button" data-act="nouveau">＋ Créer notre groupe</button></div></section>
-  <div class="rangee" style="margin-top:14px"><button class="bt" type="button" data-act="bienvenueok">Passer : nous avons déjà un groupe</button></div>`}
+  <div class="rangee" style="margin-top:14px"><button class="bt" type="button" data-act="bienvenueok">Passer : nous avons déjà un groupe</button></div>
+  ${carteDemo()}`}
 function vAccueil(){
   const G=Object.entries(ROOT.groupes).sort((a,b)=>(b[1].vu||0)-(a[1].vu||0));
   if(!bienvenueVue())return vBienvenue();

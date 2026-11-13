@@ -28,6 +28,7 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   /* ---------- 1. Appli élève : accueil, apprendre, démo ---------- */
   const B0=await page('/gym-eleves/',{premiere:true});
   verif('Élève : 1re ouverture = écran de bienvenue',await B0.evaluate(()=>!localStorage.getItem('gym-bienvenue')&&document.querySelector('#app').textContent.length>50));
+  verif('Élève : bouton démo sur l’écran de bienvenue',!!(await B0.$('[data-act="demo"]')));
   const E0=await page('/gym-eleves/');
   verif('Élève : l’accueil s’affiche',(await E0.textContent('#app')).includes('Nouveau groupe'));
   verif('Élève : pas de défilement horizontal sur téléphone',await E0.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
