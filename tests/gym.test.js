@@ -112,6 +112,20 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
     ROOT.rotation={c:S.classe,d:Date.now()-1000,m:8,g:6,o:[1,2,3,4,5,6]};const ancien=rotationActuelle();ROOT.rotation=null;S.grp=S0;return {r:r.join(','),ancien:ancien.at+'/'+ancien.nb}});
   verif('Rotation : cours A 1→2→3 puis fin, cours B 4→5→6 puis fin',rot.r==='1,2,3,fin,4,5,6,fin',rot.r);
   verif('Rotation : un ancien QR (sans tours ni décalage) marche comme avant',rot.ancien==='1/6',rot.ancien);
+  /* ---------- 7. Prof : groupes reconstitués, groupe et classe corrigés à la main ---------- */
+  const gr=await P.evaluate(()=>{const t=Date.now()-3*864e5;DB.classes['1Z1']={eleves:['ALPHA Ana','BETA Ben','GAMMA Gus','DELTA Dan']};
+    const mk=(c,n,ts)=>{DB.el[cle(c,n)]={nom:n,classe:c,v:{'1A':{e:ts,par:'x'}},maj:ts,recu:ts}};
+    mk('1Z1','ALPHA Ana',t);mk('1Z1','BETA Ben',t);mk('?','Gus',t+60000);mk('?','Dan',t+60000);
+    DB.classe='1Z1';DB.vueGr=true;DB.eleve=null;DB.vue='tableau';rendre();const r={};r.rec=/Reconstitué 1/.test($('#app').innerText);
+    DB.classe='?';DB.eleve=cle('?','Gus');rendre();r.prop=$('#mv-nom').value;$('#mv-cl').value='1Z1';$('#mv-cl').dispatchEvent(new Event('change',{bubbles:true}));
+    $('#mv-nom').value='GAMMA Gus';$('[data-act="mvcl"]').click();r.mv=!!DB.el[cle('1Z1','GAMMA Gus')]&&!DB.el[cle('?','Gus')]&&!!DB.el[cle('1Z1','GAMMA Gus')].v['1A'];
+    const s=$('select[data-grman]');s.value='4';s.dispatchEvent(new Event('change',{bubbles:true}));DB.eleve=null;DB.classe='1Z1';rendre();r.man=/Groupe 4\s*Gus/.test($('#app').innerText);
+    importerObjet({a:'GYM',v:1,t:'G',c:'1Z1',g:'zz',lt:'2',ts:Math.round(Date.now()/1000)+5,el:[{n:'GAMMA Gus',s:''},{n:'ALPHA Ana',s:''}]},'QR');rendre();r.fiche=/Groupe 2\s*Ana · Gus|Groupe 2\s*Gus · Ana/.test($('#app').innerText);
+    return r});
+  verif('Prof : groupes reconstitués d’après les anciennes fiches',gr.rec);
+  verif('Prof : élève de la classe « ? » rattaché au nom de la liste, validations gardées',gr.mv,JSON.stringify(gr));
+  verif('Prof : groupe choisi à la main affiché',gr.man);
+  verif('Prof : une fiche plus récente de la tablette reprend la main',gr.fiche);
   verif('Aucune erreur JavaScript',errs.length===0,errs.join(' | '));
   await b.close();
   console.log('\n'+ok+' réussis, '+ko+' échoués');
