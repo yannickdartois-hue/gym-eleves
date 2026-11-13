@@ -11,7 +11,8 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',partageNote:'Juste après l’in
 <li><b>Avant tout, avec le Wi-Fi</b> : installe l’appli sur l’écran d’accueil, ouvre-la depuis son icône et touche <span class="bouton">⬇ Télécharger les vidéos</span> (environ 90 Mo). Sans ça, certaines vidéos ne se chargeront pas au gymnase. Tant qu’il en manque, un bandeau orange le rappelle sur l’accueil.</li>
 <li><span class="bouton">📷 QR de la classe (prof)</span> : vise le QR que le professeur affiche. La liste de la classe arrive sur la tablette.</li>
 <li><span class="bouton">＋ Nouveau groupe</span> : choisis ta classe, puis un <b>code secret à 4 chiffres</b> (tapé deux fois). Retenez-le : il ouvre votre carnet à chaque cours. Un autre groupe ne peut pas le lire.</li>
-<li>Onglet <b>Groupe</b> : cochez vos noms dans la liste de la classe (2 à 8 élèves). Sans liste, <span class="bouton">Écrire prénom et nom</span> : prénom ET nom de famille.</li>
+<li>Onglet <b>Groupe</b> : cochez vos noms dans la liste de la classe (2 à 8 élèves). Un nom manque ? Le professeur met la liste à jour, puis rescannez le QR de la classe. Un nom écrit autrement que dans la liste est signalé sur « Ma fiche » : choisissez le bon, les validations sont gardées.</li>
+<li><b>Ne rien perdre</b> : installez l’appli sur l’écran d’accueil, et envoyez la fiche au professeur à chaque fin de cours (un rappel s’affiche si des validations attendent depuis 15 min).</li>
 </ol><p class="astuce">Aux cours suivants : touche votre groupe sur l’accueil, puis le code. Le carnet se verrouille seul après 20 minutes sans toucher l’écran sur une tablette partagée, après 2 h sur un téléphone qui n’a que votre carnet.</p>`},
 {t:'Ma fiche : E et P',html:`<ul>
 <li>En haut, touche le <b>prénom de l’élève</b> qui travaille : chacun a sa fiche.</li>

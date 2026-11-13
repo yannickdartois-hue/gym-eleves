@@ -135,6 +135,24 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   verif('Apprendre : toucher un nom le rend actif sans quitter Apprendre',ap.cur===1&&ap.tab==='apprendre');
   verif('Apprendre : abréviation devant les pastilles des ateliers',ap.abr.length>=2);
   verif('Apprendre : page atelier, élèves ayant validé chaque niveau',ap.chips>0);
+  /* ---------- 9. v1.1 : identités sûres, validations jamais perdues ---------- */
+  const N=await page('/gym-eleves/');
+  const fi=await N.evaluate(async q=>{const r={};document.body.insertAdjacentHTML('beforeend','<button id="nv" data-act="nouveau">n</button>');document.getElementById('nv').click();
+    r.sansClasse=!document.querySelector('[data-act="nvsuite"]');fermer();
+    recevoirClasse(await GQR.decoder(q));document.getElementById('nv').click();r.pasAutre=![...document.querySelectorAll('#nv-cl option')].some(o=>o.value==='');fermer();
+    await nouveauGroupe('1T9','4321');S.eleves=[{id:'a',nom:'MARTIN Hugo'},{id:'z',nom:'Lea'}];maj('z','2B',x=>{x.e={t:Date.now(),par:'MARTIN Hugo'}});await enregistrer();
+    S.tab='groupe';rendre();r.pasSaisie=!document.querySelector('#app [data-act="ajoutnom"]');
+    S.tab='fiche';rendre();r.inst=!!document.querySelector('.fia-inst');r.bandeau=!!document.querySelector('.fia-noms');
+    const sel=document.querySelector('[data-fia-nom="1"]');r.propose=sel.value;document.querySelector('[data-act="fia-renom"][data-v="1"]').click();
+    r.renom=S.eleves[1].nom==='DURAND Léa'&&!!S.val.z['2B']&&!document.querySelector('.fia-noms');
+    r.pasRappel=!document.querySelector('.fia-envoi');S.nonEnv0=Date.now()-16*60000;rendre();r.rappel=!!document.querySelector('.fia-envoi');
+    document.querySelector('#haut [data-act="verrou"],[data-act="verrou"]').click();r.verrou=/pas encore envoyées/.test(($('#modal')||{}).innerText||'');return r},qrC);
+  verif('v1.1 : pas de groupe sans le QR de la classe',fi.sansClasse&&fi.pasAutre,JSON.stringify(fi));
+  verif('v1.1 : pas de saisie libre de nom quand la liste existe',fi.pasSaisie);
+  verif('v1.1 : nom hors liste signalé, corrigé, validations gardées',fi.bandeau&&fi.propose==='DURAND Léa'&&fi.renom,JSON.stringify(fi));
+  verif('v1.1 : bandeau « appli pas installée »',fi.inst);
+  verif('v1.1 : rappel d’envoi après 15 min seulement',fi.pasRappel&&fi.rappel);
+  verif('v1.1 : fermer le carnet avec des validations non envoyées demande confirmation',fi.verrou);
   verif('Aucune erreur JavaScript',errs.length===0,errs.join(' | '));
   await b.close();
   console.log('\n'+ok+' réussis, '+ko+' échoués');
