@@ -226,7 +226,8 @@ function bandeauRotation(){
   };
   // 🔊 à côté des consignes et des critères
   const _blocFiche=blocFiche;
-  blocFiche=function(id,titre){const h=_blocFiche(id,titre);return audioDispo()&&fiche(id).cons.length?h.replace('<h4>Consignes</h4>',`<h4>Consignes <button type="button" class="ecoute" data-act="lire" data-v="${id}" aria-label="Écouter les consignes">🔊</button></h4>`):h};
+  blocFiche=function(id,titre,sansInst){const h=_blocFiche(id,titre,sansInst); // sansInst transmis : sinon le matériel s’affichait deux fois sur la page d’un niveau
+  return audioDispo()&&fiche(id).cons.length?h.replace('<h4>Consignes</h4>',`<h4>Consignes <button type="button" class="ecoute" data-act="lire" data-v="${id}" aria-label="Écouter les consignes">🔊</button></h4>`):h};
   const _vNiveau2=vNiveau;
   vNiveau=function(k){const h=_vNiveau2(k);return audioDispo()?h.replace('<b>Critères de réussite</b>',`<b>Critères de réussite</b> <button type="button" class="ecoute" data-act="lirecrit" data-v="${k}" aria-label="Écouter les critères">🔊</button>`):h};
   const _objetEnvoi2=objetEnvoi;

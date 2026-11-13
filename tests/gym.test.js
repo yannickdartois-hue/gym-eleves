@@ -41,6 +41,7 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   verif('Élève : la démo ouvre un groupe',await D.evaluate(()=>!!S&&DEMO&&S.eleves.length>1));
   const kE=await D.evaluate(()=>{for(const id of Object.keys(S.val))for(const [k,v] of Object.entries(S.val[id]))if(v.e&&!v.p){S.cur=S.eleves.findIndex(e=>e.id===id);aller({v:'niveau',k});return k}});
   await D.waitForTimeout(300);
+  verif('Niveau : le matériel ne s’affiche qu’en haut de la page (pas répété dans les fiches)',await D.evaluate(()=>GYM.ateliers.every(a=>a.niv.every(n=>{const d=document.createElement('div');d.innerHTML=vNiveau(a.n+n.n);return !d.querySelector('.carte .install')}))));
   verif('Démo : page d’un niveau validé E avec « Montrer au professeur »',!!(await D.$('[data-act="montrer"]')),kE);
   await D.click('[data-act="montrer"]');await D.waitForTimeout(300);
   verif('Démo : le QR de demande s’affiche',!!(await D.$('#modal svg, #modal img, #modal canvas')));
