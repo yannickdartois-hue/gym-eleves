@@ -1,7 +1,7 @@
 # Tests automatiques (gym)
 
 `gym.test.js` teste ensemble l'appli élève et l'outil prof : accueil, vidéos hors ligne par atelier, démo,
-circuit complet (QR de classe → fiche du groupe → demande « Montrer au professeur » → P signé → réponse
+personnages des élèves (fiche, envoi, outil prof), circuit complet (QR de classe → fiche du groupe → demande « Montrer au professeur » → P signé → réponse
 sur le téléphone), refus d'un P falsifié ou envoyé par un téléphone, note (inapte partiel, dispensé),
 code du cours sur un niveau ⚠️, absence d'erreur JavaScript.
 

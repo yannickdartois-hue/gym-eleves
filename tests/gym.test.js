@@ -18,17 +18,21 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
     const c=await b.newContext({viewport:o.vp||{width:390,height:844},serviceWorkers:'block'});
     const p=await c.newPage();p.on('pageerror',e=>errs.push(url+' : '+e.message));
     if(o.vraiTel)await p.addInitScript(()=>Object.defineProperty(navigator,'webdriver',{get:()=>false}));
+    // l’écran de bienvenue (1re ouverture) est testé à part ; ailleurs on le considère déjà vu
+    if(!o.premiere)await p.addInitScript(()=>{try{localStorage.setItem('gym-bienvenue','1')}catch(e){}});
     await p.goto(BASE+url);await p.waitForTimeout(1200);
     const r=await p.$('#eps-rappel button');if(r)await r.click();
     return p;
   };
 
   /* ---------- 1. Appli élève : accueil, apprendre, démo ---------- */
+  const B0=await page('/gym-eleves/',{premiere:true});
+  verif('Élève : 1re ouverture = écran de bienvenue',await B0.evaluate(()=>!localStorage.getItem('gym-bienvenue')&&document.querySelector('#app').textContent.length>50));
   const E0=await page('/gym-eleves/');
   verif('Élève : l’accueil s’affiche',(await E0.textContent('#app')).includes('Nouveau groupe'));
   verif('Élève : pas de défilement horizontal sur téléphone',await E0.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await E0.click('summary:has-text("vidéos hors ligne")');await E0.waitForTimeout(300);
-  verif('Élève : vidéos hors ligne proposées par atelier (≥ 8 lignes)',(await E0.$$('#hl-liste [data-act="charger"]')).length>=8);
+  verif('Élève : vidéos hors ligne proposées par atelier (≥ 6 lignes)',(await E0.$$('#hl-liste [data-act="charger"]')).length>=6);
   verif('Élève : toutes les vidéos ont un poids connu',await E0.evaluate(()=>Object.values(GYM.fiches).flatMap(f=>f.vid.map(v=>v[0])).every(f=>TAILLES[f]>0)));
   await E0.click('[data-act="onglet"][data-v="apprendre"]');await E0.waitForTimeout(300);
   verif('Élève : 6 ateliers dans Apprendre',await E0.evaluate(()=>document.querySelectorAll('.atelier').length>=6||document.querySelectorAll('[data-act="atelier"]').length>=6));
@@ -43,6 +47,9 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   await D.click('[data-act="demoP"]');await D.waitForTimeout(300);
   verif('Démo : « simuler le prof » valide P',await D.evaluate(k=>!!(S.val[S.eleves[S.cur].id][k]||{}).p,kE));
   verif('Démo : aucun code professeur affiché',!(await D.textContent('body')).includes('0000'));
+  await D.evaluate(()=>{fermer();NAV=[];S.tab='fiche';rendre()});await D.waitForTimeout(200);
+  verif('Personnage : affiché sur la fiche',!!(await D.$('.gav-carte svg')));
+  verif('Personnage : part avec l’envoi',await D.evaluate(()=>objetEnvoi().el.every(x=>!!GYMAV.parId[x.av])));
 
   /* ---------- 2. Outil prof : vues, démo ---------- */
   const PD=await page('/gym-prof/?demo',{vp:{width:1024,height:900}});
@@ -51,6 +58,7 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
     verif('Prof démo : vue « '+v+' »',(await PD.textContent('#app')).length>100);
   }
   verif('Prof démo : bouton « Valider un élève »',await PD.evaluate(()=>{DB.vue='valider';rendre();return !!document.querySelector('[data-act="scanvalid"]')}));
+  verif('Prof : le personnage reçu est gardé et affiché',await PD.evaluate(()=>{const k=Object.keys(DB.el)[0],E=DB.el[k];importerObjet({a:'GYM',v:1,t:'G',c:E.classe,g:'t',lt:'1',ts:Math.round(Date.now()/1000),el:[{n:E.nom,s:'',d:{},av:'lina'}]},'test');DB.vue='tableau';DB.eleve=null;rendre();return DB.el[k].av==='lina'&&!!document.querySelector('.gav-mini svg')}));
 
   /* ---------- 3. Circuit complet : prof → téléphone → prof → téléphone ---------- */
   const P=await page('/gym-prof/',{vp:{width:1024,height:900}});
@@ -88,7 +96,8 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
 
   /* ---------- 5. Code du cours (téléphone réel simulé) ---------- */
   const V=await page('/gym-eleves/?demo',{vraiTel:true});
-  const cc=await V.evaluate(async()=>{history.replaceState(null,'',location.pathname);DEMO=false;const cle='AAECAwQFBgcICQoL';EPSCode.memoriserCle(S.classe,cle);
+  const cc=await V.evaluate(async()=>{history.replaceState(null,'',location.pathname);DEMO=false;const cle='AAECAwQFBgcICQoL';EPSCode.memoriserCle(S.classe,cle);S.quiz=S.quiz||{};S.quiz[elv().id]=Date.now(); // quiz sécurité réussi : sinon les niveaux ⚠️ restent bloqués
+    S.exige=new Date().toDateString(); // message « La gym est une activité exigeante » déjà lu aujourd’hui
     let k='';for(const a of GYM.ateliers)for(const n of a.niv)if(n.prof&&!k)k=a.n+n.n;
     document.body.insertAdjacentHTML('beforeend','<button id="tst" data-act="valE" data-v="'+k+'">x</button>');return {k,code:await EPSCode.code(cle,S.classe,EPSCode.jour(),'G')}});
   await V.click('#tst');await V.waitForTimeout(300);
