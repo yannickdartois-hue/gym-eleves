@@ -52,7 +52,12 @@ window.EPS_AIDE={appli:'Gymnastique · Élève',partageNote:'Juste après l’in
 <li>Un bandeau jaune « Nouvelle version » : touche <span class="bouton">Mettre à jour</span> (le carnet est enregistré avant).</li>
 <li>Sans Wi-Fi, l’appli fonctionne. Pour voir les vidéos au gymnase sans Wi-Fi : Accueil → <b>Réglages : vidéos hors ligne</b> → <span class="bouton">⬇ Garder</span> sur les ateliers que tu travailles (le poids est affiché), avec le Wi-Fi. <span class="bouton">Effacer les vidéos du téléphone</span> libère la place.</li>
 <li><span class="bouton">Essayer l’appli (démo)</span> sur l’accueil : un groupe fictif pour tout essayer, rien n’est enregistré (le bouton « Démo : simuler le prof » remplace l’iPad du professeur).</li>
-</ul>`}
+</ul>`},
+{t:'Mon personnage',html:`<ul><li>Sur <b>Ma fiche</b>, chaque élève a son personnage gymnaste. Bouton <span class="bouton">Changer de personnage</span> pour en choisir un autre.</li>
+<li><b>Un nouveau personnage tous les 3 niveaux validés</b> (par un camarade ou par le professeur). 12 personnages en tout.</li>
+<li><b>Ton personnage grandit</b> avec ton meilleur niveau validé par le professeur : A–B petit, C–D plus grand avec sa figure (ATR, roue, saut), E–F grand et habile (salto, vrille, saut écart).</li>
+<li>Ton choix part avec l’envoi : le professeur voit ton personnage.</li></ul>`}
+
 ]},
 {id:'prof',titre:'Professeur',chapitres:[
 {t:'Avant le premier cours',html:`<ol>
