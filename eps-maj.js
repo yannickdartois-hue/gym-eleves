@@ -14,36 +14,22 @@
    data-bandeau="non" : il ne fait alors que les vérifications.
    Il pose aussi le lien « Confidentialité » en bas de page (voir plus bas).
    ===================================================================== */
-/* Bord du haut net sur iPad (21/11/2026).
-   Depuis iPadOS 26, une appli ouverte depuis l'écran d'accueil reçoit un voile flou en haut de l'écran,
-   SAUF si un élément fixe et opaque, qui reçoit les touchers, couvre le bord supérieur.
-   On pose donc une fine bande fixe de la couleur du haut de la page (relue régulièrement : elle suit l'appli). */
+/* Haut d'écran net sur iPad, appli ouverte depuis l'écran d'accueil (21/11/2026).
+   iPadOS 26 pose sa barre de fenêtre floutée par-dessus le haut de la page quand la page demande à occuper
+   tout l'écran (viewport-fit=cover). En mode « écran d'accueil » seulement (Safari n'est pas touché),
+   on retire cette demande : la page commence alors sous la barre, et le fond du haut prend la couleur de la page. */
 (function(){
   var sc=document.currentScript;if(sc&&sc.getAttribute('data-bord')==='non')return;
-  function couleur(el){
-    while(el&&el.nodeType===1){var c=getComputedStyle(el).backgroundColor||'',v=null,m;
-      if((m=c.match(/rgba?\(([^)]+)\)/)))v=m[1].split(',').map(parseFloat);
-      else if((m=c.match(/color\(srgb ([^)]+)\)/))){var t=m[1].replace('/',' ').split(/\s+/).filter(Boolean).map(parseFloat);v=[t[0]*255,t[1]*255,t[2]*255,t.length>3?t[3]:1];}
-      if(v&&(v.length<4||v[3]>0.6))return 'rgb('+Math.round(v[0])+','+Math.round(v[1])+','+Math.round(v[2])+')';
-      el=el.parentElement;}
-    return null;
+  var seul=(window.navigator.standalone===true)||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
+  if(!seul)return;
+  var m=document.querySelector('meta[name="viewport"]');
+  if(m&&/viewport-fit\s*=\s*cover/.test(m.content))m.content=m.content.replace(/,?\s*viewport-fit\s*=\s*cover/,'');
+  function fond(){
+    var h=document.documentElement,b=document.body;if(!b)return;
+    var c=getComputedStyle(h).backgroundColor;
+    if(!c||c==='transparent'||/rgba\(0, 0, 0, 0\)/.test(c)){var cb=getComputedStyle(b).backgroundColor;h.style.backgroundColor=(cb&&!/rgba\(0, 0, 0, 0\)/.test(cb)&&cb!=='transparent')?cb:'#fff';}
   }
-  function poser(){
-    if(!document.body||document.getElementById('eps-bord'))return;
-    var b=document.createElement('div');b.id='eps-bord';b.setAttribute('aria-hidden','true');
-    b.style.cssText='position:fixed;top:0;left:0;right:0;height:calc(env(safe-area-inset-top, 0px) + 5px);z-index:2147481000;background:#fff';
-    document.body.appendChild(b);
-    var st=document.createElement('style');st.textContent='@media print{#eps-bord{display:none}}';document.head.appendChild(st);
-    function teinter(){
-      b.style.visibility='hidden';
-      var el=document.elementFromPoint(Math.round(innerWidth/2),Math.max(8,(b.offsetHeight||5)+3));
-      b.style.visibility='';
-      var c=couleur(el)||couleur(document.body)||couleur(document.documentElement)||'#ffffff';
-      if(b.style.background!==c)b.style.background=c;
-    }
-    teinter();setInterval(teinter,1500);addEventListener('scroll',teinter,{passive:true});
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',poser);else poser();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fond);else fond();
 })();
 
 /* Lien « Confidentialité » en bas de chaque appli (20/11/2026).
