@@ -24,12 +24,28 @@
   if(!seul)return;
   var m=document.querySelector('meta[name="viewport"]');
   if(m&&/viewport-fit\s*=\s*cover/.test(m.content))m.content=m.content.replace(/,?\s*viewport-fit\s*=\s*cover/,'');
-  function fond(){
-    var h=document.documentElement,b=document.body;if(!b)return;
-    var c=getComputedStyle(h).backgroundColor;
-    if(!c||c==='transparent'||/rgba\(0, 0, 0, 0\)/.test(c)){var cb=getComputedStyle(b).backgroundColor;h.style.backgroundColor=(cb&&!/rgba\(0, 0, 0, 0\)/.test(cb)&&cb!=='transparent')?cb:'#fff';}
+  /* + une bande fixe et opaque de 6 px tout en haut, de la couleur du haut de la page :
+     testé sur iPad le 21/11/2026, c'est la combinaison (pas de plein écran + bande) qui rend le haut net. */
+  function couleur(el){
+    while(el&&el.nodeType===1){var c=getComputedStyle(el).backgroundColor||'',v=null,m;
+      if((m=c.match(/rgba?\(([^)]+)\)/)))v=m[1].split(',').map(parseFloat);
+      else if((m=c.match(/color\(srgb ([^)]+)\)/))){var t=m[1].replace('/',' ').split(/\s+/).filter(Boolean).map(parseFloat);v=[t[0]*255,t[1]*255,t[2]*255,t.length>3?t[3]:1];}
+      if(v&&(v.length<4||v[3]>0.6))return 'rgb('+Math.round(v[0])+','+Math.round(v[1])+','+Math.round(v[2])+')';
+      el=el.parentElement;}
+    return null;
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fond);else fond();
+  function poser(){
+    var h=document.documentElement,b=document.body;if(!b||document.getElementById('eps-bord'))return;
+    var c=getComputedStyle(h).backgroundColor;
+    if(!c||c==='transparent'||/rgba\(0, 0, 0, 0\)/.test(c))h.style.backgroundColor=couleur(b)||'#fff';
+    var bd=document.createElement('div');bd.id='eps-bord';bd.setAttribute('aria-hidden','true');
+    bd.style.cssText='position:fixed;top:0;left:0;right:0;height:6px;z-index:2147481000;background:#fff';
+    b.appendChild(bd);
+    function teinter(){bd.style.visibility='hidden';var el=document.elementFromPoint(Math.round(innerWidth/2),10);bd.style.visibility='';
+      var k=couleur(el)||couleur(b)||'#ffffff';if(bd.style.background!==k)bd.style.background=k;}
+    teinter();setInterval(teinter,1500);addEventListener('scroll',teinter,{passive:true});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',poser);else poser();
 })();
 
 /* Lien « Confidentialité » en bas de chaque appli (20/11/2026).
