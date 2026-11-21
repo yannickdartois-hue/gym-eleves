@@ -35,12 +35,13 @@
     return null;
   }
   function poser(){
-    var h=document.documentElement,b=document.body;if(!b||document.getElementById('eps-bord'))return;
+    var h=document.documentElement,b=document.body;if(!b)return;
     var c=getComputedStyle(h).backgroundColor;
     if(!c||c==='transparent'||/rgba\(0, 0, 0, 0\)/.test(c))h.style.backgroundColor=couleur(b)||'#fff';
-    var bd=document.createElement('div');bd.id='eps-bord';bd.setAttribute('aria-hidden','true');
-    bd.style.cssText='position:fixed;top:0;left:0;right:0;height:6px;z-index:2147481000;background:#fff';
-    b.appendChild(bd);
+    var bd=document.getElementById('eps-bord');
+    if(!bd){bd=document.createElement('div');bd.id='eps-bord';bd.setAttribute('aria-hidden','true');
+      bd.style.cssText='position:fixed;top:0;left:0;right:0;height:6px;z-index:2147481000;background:#fff';
+      b.insertBefore(bd,b.firstChild);}
     function teinter(){bd.style.visibility='hidden';var el=document.elementFromPoint(Math.round(innerWidth/2),10);bd.style.visibility='';
       var k=couleur(el)||couleur(b)||'#ffffff';if(bd.style.background!==k)bd.style.background=k;}
     teinter();setInterval(teinter,1500);addEventListener('scroll',teinter,{passive:true});
