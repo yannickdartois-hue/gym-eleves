@@ -43,7 +43,7 @@
     if(document.getElementById('eps-bord'))return;
     var el=document.elementFromPoint(Math.round(innerWidth/2),10);
     var bd=document.createElement('div');bd.id='eps-bord';bd.setAttribute('aria-hidden','true');
-    bd.style.cssText='position:fixed;top:0;left:0;right:0;height:6px;z-index:2147481000;pointer-events:none;background:'+(couleur(el)||couleur(b)||'#fff');
+    bd.style.cssText='position:fixed;top:0;left:0;right:0;height:6px;z-index:2147481000;background:'+(couleur(el)||couleur(b)||'#fff');
     b.insertBefore(bd,b.firstChild);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',poser);else poser();
