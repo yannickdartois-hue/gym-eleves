@@ -407,12 +407,21 @@ async function montrerQR(){
   const t=Math.ceil(txt.length/n);   /* morceaux de taille égale */
   QRG={L:n<=1?[txt]:Array.from({length:n},(_,i)=>`GYMQ:${id}:${i+1}/${n}:`+txt.slice(i*t,(i+1)*t)),i:0};dessinerQR();
 }
+let QRT=null;
+/* v1.18 : présentation comme le demi-fond — prénoms + date en haut, icône de l'appli sur le QR,
+   les morceaux défilent tout seuls (le prof vise jusqu'au bout, dans n'importe quel ordre). */
 function dessinerQR(){
-  const q=QRG,n=q.L.length;let svg;try{svg=GQR.svgQR(q.L[q.i])}catch(e){svg='<p class="alerte">Trop de données pour un QR : utilisez le fichier.</p>'}
-  fen(`<h3>Fiche du groupe · ${esc(S.classe||'')}</h3><p class="small muted">Outil prof → « Scanner les QR ».${DEMO?' (Démo : l’outil prof l’accepte, dans sa propre démo.)':''}</p>
-   ${n>1?`<p class="alerte" style="text-align:center">QR <b>${q.i+1} sur ${n}</b> : le professeur les scanne tous, dans n’importe quel ordre.</p>`:''}<div class="qrbox grand">${svg}</div>
-   ${n>1?`<div class="rangee" style="justify-content:center;margin-top:8px"><button class="bt" type="button" data-act="qrprec"${q.i?'':' disabled'}>◀ Précédent</button><button class="bt act" type="button" data-act="qrsuiv"${q.i<n-1?'':' disabled'}>Suivant ▶</button></div>`:''}
+  const q=QRG,n=q.L.length;clearInterval(QRT);let i=0;
+  const noms=S.eleves.map(e=>prenom(e.nom)).join(' & ')||'Groupe';
+  const jour=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  fen(`<h3>${esc(noms)} · à montrer au prof</h3><p class="small muted">Gym · ${esc(jour)} · ${esc(S.classe||'')}${n>1?' · '+n+' QR qui défilent':''}</p>
+   <div class="qrbox grand qric" id="gqr"></div><p class="small" id="gqn" style="text-align:center;font-weight:700"></p>
+   <p class="small muted" style="text-align:center">Outil prof → « Scanner les QR ».${DEMO?' (Démo : l’outil prof l’accepte, dans sa propre démo.)':''}</p>
    <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Fermer</button><button class="bt act" type="button" data-act="qrfait">C’est scanné ✔</button></div>`);
+  const z=$('#gqr'),m=$('#gqn');
+  const peindre=()=>{try{z.innerHTML=GQR.svgQR(q.L[i])}catch(e){z.innerHTML='<p class="alerte">Trop de données pour un QR : utilisez le fichier.</p>'}
+    if(m)m.textContent=n>1?(i+1)+' / '+n+' · laisse le prof viser jusqu’au bout':''};
+  peindre();if(n>1)QRT=setInterval(()=>{if(!document.getElementById('gqr')){clearInterval(QRT);return}i=(i+1)%n;peindre()},1100);
 }
 function nomFichier(){const sl=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return `gym_${sl(S.classe)||'classe'}_${S.eleves.map(e=>sl(prenom(e.nom))).join('-')}_${today()}.json`}
 async function enregistrerFichier(){
