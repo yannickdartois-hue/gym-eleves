@@ -392,10 +392,27 @@ function vEnvoi(){
   ${S.cfg&&S.cfg.lien?`<a class="bt" href="${esc(S.cfg.lien)}" target="_blank" rel="noopener">☁️ Ouvrir le dépôt Nuage</a>`:''}</div>
   <section class="carte" style="margin-top:16px"><h3>Résumé</h3>${S.eleves.map(e=>`<div style="border-top:1px solid var(--trait);padding:8px 0"><b>${esc(e.nom)}</b>${GYM.ateliers.map(a=>`<div class="rangee small" style="gap:6px"><span style="min-width:150px">${a.n}. ${esc(a.court)}</span>${puces(e.id,a.n)}</div>`).join('')}</div>`).join('')}</section>`;
 }
+/* v1.17 : QR allégé (v:2) pour qu'il se lise toujours : dates en minutes avant l'envoi, observateur = son numéro dans
+   le groupe (le QR contient déjà la liste des noms ; « professeur », « ? » ou un ancien membre restent écrits en entier),
+   plus de date de validation P (l'outil prof ne garde que ses propres P). Trop long : plusieurs QR à la suite.
+   Le fichier (Nuage) garde le format complet v:1. */
+function objetQR(){
+  const ts=Math.round(Date.now()/1000),noms=S.eleves.map(e=>e.nom);
+  return {a:'GYM',v:2,t:'G',c:S.classe||'',g:ACTIF,lt:S.lt||'',ts,
+    el:S.eleves.map(e=>{const d={};Object.entries(S.val[e.id]||{}).forEach(([k,v])=>{if(!v.e)return;const i=noms.indexOf(v.e.par);d[k]=[Math.max(0,Math.round((ts-v.e.t/1000)/60)),i>=0?i:(v.e.par||'')]});return {n:e.nom,s:chaine(e.id),d}})};
+}
+const QR_PART=750;let QRG=null;
 async function montrerQR(){
-  const txt=await GQR.encoder(objetEnvoi());let svg;
-  try{svg=GQR.svgQR(txt)}catch(e){svg='<p class="alerte">Trop de données pour un QR : utilisez le fichier.</p>'}
-  fen(`<h3>Fiche du groupe · ${esc(S.classe||'')}</h3><p class="small muted">Outil prof → « Scanner les QR ».${DEMO?' (Démo : l’outil prof l’accepte, dans sa propre démo.)':''}</p><div class="qrbox">${svg}</div><div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Fermer</button><button class="bt act" type="button" data-act="qrfait">C’est scanné ✔</button></div>`);
+  const txt=await GQR.encoder(objetQR()),n=Math.ceil(txt.length/QR_PART),id=Math.random().toString(36).slice(2,7);
+  const t=Math.ceil(txt.length/n);   /* morceaux de taille égale */
+  QRG={L:n<=1?[txt]:Array.from({length:n},(_,i)=>`GYMQ:${id}:${i+1}/${n}:`+txt.slice(i*t,(i+1)*t)),i:0};dessinerQR();
+}
+function dessinerQR(){
+  const q=QRG,n=q.L.length;let svg;try{svg=GQR.svgQR(q.L[q.i])}catch(e){svg='<p class="alerte">Trop de données pour un QR : utilisez le fichier.</p>'}
+  fen(`<h3>Fiche du groupe · ${esc(S.classe||'')}</h3><p class="small muted">Outil prof → « Scanner les QR ».${DEMO?' (Démo : l’outil prof l’accepte, dans sa propre démo.)':''}</p>
+   ${n>1?`<p class="alerte" style="text-align:center">QR <b>${q.i+1} sur ${n}</b> : le professeur les scanne tous, dans n’importe quel ordre.</p>`:''}<div class="qrbox grand">${svg}</div>
+   ${n>1?`<div class="rangee" style="justify-content:center;margin-top:8px"><button class="bt" type="button" data-act="qrprec"${q.i?'':' disabled'}>◀ Précédent</button><button class="bt act" type="button" data-act="qrsuiv"${q.i<n-1?'':' disabled'}>Suivant ▶</button></div>`:''}
+   <div class="rangee" style="margin-top:12px;justify-content:space-between"><button class="bt" type="button" data-act="fermer">Fermer</button><button class="bt act" type="button" data-act="qrfait">C’est scanné ✔</button></div>`);
 }
 function nomFichier(){const sl=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');return `gym_${sl(S.classe)||'classe'}_${S.eleves.map(e=>sl(prenom(e.nom))).join('-')}_${today()}.json`}
 async function enregistrerFichier(){
@@ -526,6 +543,8 @@ document.addEventListener('click',async ev=>{
     case 'pinok':validerPin();break;
     case 'qr':montrerQR();break;
     case 'qrfait':fermer();marquerEnvoye();break;
+    case 'qrprec':if(QRG&&QRG.i>0){QRG.i--;dessinerQR()}break;
+    case 'qrsuiv':if(QRG&&QRG.i<QRG.L.length-1){QRG.i++;dessinerQR()}break;
     case 'fichier':if(DEMO){toast('Démo : le fichier n’est pas créé. En vrai, il part dans le Nuage.');break}enregistrerFichier();break;
     case 'demo':await ouvrirDemo();rendre();window.scrollTo(0,0);break;
     case 'demofin':quitterDemo();rendre();window.scrollTo(0,0);break;
