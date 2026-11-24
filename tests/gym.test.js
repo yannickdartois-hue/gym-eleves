@@ -101,7 +101,7 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   const cc=await V.evaluate(async()=>{history.replaceState(null,'',location.pathname);DEMO=false;const cle='AAECAwQFBgcICQoL';EPSCode.memoriserCle(S.classe,cle);S.quiz=S.quiz||{};S.quiz[elv().id]=Date.now(); // quiz sécurité réussi : sinon les niveaux ⚠️ restent bloqués
     S.exige=new Date().toDateString(); // message « La gym est une activité exigeante » déjà lu aujourd’hui
     let k='';for(const a of GYM.ateliers)for(const n of a.niv)if(n.prof&&!k)k=a.n+n.n;
-    document.body.insertAdjacentHTML('beforeend','<button id="tst" data-act="valE" data-v="'+k+'">x</button>');return {k,code:await EPSCode.code(cle,S.classe,EPSCode.jour(),'G')}});
+    document.body.insertAdjacentHTML('beforeend','<button id="tst" style="position:fixed;top:60px;left:10px;z-index:30" data-act="valE" data-v="'+k+'">x</button>');return {k,code:await EPSCode.code(cle,S.classe,EPSCode.jour(),'G')}});
   await V.click('#tst');await V.waitForTimeout(300);
   verif('Code du cours : demandé pour un niveau ⚠️',!!(await V.$('#eps-code-voile')),cc.k);
   await V.fill('#eps-code-in',cc.code);await V.waitForTimeout(500);
