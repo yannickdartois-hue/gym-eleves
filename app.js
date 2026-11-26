@@ -96,7 +96,7 @@ function demanderCode(titre,texte,cb,creer){
     <input id="code" class="code" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Code à 4 chiffres">
     <p id="code-msg" class="small" style="min-height:1.4em;font-weight:700;color:var(--alerte)"></p>
     <div class="rangee" style="justify-content:space-between"><button class="bt" type="button" data-act="fermer">Annuler</button><button class="bt noir" type="button" data-act="codeok">Valider</button></div>
-    ${creer?'<p class="small" style="margin-top:10px">✎ <b>Notez ce code</b> au dos de votre carnet ou dans votre agenda : sans lui, le carnet ne s’ouvre plus.</p>':'<p class="small" style="margin-top:12px"><button class="lien" type="button" data-act="codeoubli">Code oublié ?</button></p>'}`);
+    ${creer?'<p class="small" style="margin-top:10px">✎ <b>Notez ce code</b> au dos de votre carnet ou dans votre agenda : sans lui, le carnet ne s’ouvre plus.</p>':'<p class="small" style="margin-top:12px"><button class="lien" type="button" data-act="codeoubli" style="min-height:44px;font-weight:700">🔑 Code oublié ?</button></p>'}`);
   setTimeout(()=>{const i=$('#code');if(i)i.focus()},50);
 }
 async function validerCode(){
