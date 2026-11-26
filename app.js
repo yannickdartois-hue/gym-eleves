@@ -209,7 +209,7 @@ function vGroupe(){
   <section class="carte"><h3>Fin d’année ou erreur</h3><button class="bt danger" type="button" data-act="suppgroupe">Supprimer ce groupe de la tablette</button></section>`;
 }
 function puces(id,a){return `<div class="etat-at">${NIVS.map(n=>{const s=etat(id,a+n);return `<i class="${s}">${n}</i>`}).join('')}</div>`}
-/* Groupe sans classe : bandeau pour le rattacher (sinon il arrive isolé chez le prof et le code du cours ne s'applique pas) */
+/* Groupe sans classe : bandeau pour le rattacher (sinon il arrive isolé chez le prof et le QR du jour ne s'applique pas) */
 function sansClasse(){if(!S||S.classe||DEMO)return '';const C=Object.keys(ROOT.classes).sort();
   return `<div class="alerte">⚠ Votre groupe n’est rangé dans aucune classe : chez le professeur, il arriverait à part.${C.length?`<div class="rangee" style="margin-top:8px"><select id="rat-cl">${C.map(c=>`<option>${esc(c)}</option>`).join('')}</select><button class="bt act" type="button" data-act="rattacher">Ranger dans cette classe</button></div>`:`<div class="rangee" style="margin-top:8px"><button class="bt act" type="button" data-act="scanclasse">📷 Scanner le QR de la classe</button></div>`}</div>`}
 /* Célébration : seulement pour une validation P (par le professeur) */
@@ -537,7 +537,7 @@ document.addEventListener('click',async ev=>{
     case 'exigeok':{S.exige=new Date().toDateString();sauver();fermer();const k=v;setTimeout(()=>{const x=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(x)x.click()},50);break}
     case 'valE':{
       if(!DEMO&&S.exige!==new Date().toDateString()){fen(`<h3>⚠️ La gym est une activité exigeante</h3><p>On ne valide que ce qui est <b>parfait</b> et <b>identique à la vidéo</b> : un seul critère raté, et on recommence.</p><p class="small">« Simple et correct vaut mieux que difficile et incorrect. » Le professeur contrôle les validations, et peut les annuler.</p><div class="rangee"><button class="bt act" type="button" data-act="exigeok" data-v="${v}">J’ai compris, on est exigeants</button><button class="bt" type="button" data-act="fermer">On recommence d’abord</button></div>`);return}
-      // Niveaux ⚠️ (ou tous si le prof l’a choisi pour la classe) : validation E seulement en cours (code du cours du professeur, eps-code.js).
+      // Niveaux ⚠️ (ou tous si le prof l’a choisi pour la classe) : validation E seulement en cours (QR du jour du professeur, eps-code.js).
       if(window.EPSCode&&(niveau(v).prof||(S.cfg&&S.cfg.tc))&&EPSCode.etat()==='fermee'){const k=v;EPSCode.exiger(()=>{const b=document.querySelector('[data-act="valE"][data-v="'+k+'"]');if(b)b.click()});return}
       const coches=[...document.querySelectorAll('[data-cr]')];
       if(coches.some(c=>!c.checked)){toast('Toutes les cases doivent être cochées : sinon, on recommence !');return}
@@ -574,8 +574,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'){if($('#code'))valide
 if(/[?&]demo\b/.test(location.search))ouvrirDemo().then(rendre);
 rendre();compterHL();
 
-/* Code du cours (eps-code.js, commun) : en gym, seuls les niveaux ⚠️ le demandent pour valider E, avec le code à 4 chiffres du professeur (valable toute la journée). */
-if(window.EPSCode)EPSCode.eleve({app:'gye',classe:()=>S&&S.classe||'',seance:()=>'G',seances:()=>['G'],nom:()=>'Le cours du jour',ouvrir:()=>{},actif:()=>false,bandeau:false,demo:()=>DEMO});
+/* Séance du jour (eps-code.js v2, commun) : en gym, seuls les niveaux ⚠️ (ou tous, option du prof) demandent le QR du jour du professeur pour valider E. Aucun code à taper. */
+if(window.EPSCode)EPSCode.eleve({app:'gye',qrApp:'GYM',scanner:v=>GQR.scanner(async t=>{let o;try{o=await GQR.decoder(t)}catch(e){throw new Error('Ce QR n’est pas un QR de cette appli. Demande le QR du jour à ton professeur.')}await v(o);return recevoirClasse(o)},{titre:'QR du jour',aide:'Visez le QR affiché par le professeur.'}),classe:()=>S&&S.classe||'',seance:()=>'G',seances:()=>['G'],nom:()=>'Le cours du jour',ouvrir:()=>{},actif:()=>false,bandeau:false,demo:()=>DEMO});
 
 /* ---------- Validation P par QR signé (le code du prof n’est plus tapé sur les téléphones) ----------
    1. « Montrer au professeur » : QR de demande (t:'V').  2. Le prof le scanne et valide dans son outil.

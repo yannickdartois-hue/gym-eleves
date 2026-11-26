@@ -96,16 +96,17 @@ function verif(nom,cond,info){if(cond){ok++;console.log('✓ '+nom)}else{ko++;co
   verif('Note : inapte partiel → note calculée',nt.b>0);
   verif('Note : dispensé → pas de note',nt.c==null&&nt.disp);
 
-  /* ---------- 5. Code du cours (téléphone réel simulé) ---------- */
+  /* ---------- 5. QR du jour pour les niveaux ⚠️ (téléphone réel simulé, chantier 9 : plus de code tapé) ---------- */
   const V=await page('/gym-eleves/?demo',{vraiTel:true});
   const cc=await V.evaluate(async()=>{history.replaceState(null,'',location.pathname);DEMO=false;const cle='AAECAwQFBgcICQoL';EPSCode.memoriserCle(S.classe,cle);S.quiz=S.quiz||{};S.quiz[elv().id]=Date.now(); // quiz sécurité réussi : sinon les niveaux ⚠️ restent bloqués
     S.exige=new Date().toDateString(); // message « La gym est une activité exigeante » déjà lu aujourd’hui
     let k='';for(const a of GYM.ateliers)for(const n of a.niv)if(n.prof&&!k)k=a.n+n.n;
-    document.body.insertAdjacentHTML('beforeend','<button id="tst" style="position:fixed;top:60px;left:10px;z-index:30" data-act="valE" data-v="'+k+'">x</button>');return {k,code:await EPSCode.code(cle,S.classe,EPSCode.jour(),'G')}});
+    document.body.insertAdjacentHTML('beforeend','<button id="tst" style="position:fixed;top:60px;left:10px;z-index:30" data-act="valE" data-v="'+k+'">x</button>');GQR.scanner=on=>{window.__on=on;return()=>{}};
+    return {k,qr:await GQR.encoder({a:'GYM',v:1,t:'C',c:S.classe,l:[],cc:cle,cj:await EPSCode.cjPour(cle,S.classe,EPSCode.jour(),'G')})}});
   await V.click('#tst');await V.waitForTimeout(300);
-  verif('Code du cours : demandé pour un niveau ⚠️',!!(await V.$('#eps-code-voile')),cc.k);
-  await V.fill('#eps-code-in',cc.code);await V.waitForTimeout(500);
-  verif('Code du cours : le bon code ouvre le cours',await V.evaluate(()=>EPSCode.etat()==='ouverte'));
+  verif('QR du jour : demandé pour un niveau ⚠️, sans champ de code',!!(await V.$('#eps-code-voile #eps-code-scan'))&&!(await V.$('#eps-code-voile input')),cc.k);
+  await V.click('#eps-code-scan');await V.evaluate(t=>window.__on(t),cc.qr);await V.waitForTimeout(600);
+  verif('QR du jour : le QR scanné ouvre le cours',await V.evaluate(()=>EPSCode.etat()==='ouverte'));
 
   /* ---------- 6. Rotation : 3 tours par cours, cours B décalé de 3 ateliers ---------- */
   const rot=await T.evaluate(()=>{const S0=S.grp;S.grp=1;const r=[];for(const s of [0,3])for(const k of [0,1,2,3]){ROOT.rotation={c:S.classe,d:Date.now()-k*20*60000-1000,m:20,g:6,o:[1,2,3,4,5,6],n:3,s};const x=rotationActuelle();r.push(x.fini?'fin':x.at)}

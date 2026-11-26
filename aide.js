@@ -1,10 +1,10 @@
 /* aide.js — mode d'emploi de l'appli élève de gymnastique (lu par eps-aide.js) */
 window.EPS_AIDE={appli:'Gymnastique · Élève',partageNote:'Juste après l’installation, <b>ouvre l’appli depuis son icône, avec le Wi-Fi, et touche « Télécharger les vidéos »</b> (environ 90 Mo) : sinon certaines vidéos ne se chargeront pas au gymnase.',bouton:false,publics:[
 {id:'eleve',titre:'Élève',chapitres:[
-{t:'🔑 Code du cours',html:`<ul>
-<li>Au début du cours, le professeur écrit un <b>code à 4 chiffres</b>. Touche <span class="bouton">🔑 Code du cours</span> et tape-le : les niveaux ⚠️ peuvent être validés E toute la journée.</li>
-<li>Le code n’est demandé que pour les niveaux ⚠️, au moment de valider E.</li>
-<li>Code refusé ? Vérifie que la date du téléphone est juste. Après 5 erreurs, attends 1 minute.</li>
+{t:'📷 QR du jour (niveaux ⚠️)',html:`<ul>
+<li>Pour valider E un niveau ⚠️, la séance du jour doit être ouverte : scanne le <b>QR du jour</b> affiché par le professeur (« QR de la classe »). Rien à taper.</li>
+<li>Le QR n’est demandé que pour les niveaux ⚠️ (ou tous, si ton professeur l’a choisi), au moment de valider E.</li>
+<li>QR refusé ? Lis le message : QR d’un autre jour (vérifie la date du téléphone), d’une autre classe ou abîmé. Demande le QR du jour à ton professeur.</li>
 </ul>`},
 
 {t:'Commencer (premier cours)',html:`<ol>
