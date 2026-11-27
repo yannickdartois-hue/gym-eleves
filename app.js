@@ -355,7 +355,7 @@ function blocValid(k){
     ${n.crit.slice(0,2).map((c,i)=>`<label class="coche"><input type="checkbox" data-cr="${i}"> ${esc(c)}</label>`).join('')}
     <label class="coche"><input type="checkbox" data-cr="r1"> Conforme à la vidéo, du premier coup</label>
     <div class="rangee" style="margin-top:12px"><button class="bt ok" type="button" data-act="valE" data-v="${k}">✔ Valider E</button><button class="bt prof" type="button" data-act="montrer" data-v="${k}" data-x="p">📲 Directement P</button></div>
-    <p class="small muted">« Simple et correct vaut mieux que difficile et incorrect »</p></div>`;
+    <p class="small muted">« Simple et correct vaut mieux que difficile et incorrect »</p>${nx>=0?`<div class="rangee" style="margin-top:10px"><button class="bt" type="button" data-act="qui" data-v="${nx}">▶ Pas encore : passer à ${esc(court(S.eleves[nx].nom))}</button></div>`:''}</div>`;
 }
 let OBS=null;
 function vBonus(id){
